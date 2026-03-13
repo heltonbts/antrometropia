@@ -5,7 +5,7 @@ import { jwtVerify } from "jose"
 import { formatarData } from "@/lib/utils"
 import { getJwtSecret } from "@/lib/auth"
 
-const SECRET = getJwtSecret()
+
 
 async function getDashboardData() {
   try {
@@ -13,7 +13,7 @@ async function getDashboardData() {
     const token = cookieStore.get("token")?.value
     if (!token) return null
 
-    const { payload } = await jwtVerify(token, SECRET)
+    const { payload } = await jwtVerify(token, getJwtSecret())
     if (payload.tipo !== "nutricionista") return null
     const nutriId = payload.id as string
 

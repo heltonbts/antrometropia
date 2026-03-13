@@ -4,7 +4,7 @@ import { cookies } from "next/headers"
 import { jwtVerify } from "jose"
 import { getJwtSecret } from "@/lib/auth"
 
-const SECRET = getJwtSecret()
+
 
 export async function GET() {
   const cookieStore = await cookies()
@@ -13,7 +13,7 @@ export async function GET() {
 
   let pacienteId: string
   try {
-    const { payload } = await jwtVerify(token, SECRET)
+    const { payload } = await jwtVerify(token, getJwtSecret())
     if (payload.tipo !== "paciente") return NextResponse.json({ erro: "Acesso negado" }, { status: 403 })
     pacienteId = payload.id as string
   } catch {

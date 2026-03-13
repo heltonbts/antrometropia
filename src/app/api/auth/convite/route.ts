@@ -4,7 +4,7 @@ import { SignJWT } from "jose"
 import bcrypt from "bcryptjs"
 import { getJwtSecret, setAuthCookie } from "@/lib/auth"
 
-const SECRET = getJwtSecret()
+
 
 export async function POST(req: NextRequest) {
   const { token, senha } = await req.json()
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
   const jwt = await new SignJWT({ id: paciente.id, tipo: "paciente" })
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime("7d")
-    .sign(SECRET)
+    .sign(getJwtSecret())
 
   const res = NextResponse.json({ ok: true })
   setAuthCookie(res, jwt)

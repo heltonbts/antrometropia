@@ -2,21 +2,13 @@ import { NextRequest, NextResponse } from "next/server"
 import { jwtVerify } from "jose"
 import { clearAuthCookie, getJwtSecret } from "@/lib/auth"
 
-const SECRET = getJwtSecret()
-
-// Rotas que exigem autenticação de nutricionista
 const rotasNutri = ["/dashboard", "/pacientes", "/avaliacao"]
-
-// Rotas que exigem autenticação de paciente
 const rotasPaciente = ["/painel"]
-
-// Prefixos públicos (não redireciona)
 const rotasPublicas = ["/login", "/cadastro", "/convite", "/api"]
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
-  // Não intercepta raiz, rotas públicas nem assets
   if (
     pathname === "/" ||
     rotasPublicas.some((r) => pathname.startsWith(r)) ||
@@ -33,7 +25,7 @@ export async function middleware(req: NextRequest) {
   }
 
   try {
-    const { payload } = await jwtVerify(token, SECRET)
+    const { payload } = await jwtVerify(token, getJwtSecret())
 
     // Paciente tentando acessar área do nutricionista
     if (payload.tipo === "paciente" && rotasNutri.some((r) => pathname.startsWith(r))) {

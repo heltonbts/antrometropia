@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { SignJWT } from "jose"
 import { getJwtSecret, setAuthCookie } from "@/lib/auth"
 
-const SECRET = getJwtSecret()
+
 
 export async function POST(req: NextRequest) {
   const { email, senha } = await req.json()
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const token = await new SignJWT({ id: nutri.id, tipo: "nutricionista" })
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("7d")
-      .sign(SECRET)
+      .sign(getJwtSecret())
 
     const res = NextResponse.json({ ok: true, tipo: "nutricionista" })
     setAuthCookie(res, token)
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     const token = await new SignJWT({ id: paciente.id, tipo: "paciente" })
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("7d")
-      .sign(SECRET)
+      .sign(getJwtSecret())
 
     const res = NextResponse.json({ ok: true, tipo: "paciente" })
     setAuthCookie(res, token)
