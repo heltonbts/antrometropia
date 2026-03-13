@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server"
 
 export function getJwtSecret(): Uint8Array {
-  // Em produção, se a variável sumir por um instante, o fallback para uma string fixa 
-  // evita que o catch do middleware limpe o cookie do usuário.
-  // IMPORTANTE: Defina APP_SECRET no seu servidor para segurança real.
-  const secret = process.env.APP_SECRET || "fallback-secret-para-producao-e-dev"
+  const secret = process.env.APP_SECRET?.trim()
+
+  if (!secret) {
+    throw new Error("APP_SECRET não configurado")
+  }
+
   return new TextEncoder().encode(secret)
 }
 

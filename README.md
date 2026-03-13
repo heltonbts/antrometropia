@@ -1,3 +1,20 @@
+## Configuração
+
+Crie um arquivo `.env` com as variáveis mínimas abaixo:
+
+```bash
+cp .env.example .env
+```
+
+```env
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE"
+APP_SECRET="troque-por-um-segredo-longo-e-aleatorio"
+```
+
+`APP_SECRET` é obrigatório. O app usa esse valor para assinar e validar os cookies JWT; sem ele, autenticação e rotas protegidas não inicializam corretamente.
+
+## Desenvolvimento
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
