@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { jwtVerify } from "jose"
 
-const SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET || "secret")
+const SECRET = new TextEncoder().encode(process.env.APP_SECRET || "secret")
 
 // Rotas que exigem autenticação de nutricionista
 const rotasNutri = ["/dashboard", "/pacientes", "/avaliacao"]
@@ -9,14 +9,15 @@ const rotasNutri = ["/dashboard", "/pacientes", "/avaliacao"]
 // Rotas que exigem autenticação de paciente
 const rotasPaciente = ["/painel"]
 
-// Rotas públicas (não redireciona)
-const rotasPublicas = ["/", "/login", "/cadastro", "/convite", "/api"]
+// Prefixos públicos (não redireciona)
+const rotasPublicas = ["/login", "/cadastro", "/convite", "/api"]
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
-  // Não intercepta rotas públicas nem assets
+  // Não intercepta raiz, rotas públicas nem assets
   if (
+    pathname === "/" ||
     rotasPublicas.some((r) => pathname.startsWith(r)) ||
     pathname.startsWith("/_next") ||
     pathname.includes(".")

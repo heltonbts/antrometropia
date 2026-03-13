@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { cookies } from "next/headers"
 import { SignJWT } from "jose"
 
-const SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET || "secret")
+const SECRET = new TextEncoder().encode(process.env.APP_SECRET || "secret")
 
 export async function POST(req: NextRequest) {
   const { nome, email, senha } = await req.json()

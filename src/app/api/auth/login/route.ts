@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { cookies } from "next/headers"
 import { SignJWT } from "jose"
 
-const SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET || "secret")
+const SECRET = new TextEncoder().encode(process.env.APP_SECRET || "secret")
 
 export async function POST(req: NextRequest) {
   const { email, senha } = await req.json()
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       .sign(SECRET)
 
     const cookieStore = await cookies()
-    cookieStore.set("token", token, { httpOnly: true, maxAge: 604800, path: "/" })
+    cookieStore.set("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", maxAge: 604800, path: "/" })
     return NextResponse.json({ ok: true, tipo: "nutricionista" })
   }
 
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       .sign(SECRET)
 
     const cookieStore = await cookies()
-    cookieStore.set("token", token, { httpOnly: true, maxAge: 604800, path: "/" })
+    cookieStore.set("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", maxAge: 604800, path: "/" })
     return NextResponse.json({ ok: true, tipo: "paciente" })
   }
 

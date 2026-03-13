@@ -4,7 +4,7 @@ import { cookies } from "next/headers"
 import { jwtVerify } from "jose"
 import { formatarData } from "@/lib/utils"
 
-const SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET || "secret")
+const SECRET = new TextEncoder().encode(process.env.APP_SECRET || "secret")
 
 async function getDashboardData() {
   try {

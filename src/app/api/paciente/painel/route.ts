@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { cookies } from "next/headers"
 import { jwtVerify } from "jose"
 
-const SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET || "secret")
+const SECRET = new TextEncoder().encode(process.env.APP_SECRET || "secret")
 
 export async function GET() {
   const cookieStore = await cookies()

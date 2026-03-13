@@ -5,7 +5,7 @@ import { cookies } from "next/headers"
 import { jwtVerify } from "jose"
 import { randomBytes } from "crypto"
 
-const SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET || "secret")
+const SECRET = new TextEncoder().encode(process.env.APP_SECRET || "secret")
 
 async function getNutriId(): Promise<string | null> {
   const cookieStore = await cookies()

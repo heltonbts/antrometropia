@@ -5,7 +5,7 @@ import { jwtVerify } from "jose"
 import { calcularTudo } from "@/lib/formulas"
 import { calcularIdade, normalizarSexo } from "@/lib/utils"
 
-const SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET || "secret")
+const SECRET = new TextEncoder().encode(process.env.APP_SECRET || "secret")
 
 async function getNutriId(): Promise<string | null> {
   const cookieStore = await cookies()

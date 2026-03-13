@@ -4,7 +4,7 @@ import { cookies } from "next/headers"
 import { SignJWT } from "jose"
 import bcrypt from "bcryptjs"
 
-const SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET || "secret")
+const SECRET = new TextEncoder().encode(process.env.APP_SECRET || "secret")
 
 export async function POST(req: NextRequest) {
   const { token, senha } = await req.json()
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     .sign(SECRET)
 
   const cookieStore = await cookies()
-  cookieStore.set("token", jwt, { httpOnly: true, maxAge: 604800, path: "/" })
+  cookieStore.set("token", jwt, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", maxAge: 604800, path: "/" })
 
   return NextResponse.json({ ok: true })
 }
