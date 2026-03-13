@@ -276,7 +276,10 @@ export default function PainelPaciente() {
             </div>
             <div className="flex items-center gap-3">
               <span className="text-sm text-slate-500 hidden sm:block">{data.nome}</span>
-              <a href="/api/auth/logout" className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-slate-400 hover:text-slate-700 transition">Sair</a>
+              <button
+              onClick={async () => { await fetch("/api/auth/logout"); window.location.href = "/login" }}
+              className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-slate-400 hover:text-slate-700 transition"
+            >Sair</button>
             </div>
           </header>
 

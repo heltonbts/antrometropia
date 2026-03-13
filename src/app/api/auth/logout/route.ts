@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { clearAuthCookie } from "@/lib/auth"
 
-export async function GET(req: NextRequest) {
-  const res = NextResponse.redirect(new URL("/login", req.url))
+export async function GET() {
+  const res = NextResponse.json({ ok: true })
   clearAuthCookie(res)
   return res
 }

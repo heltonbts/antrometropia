@@ -29,6 +29,7 @@ export default function LoginPage() {
       return
     }
 
+    router.refresh()
     if (data.tipo === "nutricionista") {
       router.push("/dashboard")
     } else {

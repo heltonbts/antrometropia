@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 
 const navItems = [
@@ -12,6 +12,13 @@ const navItems = [
 
 export function Sidebar() {
   const path = usePathname()
+  const router = useRouter()
+
+  async function handleLogout() {
+    await fetch("/api/auth/logout")
+    router.refresh()
+    router.push("/login")
+  }
 
   return (
     <aside className="w-72 min-h-screen border-r border-[rgba(23,32,51,0.08)] bg-[rgba(255,251,243,0.74)] backdrop-blur-xl flex flex-col">
@@ -56,13 +63,13 @@ export function Sidebar() {
           <p className="mt-2 text-sm font-semibold text-slate-800">Fluxo antropométrico</p>
           <p className="mt-1 text-xs text-slate-500">Cadastros, avaliações e evolução em um painel contínuo.</p>
         </div>
-        <Link
-          href="/api/auth/logout"
-          className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-500 hover:bg-[rgba(255,255,255,0.5)] transition-all"
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-500 hover:bg-[rgba(255,255,255,0.5)] transition-all"
         >
           <span>🚪</span>
           Sair
-        </Link>
+        </button>
       </div>
     </aside>
   )
