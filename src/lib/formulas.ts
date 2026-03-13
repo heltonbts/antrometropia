@@ -3,8 +3,8 @@ import { normalizarSexo } from "@/lib/utils"
 // ============================================================
 // TODAS AS FÓRMULAS DE AVALIAÇÃO FÍSICA
 // NOTAS DE CAMPO:
-//   dobSupraespinal = supraespinal — usada em Faulkner e Heath-Carter
-//   dobSupraIliaca / dobCristaIliaca = mesma dobra no fluxo atual
+//   dobSupraespinal = supraespinal — usada em Heath-Carter
+//   dobCristaIliaca = crista ilíaca (Dcri) — usada em Faulkner
 // ============================================================
 
 export interface DadosAvaliacao {
@@ -107,10 +107,10 @@ export function classificarIMC(imc: number, idade: number): string {
 export function calcularFaulkner(
   tricipital: number,
   subescapular: number,
-  suprailíaca: number,
+  cristaIliaca: number,
   abdominal: number
 ): number {
-  const soma = tricipital + subescapular + suprailíaca + abdominal
+  const soma = tricipital + subescapular + cristaIliaca + abdominal
   return soma * 0.153 + 5.783
 }
 
@@ -358,18 +358,18 @@ export function calcularTudo(dados: DadosAvaliacao): ResultadoFormulas {
   const imc = calcularIMC(dados.peso, dados.altura)
   const classificacaoImc = classificarIMC(imc, dados.idade)
 
-  // Faulkner — usa dobSupraespinal
+  // Faulkner — Dtri + Dsub + Dcri (crista ilíaca) + Dab
   let percGorduraFaulkner: number | null = null
   if (
     temNumero(dados.dobTricipital) &&
     temNumero(dados.dobSubescapular) &&
-    temNumero(dados.dobSupraespinal) &&
+    temNumero(dados.dobCristaIliaca) &&
     temNumero(dados.dobAbdominal)
   ) {
     percGorduraFaulkner = calcularFaulkner(
       dados.dobTricipital,
       dados.dobSubescapular,
-      dados.dobSupraespinal,
+      dados.dobCristaIliaca,
       dados.dobAbdominal
     )
   }
