@@ -183,6 +183,12 @@ export default async function ResultadoPage({
           Nova Avaliação
         </Link>
         <Link
+          href={`/avaliacao/${avaliacao.id}/editar`}
+          className="px-5 py-2.5 glass-panel text-slate-700 text-sm font-semibold rounded-2xl hover:bg-white transition"
+        >
+          Editar
+        </Link>
+        <Link
           href={`/pacientes/${p.id}`}
           className="px-5 py-2.5 glass-panel text-slate-700 text-sm font-semibold rounded-2xl hover:bg-white transition"
         >
