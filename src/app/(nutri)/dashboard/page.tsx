@@ -44,9 +44,9 @@ export default async function DashboardPage() {
   const data = await getDashboardData()
 
   const stats = [
-    { label: "Total de Pacientes",   valor: data?.totalPacientes?.toString() ?? "—",         tone: "from-[#1f8a70] to-[#2a9d8f]" },
-    { label: "Avaliações este mês",  valor: data?.avaliacoesDoMes?.toString() ?? "—",         tone: "from-[#c96d42] to-[#d88c5b]" },
-    { label: "Última avaliação",     valor: data?.ultimasAvaliacoes[0] ? formatarData(data.ultimasAvaliacoes[0].dataAvaliacao) : "—", tone: "from-[#264653] to-[#4d6a77]" },
+    { label: "Total de Pacientes",  valor: data?.totalPacientes?.toString() ?? "—",  tone: "from-[#06b6d4] to-[#22d3ee]" },
+    { label: "Avaliações este mês", valor: data?.avaliacoesDoMes?.toString() ?? "—", tone: "from-[#ec4899] to-[#f472b6]" },
+    { label: "Última avaliação",    valor: data?.ultimasAvaliacoes[0] ? formatarData(data.ultimasAvaliacoes[0].dataAvaliacao) : "—", tone: "from-[#2563eb] to-[#60a5fa]" },
   ]
 
   return (
@@ -69,7 +69,7 @@ export default async function DashboardPage() {
           </div>
           <Link
             href="/avaliacao/nova"
-            className="mt-5 inline-flex w-fit px-5 py-2.5 bg-[linear-gradient(135deg,#1f8a70,#264653)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition-opacity shadow-[0_14px_34px_rgba(31,138,112,0.22)]"
+            className="mt-5 inline-flex w-fit px-5 py-2.5 bg-[linear-gradient(135deg,#06b6d4,#2563eb)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition-opacity shadow-[0_14px_34px_rgba(6,182,212,0.28)]"
           >
             + Nova Avaliação
           </Link>
@@ -90,12 +90,12 @@ export default async function DashboardPage() {
       <div>
         <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-4">Ações rápidas</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Link href="/pacientes/novo" className="glass-panel rounded-[28px] p-6 hover:border-[rgba(31,138,112,0.22)] hover:shadow-md transition-all group">
+          <Link href="/pacientes/novo" className="glass-panel rounded-[28px] p-6 hover:border-[rgba(6,182,212,0.22)] hover:shadow-md transition-all group">
             <div className="font-mono-ui text-sm mb-3 text-[color:var(--accent)]">01</div>
             <h3 className="font-semibold text-slate-800 group-hover:text-[color:var(--accent)] transition-colors text-lg">Cadastrar Paciente</h3>
             <p className="text-slate-500 text-sm mt-2 leading-6">Adicione um novo paciente e gere o link de convite para acesso.</p>
           </Link>
-          <Link href="/avaliacao/nova" className="glass-panel rounded-[28px] p-6 hover:border-[rgba(31,138,112,0.22)] hover:shadow-md transition-all group">
+          <Link href="/avaliacao/nova" className="glass-panel rounded-[28px] p-6 hover:border-[rgba(6,182,212,0.22)] hover:shadow-md transition-all group">
             <div className="font-mono-ui text-sm mb-3 text-[color:var(--accent-2)]">02</div>
             <h3 className="font-semibold text-slate-800 group-hover:text-[color:var(--accent)] transition-colors text-lg">Nova Avaliação</h3>
             <p className="text-slate-500 text-sm mt-2 leading-6">Registre dobras, circunferências e calcule composição corporal completa.</p>
@@ -118,11 +118,11 @@ export default async function DashboardPage() {
               <Link
                 key={a.id}
                 href={`/avaliacao/${a.id}/resultado`}
-                className="glass-panel flex items-center justify-between rounded-[22px] p-4 hover:border-[rgba(31,138,112,0.22)] hover:shadow-md transition-all"
+                className="glass-panel flex items-center justify-between rounded-[22px] p-4 hover:border-[rgba(6,182,212,0.22)] hover:shadow-md transition-all"
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-2 h-2 rounded-full ${i === 0 ? "bg-[color:var(--accent)]" : "bg-slate-200"}`} />
-                  <div className="w-9 h-9 rounded-xl bg-[linear-gradient(135deg,#1f8a70,#264653)] flex items-center justify-center text-white text-sm font-bold">
+                  <div className="w-9 h-9 rounded-xl bg-[linear-gradient(135deg,#06b6d4,#2563eb)] flex items-center justify-center text-white text-sm font-bold">
                     {a.paciente.nome[0]}
                   </div>
                   <div>
@@ -132,7 +132,7 @@ export default async function DashboardPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   {a.resultado?.imc && (
-                    <span className="font-mono-ui text-[11px] bg-[rgba(38,70,83,0.08)] text-[color:var(--accent-3)] font-semibold px-2 py-1 rounded-lg">
+                    <span className="font-mono-ui text-[11px] bg-[rgba(37,99,235,0.08)] text-[color:var(--accent-3)] font-semibold px-2 py-1 rounded-lg">
                       IMC {a.resultado.imc.toFixed(1)}
                     </span>
                   )}

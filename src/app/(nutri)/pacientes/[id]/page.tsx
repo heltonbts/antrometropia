@@ -12,10 +12,10 @@ import { GraficoBarrasAgrupadas } from "@/components/charts/GraficoBarrasAgrupad
 import { GraficoComparacaoDobras } from "@/components/charts/GraficoComparacaoDobras"
 import { Somatocarta } from "@/components/charts/Somatocarta"
 
-const ACCENT   = "#1f8a70"
-const ACCENT2  = "#c96d42"
-const ACCENT3  = "#264653"
-const COR_ROSA = "#f472b6"
+const ACCENT    = "#06b6d4"
+const ACCENT2   = "#ec4899"
+const ACCENT3   = "#2563eb"
+const COR_ROSA  = "#f472b6"
 const COR_AMBER = "#f59e0b"
 
 interface Avaliacao {
@@ -101,12 +101,12 @@ export default function PerfilPacientePage() {
   const r = ultima?.resultado
 
   const dobrasBarra = [
-    { nome: "Tricipital",  valor: ultima?.dobTricipital ?? 0,  cor: ACCENT },
-    { nome: "Subescap.",   valor: ultima?.dobSubescapular ?? 0, cor: ACCENT3 },
-    { nome: "Supraespinal",valor: ultima?.dobSupraespinal ?? 0, cor: ACCENT2 },
-    { nome: "Abdominal",   valor: ultima?.dobAbdominal ?? 0,    cor: COR_ROSA },
-    { nome: "Coxa",        valor: ultima?.dobCoxa ?? 0,         cor: COR_AMBER },
-    { nome: "Panturrilha", valor: ultima?.dobPanturrilha ?? 0,  cor: "#10b981" },
+    { nome: "Tricipital",   valor: ultima?.dobTricipital ?? 0,   cor: ACCENT },
+    { nome: "Subescap.",    valor: ultima?.dobSubescapular ?? 0,  cor: ACCENT3 },
+    { nome: "Supraespinal", valor: ultima?.dobSupraespinal ?? 0,  cor: ACCENT2 },
+    { nome: "Abdominal",    valor: ultima?.dobAbdominal ?? 0,     cor: COR_ROSA },
+    { nome: "Coxa",         valor: ultima?.dobCoxa ?? 0,          cor: COR_AMBER },
+    { nome: "Panturrilha",  valor: ultima?.dobPanturrilha ?? 0,   cor: "#10b981" },
   ]
 
   const dobrasPorAvaliacao = avals.map((a) => ({
@@ -134,7 +134,7 @@ export default function PerfilPacientePage() {
       {/* Header */}
       <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-[22px] bg-[linear-gradient(135deg,#1f8a70,#264653)] flex items-center justify-center text-white text-2xl font-bold shadow-[0_16px_36px_rgba(31,138,112,0.22)]">
+          <div className="w-14 h-14 rounded-[22px] bg-[linear-gradient(135deg,#06b6d4,#2563eb)] flex items-center justify-center text-white text-2xl font-bold shadow-[0_16px_36px_rgba(6,182,212,0.28)]">
             {paciente.nome[0]}
           </div>
           <div>
@@ -149,7 +149,7 @@ export default function PerfilPacientePage() {
         </div>
         <Link
           href={`/avaliacao/nova?pacienteId=${paciente.id}`}
-          className="self-start md:self-auto px-5 py-2.5 bg-[linear-gradient(135deg,#1f8a70,#264653)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition shadow-[0_14px_34px_rgba(31,138,112,0.22)]"
+          className="self-start md:self-auto px-5 py-2.5 bg-[linear-gradient(135deg,#06b6d4,#2563eb)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition shadow-[0_14px_34px_rgba(6,182,212,0.28)]"
         >
           + Nova Avaliação
         </Link>
@@ -172,11 +172,11 @@ export default function PerfilPacientePage() {
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
               {[
-                { label: "Peso",           valor: ultima.peso?.toFixed(1),                                                           unidade: "kg",    tone: "from-[#1f8a70] to-[#2a9d8f]" },
-                { label: "IMC",            valor: r?.imc?.toFixed(1) ?? "—",                                                         unidade: "kg/m²", tone: "from-[#264653] to-[#4d6a77]" },
-                { label: "% Gordura",      valor: (r?.formulaReferencia === "faulkner" ? r?.percGorduraFaulkner : r?.percGorduraPetroski)?.toFixed(1) ?? "—", unidade: "%", tone: "from-[#c96d42] to-[#d88c5b]" },
-                { label: "Massa Muscular", valor: r?.massaMuscular?.toFixed(1) ?? "—",                                               unidade: "kg",    tone: "from-[#1f8a70] to-[#264653]" },
-                { label: "Massa Óssea",    valor: r?.massaOssea?.toFixed(1) ?? "—",                                                  unidade: "kg",    tone: "from-[#264653] to-[#172033]" },
+                { label: "Peso",           valor: ultima.peso?.toFixed(1),                                                           unidade: "kg",    tone: "from-[#06b6d4] to-[#22d3ee]" },
+                { label: "IMC",            valor: r?.imc?.toFixed(1) ?? "—",                                                         unidade: "kg/m²", tone: "from-[#2563eb] to-[#60a5fa]" },
+                { label: "% Gordura",      valor: (r?.formulaReferencia === "faulkner" ? r?.percGorduraFaulkner : r?.percGorduraPetroski)?.toFixed(1) ?? "—", unidade: "%", tone: "from-[#ec4899] to-[#f472b6]" },
+                { label: "Massa Muscular", valor: r?.massaMuscular?.toFixed(1) ?? "—",                                               unidade: "kg",    tone: "from-[#06b6d4] to-[#2563eb]" },
+                { label: "Massa Óssea",    valor: r?.massaOssea?.toFixed(1) ?? "—",                                                  unidade: "kg",    tone: "from-[#2563eb] to-[#1e3a8a]" },
               ].map((c) => (
                 <div key={c.label} className={`metric-card rounded-[22px] bg-gradient-to-br ${c.tone} p-4 text-white`}>
                   <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-white/70">{c.label}</p>
@@ -233,7 +233,7 @@ export default function PerfilPacientePage() {
             <div className="glass-panel rounded-[28px] p-6">
               <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-5">Somatório de Dobras — última avaliação</p>
               <div className="grid grid-cols-2 gap-4">
-                <div className="metric-card rounded-[22px] bg-gradient-to-br from-[#c96d42] to-[#264653] p-5 text-white">
+                <div className="metric-card rounded-[22px] bg-gradient-to-br from-[#ec4899] to-[#2563eb] p-5 text-white">
                   <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-white/70">Soma 6 Dobras</p>
                   <p className="text-4xl font-bold mt-3">{r?.soma6Dobras?.toFixed(1) ?? "—"}</p>
                   <p className="text-xs text-white/60 mt-1">mm</p>
@@ -243,7 +243,7 @@ export default function PerfilPacientePage() {
                     </span>
                   )}
                 </div>
-                <div className="metric-card rounded-[22px] bg-gradient-to-br from-[#264653] to-[#c96d42] p-5 text-white">
+                <div className="metric-card rounded-[22px] bg-gradient-to-br from-[#2563eb] to-[#ec4899] p-5 text-white">
                   <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-white/70">Soma Todas as Dobras</p>
                   <p className="text-4xl font-bold mt-3">{r?.somaTodasDobras?.toFixed(1) ?? "—"}</p>
                   <p className="text-xs text-white/60 mt-1">mm · {r?.somaTodasDobras != null && r?.soma6Dobras != null ? `${(r.somaTodasDobras - r.soma6Dobras).toFixed(1)} mm fora do S6` : ""}</p>
@@ -259,12 +259,10 @@ export default function PerfilPacientePage() {
               <p className="text-xs text-slate-400 mb-4">Valores em mm — última avaliação</p>
               <GraficoBarrasAgrupadas dobras={dobrasBarra} />
               {avals.length >= 2 && (
-                <>
-                  <div className="border-t border-slate-100 mt-5 pt-5">
-                    <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-3">Comparação entre avaliações</p>
-                    <GraficoComparacaoDobras avaliacoes={dobrasPorAvaliacao} />
-                  </div>
-                </>
+                <div className="border-t border-slate-100 mt-5 pt-5">
+                  <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-3">Comparação entre avaliações</p>
+                  <GraficoComparacaoDobras avaliacoes={dobrasPorAvaliacao} />
+                </div>
               )}
             </div>
 
@@ -272,7 +270,7 @@ export default function PerfilPacientePage() {
               <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-1">Somatocarta</p>
               <p className="text-xs text-slate-400 mb-4">
                 {r?.biotipo && (
-                  <span className="inline-flex items-center gap-1 bg-[rgba(31,138,112,0.1)] text-[color:var(--accent)] px-2 py-0.5 rounded-full text-xs font-semibold mr-2">
+                  <span className="inline-flex items-center gap-1 bg-[rgba(6,182,212,0.10)] text-[color:var(--accent)] px-2 py-0.5 rounded-full text-xs font-semibold mr-2">
                     {r.biotipo}
                   </span>
                 )}
@@ -288,9 +286,9 @@ export default function PerfilPacientePage() {
               <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-5">Somatotipo — Heath-Carter</p>
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  { label: "Endomorfia", valor: r.endomorfia, tone: "from-[#c96d42] to-[#d88c5b]", desc: "Adiposidade" },
-                  { label: "Mesomorfia", valor: r.mesomorfia, tone: "from-[#1f8a70] to-[#2a9d8f]", desc: "Muscularidade" },
-                  { label: "Ectomorfia", valor: r.ectomorfia, tone: "from-[#264653] to-[#4d6a77]", desc: "Linearidade" },
+                  { label: "Endomorfia", valor: r.endomorfia, tone: "from-[#ec4899] to-[#f472b6]", desc: "Adiposidade" },
+                  { label: "Mesomorfia", valor: r.mesomorfia, tone: "from-[#06b6d4] to-[#22d3ee]", desc: "Muscularidade" },
+                  { label: "Ectomorfia", valor: r.ectomorfia, tone: "from-[#2563eb] to-[#60a5fa]", desc: "Linearidade" },
                 ].map((c) => (
                   <div key={c.label} className={`metric-card rounded-[22px] bg-gradient-to-br ${c.tone} p-5 text-center text-white`}>
                     <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-white/70">{c.label}</p>
@@ -310,7 +308,7 @@ export default function PerfilPacientePage() {
                 <Link
                   key={a.id}
                   href={`/avaliacao/${a.id}/resultado`}
-                  className="glass-panel flex items-center justify-between rounded-[22px] p-4 hover:border-[rgba(31,138,112,0.22)] hover:shadow-md transition-all"
+                  className="glass-panel flex items-center justify-between rounded-[22px] p-4 hover:border-[rgba(6,182,212,0.22)] hover:shadow-md transition-all"
                 >
                   <div className="flex items-center gap-4">
                     <div className={`w-2 h-2 rounded-full ${i === 0 ? "bg-[color:var(--accent)]" : "bg-slate-200"}`} />
@@ -321,7 +319,7 @@ export default function PerfilPacientePage() {
                   </div>
                   <div className="flex items-center gap-2">
                     {(a.resultado?.formulaReferencia === "faulkner" ? a.resultado?.percGorduraFaulkner : a.resultado?.percGorduraPetroski) && (
-                      <span className="font-mono-ui text-[11px] bg-[rgba(201,109,66,0.1)] text-[color:var(--accent-2)] font-semibold px-2 py-1 rounded-lg">
+                      <span className="font-mono-ui text-[11px] bg-[rgba(236,72,153,0.10)] text-[color:var(--accent-2)] font-semibold px-2 py-1 rounded-lg">
                         {(a.resultado?.formulaReferencia === "faulkner" ? a.resultado?.percGorduraFaulkner : a.resultado?.percGorduraPetroski)?.toFixed(1)}% G
                       </span>
                     )}

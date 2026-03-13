@@ -43,7 +43,7 @@ function ConviteBtn({ paciente }: { paciente: Paciente }) {
     return (
       <button
         onClick={() => copiarLink(paciente.tokenConvite!)}
-        className="px-3 py-2 text-xs font-medium bg-[rgba(201,109,66,0.1)] text-[color:var(--accent-2)] rounded-xl hover:bg-[rgba(201,109,66,0.16)] transition"
+        className="px-3 py-2 text-xs font-medium bg-[rgba(236,72,153,0.10)] text-[color:var(--accent-2)] rounded-xl hover:bg-[rgba(236,72,153,0.16)] transition"
       >
         {copiado ? "Copiado!" : "Copiar convite"}
       </button>
@@ -54,7 +54,7 @@ function ConviteBtn({ paciente }: { paciente: Paciente }) {
     <button
       onClick={reenviar}
       disabled={loading}
-      className="px-3 py-2 text-xs font-medium bg-[rgba(201,109,66,0.1)] text-[color:var(--accent-2)] rounded-xl hover:bg-[rgba(201,109,66,0.16)] transition disabled:opacity-50"
+      className="px-3 py-2 text-xs font-medium bg-[rgba(236,72,153,0.10)] text-[color:var(--accent-2)] rounded-xl hover:bg-[rgba(236,72,153,0.16)] transition disabled:opacity-50"
     >
       {loading ? "..." : copiado ? "Copiado!" : "Reenviar acesso"}
     </button>
@@ -94,7 +94,7 @@ export default function PacientesPage() {
         </div>
         <Link
           href="/pacientes/novo"
-          className="px-5 py-2.5 bg-[linear-gradient(135deg,#1f8a70,#264653)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition-opacity shadow-[0_14px_34px_rgba(31,138,112,0.22)]"
+          className="px-5 py-2.5 bg-[linear-gradient(135deg,#06b6d4,#2563eb)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition-opacity shadow-[0_14px_34px_rgba(6,182,212,0.28)]"
         >
           + Novo Paciente
         </Link>
@@ -106,7 +106,7 @@ export default function PacientesPage() {
         placeholder="Buscar paciente..."
         value={busca}
         onChange={(e) => setBusca(e.target.value)}
-        className="glass-panel w-full max-w-sm px-4 py-3 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(31,138,112,0.3)]"
+        className="glass-panel w-full max-w-sm px-4 py-3 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(6,182,212,0.30)]"
       />
 
       {loading ? (
@@ -129,17 +129,17 @@ export default function PacientesPage() {
             return (
               <div
                 key={p.id}
-                className="glass-panel rounded-[28px] p-5 flex flex-col gap-5 md:flex-row md:items-center md:justify-between hover:border-[rgba(31,138,112,0.22)] hover:shadow-md transition-all"
+                className="glass-panel rounded-[28px] p-5 flex flex-col gap-5 md:flex-row md:items-center md:justify-between hover:border-[rgba(6,182,212,0.22)] hover:shadow-md transition-all"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-[linear-gradient(135deg,#1f8a70,#264653)] flex items-center justify-center text-white font-bold text-lg shadow-[0_14px_32px_rgba(31,138,112,0.18)]">
+                  <div className="w-12 h-12 rounded-2xl bg-[linear-gradient(135deg,#06b6d4,#2563eb)] flex items-center justify-center text-white font-bold text-lg shadow-[0_14px_32px_rgba(6,182,212,0.22)]">
                     {p.nome[0]}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
                       <p className="font-semibold text-slate-800">{p.nome}</p>
                       {!p.conviteAceito && (
-                        <span className="font-mono-ui text-[9px] uppercase tracking-[0.18em] px-2 py-0.5 rounded-full bg-[rgba(201,109,66,0.1)] text-[color:var(--accent-2)]">
+                        <span className="font-mono-ui text-[9px] uppercase tracking-[0.18em] px-2 py-0.5 rounded-full bg-[rgba(236,72,153,0.10)] text-[color:var(--accent-2)]">
                           Convite pendente
                         </span>
                       )}
@@ -166,13 +166,13 @@ export default function PacientesPage() {
                     <ConviteBtn paciente={p} />
                     <Link
                       href={`/avaliacao/nova?pacienteId=${p.id}`}
-                      className="px-3 py-2 text-xs font-medium bg-[rgba(31,138,112,0.1)] text-[color:var(--accent)] rounded-xl hover:bg-[rgba(31,138,112,0.16)] transition"
+                      className="px-3 py-2 text-xs font-medium bg-[rgba(6,182,212,0.10)] text-[color:var(--accent)] rounded-xl hover:bg-[rgba(6,182,212,0.16)] transition"
                     >
                       + Avaliação
                     </Link>
                     <Link
                       href={`/pacientes/${p.id}`}
-                      className="px-3 py-2 text-xs font-medium bg-[rgba(23,32,51,0.06)] text-slate-600 rounded-xl hover:bg-[rgba(23,32,51,0.1)] transition"
+                      className="px-3 py-2 text-xs font-medium bg-[rgba(15,23,42,0.06)] text-slate-600 rounded-xl hover:bg-[rgba(15,23,42,0.10)] transition"
                     >
                       Ver perfil
                     </Link>

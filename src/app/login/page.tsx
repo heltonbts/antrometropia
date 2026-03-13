@@ -40,10 +40,10 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen hero-grid px-4 py-4 md:px-6 md:py-6">
       <div className="glass-panel-strong mx-auto grid min-h-[calc(100vh-2rem)] w-full max-w-6xl items-stretch overflow-hidden rounded-[36px] md:grid-cols-[0.9fr_1.1fr]">
-        <div className="hidden flex-col justify-between border-r border-[rgba(23,32,51,0.08)] bg-[linear-gradient(160deg,rgba(31,138,112,0.12),rgba(255,255,255,0.18),rgba(38,70,83,0.14))] p-8 md:flex">
+        <div className="hidden flex-col justify-between border-r border-[rgba(15,23,42,0.08)] bg-[linear-gradient(160deg,rgba(6,182,212,0.12),rgba(255,255,255,0.18),rgba(37,99,235,0.12))] p-8 md:flex">
           <div>
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-[linear-gradient(135deg,#1f8a70,#264653)] flex items-center justify-center shadow-[0_16px_34px_rgba(31,138,112,0.22)]">
+              <div className="w-11 h-11 rounded-2xl bg-[linear-gradient(135deg,#06b6d4,#2563eb)] flex items-center justify-center shadow-[0_16px_34px_rgba(6,182,212,0.28)]">
                 <span className="text-white font-bold">N</span>
               </div>
               <div>
@@ -80,7 +80,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <div className="mb-8 md:hidden">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-[linear-gradient(135deg,#1f8a70,#264653)] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-2xl bg-[linear-gradient(135deg,#06b6d4,#2563eb)] flex items-center justify-center">
                 <span className="text-white font-bold">N</span>
               </div>
               <div>
@@ -107,7 +107,7 @@ export default function LoginPage() {
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 placeholder="seu@email.com"
-                className="w-full px-4 py-3 border border-[rgba(23,32,51,0.1)] rounded-2xl bg-[rgba(255,255,255,0.7)] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(31,138,112,0.3)] transition"
+                className="w-full px-4 py-3 border border-[rgba(15,23,42,0.10)] rounded-2xl bg-[rgba(255,255,255,0.7)] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(6,182,212,0.30)] transition"
               />
             </div>
 
@@ -121,7 +121,7 @@ export default function LoginPage() {
                 value={form.senha}
                 onChange={(e) => setForm({ ...form, senha: e.target.value })}
                 placeholder="••••••••"
-                className="w-full px-4 py-3 border border-[rgba(23,32,51,0.1)] rounded-2xl bg-[rgba(255,255,255,0.7)] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(31,138,112,0.3)] transition"
+                className="w-full px-4 py-3 border border-[rgba(15,23,42,0.10)] rounded-2xl bg-[rgba(255,255,255,0.7)] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(6,182,212,0.30)] transition"
               />
             </div>
 
@@ -134,7 +134,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[linear-gradient(135deg,#1f8a70,#264653)] text-white font-semibold rounded-2xl hover:opacity-90 transition-opacity disabled:opacity-60 shadow-[0_16px_36px_rgba(31,138,112,0.22)]"
+              className="w-full py-3 bg-[linear-gradient(135deg,#06b6d4,#2563eb)] text-white font-semibold rounded-2xl hover:opacity-90 transition-opacity disabled:opacity-60 shadow-[0_16px_36px_rgba(6,182,212,0.28)]"
             >
               {loading ? "Entrando..." : "Entrar"}
             </button>

@@ -21,12 +21,12 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="w-72 min-h-screen border-r border-[rgba(23,32,51,0.08)] bg-[rgba(255,251,243,0.74)] backdrop-blur-xl flex flex-col">
+    <aside className="w-72 min-h-screen border-r border-[rgba(15,23,42,0.08)] bg-[rgba(240,249,255,0.80)] backdrop-blur-xl flex flex-col">
       {/* Logo */}
-      <div className="p-6 border-b border-[rgba(23,32,51,0.08)]">
+      <div className="p-6 border-b border-[rgba(15,23,42,0.08)]">
         <div className="glass-panel rounded-[28px] p-4">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-[linear-gradient(135deg,#1f8a70,#264653)] flex items-center justify-center shadow-[0_12px_30px_rgba(31,138,112,0.22)]">
+            <div className="w-11 h-11 rounded-2xl bg-[linear-gradient(135deg,#06b6d4,#2563eb)] flex items-center justify-center shadow-[0_12px_30px_rgba(6,182,212,0.30)]">
               <span className="text-white text-sm font-bold">N</span>
             </div>
             <div>
@@ -46,8 +46,8 @@ export function Sidebar() {
             className={cn(
               "flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all border",
               path === item.href || path.startsWith(item.href + "/")
-                ? "bg-[linear-gradient(135deg,#1f8a70,#264653)] text-white border-transparent shadow-[0_14px_34px_rgba(31,138,112,0.22)]"
-                : "text-slate-700 border-transparent hover:border-[rgba(23,32,51,0.08)] hover:bg-[rgba(255,255,255,0.46)]"
+                ? "bg-[linear-gradient(135deg,#06b6d4,#2563eb)] text-white border-transparent shadow-[0_14px_34px_rgba(6,182,212,0.30)]"
+                : "text-slate-700 border-transparent hover:border-[rgba(6,182,212,0.14)] hover:bg-[rgba(240,249,255,0.60)]"
             )}
           >
             <span className="text-base">{item.icon}</span>
@@ -57,7 +57,7 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-[rgba(23,32,51,0.08)] space-y-3">
+      <div className="p-4 border-t border-[rgba(15,23,42,0.08)] space-y-3">
         <div className="glass-panel rounded-2xl p-4">
           <p className="font-mono-ui text-[11px] uppercase tracking-[0.26em] text-slate-500">Workspace</p>
           <p className="mt-2 text-sm font-semibold text-slate-800">Fluxo antropométrico</p>
@@ -65,7 +65,7 @@ export function Sidebar() {
         </div>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-500 hover:bg-[rgba(255,255,255,0.5)] transition-all"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-500 hover:bg-[rgba(6,182,212,0.08)] transition-all"
         >
           <span>🚪</span>
           Sair

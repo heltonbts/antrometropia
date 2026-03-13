@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
-const inputCls = "w-full px-4 py-3 border border-[rgba(23,32,51,0.1)] rounded-2xl bg-[rgba(255,255,255,0.7)] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(31,138,112,0.3)] transition"
+const inputCls = "w-full px-4 py-3 border border-[rgba(15,23,42,0.10)] rounded-2xl bg-[rgba(255,255,255,0.7)] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(6,182,212,0.30)] transition"
 
 export default function NovoPacientePage() {
   const router = useRouter()
@@ -36,7 +36,7 @@ export default function NovoPacientePage() {
     return (
       <div className="max-w-lg mx-auto">
         <div className="glass-panel rounded-[32px] p-8 text-center">
-          <div className="w-14 h-14 rounded-[22px] bg-[linear-gradient(135deg,#1f8a70,#264653)] flex items-center justify-center text-white text-2xl mx-auto mb-5 shadow-[0_16px_36px_rgba(31,138,112,0.22)]">
+          <div className="w-14 h-14 rounded-[22px] bg-[linear-gradient(135deg,#06b6d4,#2563eb)] flex items-center justify-center text-white text-2xl mx-auto mb-5 shadow-[0_16px_36px_rgba(6,182,212,0.28)]">
             ✓
           </div>
           <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-[color:var(--accent)] mb-2">Cadastrado</p>
@@ -47,7 +47,7 @@ export default function NovoPacientePage() {
           </div>
           <button
             onClick={() => navigator.clipboard.writeText(link)}
-            className="w-full py-3 bg-[linear-gradient(135deg,#1f8a70,#264653)] text-white font-semibold rounded-2xl hover:opacity-90 transition mb-3 shadow-[0_14px_34px_rgba(31,138,112,0.22)]"
+            className="w-full py-3 bg-[linear-gradient(135deg,#06b6d4,#2563eb)] text-white font-semibold rounded-2xl hover:opacity-90 transition mb-3 shadow-[0_14px_34px_rgba(6,182,212,0.28)]"
           >
             Copiar link
           </button>
@@ -133,7 +133,7 @@ export default function NovoPacientePage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-[linear-gradient(135deg,#1f8a70,#264653)] text-white font-semibold rounded-2xl hover:opacity-90 transition disabled:opacity-60 shadow-[0_16px_36px_rgba(31,138,112,0.22)]"
+            className="w-full py-3 bg-[linear-gradient(135deg,#06b6d4,#2563eb)] text-white font-semibold rounded-2xl hover:opacity-90 transition disabled:opacity-60 shadow-[0_16px_36px_rgba(6,182,212,0.28)]"
           >
             {loading ? "Cadastrando..." : "Cadastrar Paciente"}
           </button>

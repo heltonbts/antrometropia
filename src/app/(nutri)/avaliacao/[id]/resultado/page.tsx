@@ -27,63 +27,63 @@ export default async function ResultadoPage({
       valor: formatarNumero(r.imc),
       unidade: "kg/m²",
       badge: r.classificacaoImc,
-      tone: "from-[#264653] to-[#4d6a77]",
+      tone: "from-[#2563eb] to-[#60a5fa]",
     },
     {
       titulo: formula === "faulkner" ? "% Gordura — Faulkner" : "% Gordura — Petroski",
       valor: formula === "faulkner" ? formatarNumero(r.percGorduraFaulkner) : formatarNumero(r.percGorduraPetroski),
       unidade: "%",
-      tone: "from-[#c96d42] to-[#d88c5b]",
+      tone: "from-[#ec4899] to-[#f472b6]",
     },
     {
       titulo: "Massa Gorda",
       valor: formatarNumero(r.massaGorda),
       unidade: "kg",
-      tone: "from-[#c96d42] to-[#264653]",
+      tone: "from-[#ec4899] to-[#2563eb]",
     },
     {
       titulo: "Massa Magra",
       valor: formatarNumero(r.massaMagra),
       unidade: "kg",
-      tone: "from-[#1f8a70] to-[#2a9d8f]",
+      tone: "from-[#06b6d4] to-[#22d3ee]",
     },
     {
       titulo: "Massa Muscular (SMM)",
       valor: formatarNumero(r.massaMuscular),
       unidade: "kg",
-      tone: "from-[#1f8a70] to-[#264653]",
+      tone: "from-[#06b6d4] to-[#2563eb]",
     },
     {
       titulo: "Massa Óssea",
       valor: formatarNumero(r.massaOssea),
       unidade: "kg",
-      tone: "from-[#264653] to-[#172033]",
+      tone: "from-[#2563eb] to-[#1e3a8a]",
     },
     {
       titulo: "RCQ",
       valor: formatarNumero(r.rcq, 2),
       unidade: "",
       badge: r.classificacaoRcq,
-      tone: "from-[#264653] to-[#1f8a70]",
+      tone: "from-[#2563eb] to-[#06b6d4]",
     },
     {
       titulo: "Risco — Cintura",
       valor: "",
       unidade: "",
       badge: r.riscoCintura,
-      tone: "from-[#172033] to-[#264653]",
+      tone: "from-[#1e3a8a] to-[#2563eb]",
     },
     {
       titulo: "CMB",
       valor: formatarNumero(r.cmb),
       unidade: "cm",
-      tone: "from-[#1f8a70] to-[#2a9d8f]",
+      tone: "from-[#06b6d4] to-[#22d3ee]",
     },
     {
       titulo: "CMC",
       valor: formatarNumero(r.cmc),
       unidade: "cm",
-      tone: "from-[#1f8a70] to-[#2a9d8f]",
+      tone: "from-[#06b6d4] to-[#22d3ee]",
     },
     {
       titulo: "Soma 6 Dobras",
@@ -91,13 +91,13 @@ export default async function ResultadoPage({
       unidade: "mm",
       badge: r.classificacao6Dobras,
       badgeDobras: true,
-      tone: "from-[#c96d42] to-[#264653]",
+      tone: "from-[#ec4899] to-[#2563eb]",
     },
     {
       titulo: "Soma de Todas as Dobras",
       valor: formatarNumero(r.somaTodasDobras),
       unidade: "mm",
-      tone: "from-[#264653] to-[#c96d42]",
+      tone: "from-[#2563eb] to-[#ec4899]",
     },
   ] as { titulo: string; valor: string; unidade: string; badge?: string | null; badgeDobras?: boolean; tone: string }[]
 
@@ -148,17 +148,17 @@ export default async function ResultadoPage({
         <div className="glass-panel rounded-[28px] p-6">
           <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-5">Somatotipo — Heath-Carter</p>
           <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="metric-card rounded-[22px] bg-gradient-to-br from-[#c96d42] to-[#d88c5b] p-5 text-white">
+            <div className="metric-card rounded-[22px] bg-gradient-to-br from-[#ec4899] to-[#f472b6] p-5 text-white">
               <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-white/70">Endomorfia</p>
               <p className="text-4xl font-bold mt-3">{formatarNumero(r.endomorfia, 2)}</p>
               <p className="text-xs text-white/60 mt-2">Adiposidade</p>
             </div>
-            <div className="metric-card rounded-[22px] bg-gradient-to-br from-[#1f8a70] to-[#2a9d8f] p-5 text-white">
+            <div className="metric-card rounded-[22px] bg-gradient-to-br from-[#06b6d4] to-[#22d3ee] p-5 text-white">
               <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-white/70">Mesomorfia</p>
               <p className="text-4xl font-bold mt-3">{formatarNumero(r.mesomorfia, 2)}</p>
               <p className="text-xs text-white/60 mt-2">Muscularidade</p>
             </div>
-            <div className="metric-card rounded-[22px] bg-gradient-to-br from-[#264653] to-[#4d6a77] p-5 text-white">
+            <div className="metric-card rounded-[22px] bg-gradient-to-br from-[#2563eb] to-[#60a5fa] p-5 text-white">
               <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-white/70">Ectomorfia</p>
               <p className="text-4xl font-bold mt-3">{formatarNumero(r.ectomorfia, 2)}</p>
               <p className="text-xs text-white/60 mt-2">Linearidade</p>
@@ -166,7 +166,7 @@ export default async function ResultadoPage({
           </div>
           {r.biotipo && (
             <div className="mt-5 text-center">
-              <span className="inline-flex items-center gap-2 bg-[rgba(31,138,112,0.1)] border border-[rgba(31,138,112,0.2)] text-[color:var(--accent)] text-sm font-semibold px-4 py-2 rounded-full">
+              <span className="inline-flex items-center gap-2 bg-[rgba(6,182,212,0.10)] border border-[rgba(6,182,212,0.20)] text-[color:var(--accent)] text-sm font-semibold px-4 py-2 rounded-full">
                 Biotipo: {r.biotipo}
               </span>
             </div>
@@ -178,7 +178,7 @@ export default async function ResultadoPage({
       <div className="flex gap-3">
         <Link
           href={`/avaliacao/nova?pacienteId=${p.id}`}
-          className="px-5 py-2.5 bg-[linear-gradient(135deg,#1f8a70,#264653)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition shadow-[0_14px_34px_rgba(31,138,112,0.22)]"
+          className="px-5 py-2.5 bg-[linear-gradient(135deg,#06b6d4,#2563eb)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition shadow-[0_14px_34px_rgba(6,182,212,0.28)]"
         >
           Nova Avaliação
         </Link>
