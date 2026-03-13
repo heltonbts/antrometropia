@@ -69,7 +69,7 @@ function NovaAvaliacaoContent() {
     const payload: Record<string, unknown> = {}
     for (const [k, v] of Object.entries(form)) {
       if (v === "") continue
-      payload[k] = (k === "pacienteId" || k === "dataAvaliacao" || k === "sexoConfirmado") ? v : Number(v)
+      payload[k] = (k === "pacienteId" || k === "dataAvaliacao" || k === "sexoConfirmado" || k === "formulaReferencia") ? v : Number(v)
     }
     const res = await fetch("/api/avaliacoes", {
       method: "POST", headers: { "Content-Type": "application/json" },
