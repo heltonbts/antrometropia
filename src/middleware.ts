@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { jwtVerify } from "jose"
+import { clearAuthCookie, getJwtSecret } from "@/lib/auth"
 
-const SECRET = new TextEncoder().encode(process.env.APP_SECRET || "secret")
+const SECRET = getJwtSecret()
 
 // Rotas que exigem autenticação de nutricionista
 const rotasNutri = ["/dashboard", "/pacientes", "/avaliacao"]
@@ -48,7 +49,7 @@ export async function middleware(req: NextRequest) {
   } catch {
     // Token inválido — remove cookie e redireciona
     const res = NextResponse.redirect(new URL("/login", req.url))
-    res.cookies.delete("token")
+    clearAuthCookie(res)
     return res
   }
 }

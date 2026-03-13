@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { cookies } from "next/headers"
 import { SignJWT } from "jose"
 import bcrypt from "bcryptjs"
+import { getJwtSecret, setAuthCookie } from "@/lib/auth"
 
-const SECRET = new TextEncoder().encode(process.env.APP_SECRET || "secret")
+const SECRET = getJwtSecret()
 
 export async function POST(req: NextRequest) {
   const { token, senha } = await req.json()
@@ -37,10 +37,9 @@ export async function POST(req: NextRequest) {
     .setExpirationTime("7d")
     .sign(SECRET)
 
-  const cookieStore = await cookies()
-  cookieStore.set("token", jwt, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", maxAge: 604800, path: "/" })
-
-  return NextResponse.json({ ok: true })
+  const res = NextResponse.json({ ok: true })
+  setAuthCookie(res, jwt)
+  return res
 }
 
 // Valida o token sem aceitar — usado para mostrar o nome na tela de convite

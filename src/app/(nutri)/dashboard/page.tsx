@@ -3,8 +3,9 @@ import { prisma } from "@/lib/prisma"
 import { cookies } from "next/headers"
 import { jwtVerify } from "jose"
 import { formatarData } from "@/lib/utils"
+import { getJwtSecret } from "@/lib/auth"
 
-const SECRET = new TextEncoder().encode(process.env.APP_SECRET || "secret")
+const SECRET = getJwtSecret()
 
 async function getDashboardData() {
   try {
