@@ -255,18 +255,44 @@ export function calcularMassaOssea(
 }
 
 // ------------------------------------------------------------
-// 8. SMM — Lee et al. (2000)
+// 8. MASSA MUSCULAR ESQUELÉTICA — Lee et al. (2000), modelo antropométrico
+//    SMM = Ht x (0.00744 x CAG² + 0.00088 x CTG² + 0.00441 x CCG²)
+//          + 2.4 x sexo - 0.048 x idade + raca + 7.8
+//    sexo: 1 masculino, 0 feminino
+//    raca: 0 branco/hispânico, 1.1 afrodescendente, -2 asiático
 // ------------------------------------------------------------
-export function calcularSMM(
-  peso: number,
-  alturaM: number,
+export function calcularMassaMuscularLee(
+  alturaCm: number,
+  circBracoCm: number,
+  dobTricipitalMm: number,
+  circCoxaCm: number,
+  dobCoxaMm: number,
+  circPanturrilhaCm: number,
+  dobPanturrilhaMm: number,
   sexo: "M" | "F",
   idade: number,
   raca: "branco" | "negro" | "asiatico" = "branco"
 ): number {
+  const alturaM = alturaCm / 100
   const sexoVal = sexo === "M" ? 1 : 0
-  const racaVal = raca === "negro" ? 1.2 : raca === "asiatico" ? -1.2 : 0
-  return 0.244 * peso + 7.8 * alturaM + 6.6 * sexoVal - 0.098 * idade + (racaVal - 3.3)
+  const racaVal = raca === "negro" ? 1.1 : raca === "asiatico" ? -2 : 0
+
+  const bracoCorrigido = circBracoCm - Math.PI * (dobTricipitalMm / 10)
+  const coxaCorrigida = circCoxaCm - Math.PI * (dobCoxaMm / 10)
+  const panturrilhaCorrigida = circPanturrilhaCm - Math.PI * (dobPanturrilhaMm / 10)
+
+  return (
+    alturaM *
+      (
+        0.00744 * bracoCorrigido * bracoCorrigido +
+        0.00088 * coxaCorrigida * coxaCorrigida +
+        0.00441 * panturrilhaCorrigida * panturrilhaCorrigida
+      ) +
+    2.4 * sexoVal -
+    0.048 * idade +
+    racaVal +
+    7.8
+  )
 }
 
 // ------------------------------------------------------------
@@ -384,8 +410,30 @@ export function calcularTudo(dados: DadosAvaliacao): ResultadoFormulas {
     massaOssea = calcularMassaOssea(alturaM, dados.diamPunho, femurDiam)
   }
 
-  // SMM
-  const massaMuscular = calcularSMM(dados.peso, alturaM, sexo ?? "F", dados.idade, dados.raca)
+  // Massa muscular esquelética — Lee et al. (2000)
+  let massaMuscular: number | null = null
+  if (
+    sexo &&
+    temNumero(dados.circBracoRelaxado) &&
+    temNumero(dados.dobTricipital) &&
+    temNumero(dados.circCoxaMedia) &&
+    temNumero(dados.dobCoxa) &&
+    temNumero(dados.circPanturrilha) &&
+    temNumero(dados.dobPanturrilha)
+  ) {
+    massaMuscular = calcularMassaMuscularLee(
+      dados.altura,
+      dados.circBracoRelaxado,
+      dados.dobTricipital,
+      dados.circCoxaMedia,
+      dados.dobCoxa,
+      dados.circPanturrilha,
+      dados.dobPanturrilha,
+      sexo,
+      dados.idade,
+      dados.raca
+    )
+  }
 
   // Somatotipo Heath-Carter
   let endomorfia: number | null = null

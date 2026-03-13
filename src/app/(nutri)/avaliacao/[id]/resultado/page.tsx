@@ -22,6 +22,21 @@ export default async function ResultadoPage({
 
   const r = avaliacao.resultado
   const p = avaliacao.paciente
+  const formulaReferencia = avaliacao.resultado?.formulaReferencia === "faulkner" ? "faulkner" : "petroski"
+  const cardGordura =
+    formulaReferencia === "faulkner"
+      ? {
+          titulo: "% Gordura — Faulkner",
+          valor: formatarNumero(r.percGorduraFaulkner),
+          unidade: "%",
+          class: "bg-pink-50 border-pink-200",
+        }
+      : {
+          titulo: "% Gordura — Petroski",
+          valor: formatarNumero(r.percGorduraPetroski),
+          unidade: "%",
+          class: "bg-violet-50 border-violet-200",
+        }
 
   const cards = [
     {
@@ -32,18 +47,7 @@ export default async function ResultadoPage({
       badge: r.classificacaoImc,
       badgeClass: r.classificacaoImc ? corRisco(r.classificacaoImc) : "",
     },
-    {
-      titulo: "% Gordura — Faulkner",
-      valor: formatarNumero(r.percGorduraFaulkner),
-      unidade: "%",
-      class: "bg-pink-50 border-pink-200",
-    },
-    {
-      titulo: "% Gordura — Petroski",
-      valor: formatarNumero(r.percGorduraPetroski),
-      unidade: "%",
-      class: "bg-violet-50 border-violet-200",
-    },
+    cardGordura,
     {
       titulo: "Massa Gorda",
       valor: formatarNumero(r.massaGorda),
