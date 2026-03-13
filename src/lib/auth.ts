@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 
 export function getJwtSecret(): Uint8Array {
-  const secret = process.env.APP_SECRET ?? process.env.NEXTAUTH_SECRET ?? "secret-dev-fallback"
+  const secret = process.env.APP_SECRET ?? "dev-only-secret"
   return new TextEncoder().encode(secret)
 }
 
