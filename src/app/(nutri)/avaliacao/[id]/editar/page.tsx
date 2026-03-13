@@ -118,7 +118,7 @@ export default function EditarAvaliacaoPage() {
   }
 
   const f = form
-  const sf = (u: Partial<FormData>) => setForm((prev) => ({ ...prev, ...u }))
+  const sf = (u: FormData) => setForm((prev) => ({ ...prev, ...u }))
 
   function validar(): string | null {
     if (!f.peso || !f.altura) return "Peso e altura são obrigatórios"
