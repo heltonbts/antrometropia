@@ -12,7 +12,7 @@ import {
 interface Props {
   tricipital?: number | null
   subescapular?: number | null
-  suprailíaca?: number | null
+  supraespinal?: number | null
   abdominal?: number | null
   coxa?: number | null
   panturrilha?: number | null
@@ -33,7 +33,7 @@ const CustomTooltip = ({ active, payload }: any) => {
 export function GraficoRadarDobras({
   tricipital,
   subescapular,
-  suprailíaca,
+  supraespinal,
   abdominal,
   coxa,
   panturrilha,
@@ -41,7 +41,7 @@ export function GraficoRadarDobras({
   const dados = [
     { dobra: "Tricipital", valor: tricipital ?? 0 },
     { dobra: "Subescapular", valor: subescapular ?? 0 },
-    { dobra: "Suprailíaca", valor: suprailíaca ?? 0 },
+    { dobra: "Supraespinal", valor: supraespinal ?? 0 },
     { dobra: "Abdominal", valor: abdominal ?? 0 },
     { dobra: "Coxa", valor: coxa ?? 0 },
     { dobra: "Panturrilha", valor: panturrilha ?? 0 },

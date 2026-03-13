@@ -9,6 +9,7 @@ import { GraficoComposicao } from "@/components/charts/GraficoComposicao"
 import { GraficoRadarDobras } from "@/components/charts/GraficoRadarDobras"
 import { GraficoAreaEmpilhada } from "@/components/charts/GraficoAreaEmpilhada"
 import { GraficoBarrasAgrupadas } from "@/components/charts/GraficoBarrasAgrupadas"
+import { GraficoComparacaoDobras } from "@/components/charts/GraficoComparacaoDobras"
 import { Somatocarta } from "@/components/charts/Somatocarta"
 
 const ACCENT   = "#1f8a70"
@@ -107,6 +108,16 @@ export default function PerfilPacientePage() {
     { nome: "Coxa",        valor: ultima?.dobCoxa ?? 0,         cor: COR_AMBER },
     { nome: "Panturrilha", valor: ultima?.dobPanturrilha ?? 0,  cor: "#10b981" },
   ]
+
+  const dobrasPorAvaliacao = avals.map((a) => ({
+    data: fmt(a.dataAvaliacao),
+    tricipital:   a.dobTricipital,
+    subescapular: a.dobSubescapular,
+    supraespinal: a.dobSupraespinal,
+    abdominal:    a.dobAbdominal,
+    coxa:         a.dobCoxa,
+    panturrilha:  a.dobPanturrilha,
+  }))
 
   const pontosSomatocarta = avals
     .filter((a) => a.resultado?.somatocartaX != null)
@@ -213,7 +224,7 @@ export default function PerfilPacientePage() {
             <div className="glass-panel rounded-[28px] p-6">
               <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-1">Dobras Cutâneas</p>
               <p className="text-xs text-slate-400 mb-4">Distribuição — última avaliação</p>
-              <GraficoRadarDobras tricipital={ultima.dobTricipital} subescapular={ultima.dobSubescapular} abdominal={ultima.dobAbdominal} coxa={ultima.dobCoxa} panturrilha={ultima.dobPanturrilha} />
+              <GraficoRadarDobras tricipital={ultima.dobTricipital} subescapular={ultima.dobSubescapular} supraespinal={ultima.dobSupraespinal} abdominal={ultima.dobAbdominal} coxa={ultima.dobCoxa} panturrilha={ultima.dobPanturrilha} />
             </div>
           </div>
 
@@ -247,6 +258,14 @@ export default function PerfilPacientePage() {
               <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-1">Dobras por Região</p>
               <p className="text-xs text-slate-400 mb-4">Valores em mm — última avaliação</p>
               <GraficoBarrasAgrupadas dobras={dobrasBarra} />
+              {avals.length >= 2 && (
+                <>
+                  <div className="border-t border-slate-100 mt-5 pt-5">
+                    <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-3">Comparação entre avaliações</p>
+                    <GraficoComparacaoDobras avaliacoes={dobrasPorAvaliacao} />
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="glass-panel rounded-[28px] p-6">
