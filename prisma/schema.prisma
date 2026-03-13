@@ -117,8 +117,11 @@ model Resultado {
 
   soma6Dobras          Float?
   classificacao6Dobras String?
+  somaTodasDobras      Float?
 
   cpRisco              String?
+
+  formulaReferencia    String?
 
   criadoEm            DateTime  @default(now())
 

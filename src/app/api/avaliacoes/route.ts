@@ -166,6 +166,8 @@ export async function POST(req: NextRequest) {
       soma6Dobras: resultado.soma6Dobras,
       classificacao6Dobras: resultado.classificacao6Dobras,
       cpRisco: resultado.cpRisco,
+      somaTodasDobras: resultado.somaTodasDobras,
+      formulaReferencia: formulaEscolha ?? "petroski",
     },
   })
 

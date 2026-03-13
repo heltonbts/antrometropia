@@ -64,8 +64,8 @@ export function GraficoComposicao({ massaGorda, massaMagra, massaOssea, massaMus
   ]
 
   return (
-    <ResponsiveContainer width="100%" height={220}>
-      <PieChart>
+    <ResponsiveContainer width="100%" height={240}>
+      <PieChart margin={{ top: 0, right: 0, bottom: 10, left: 0 }}>
         <Pie
           data={dados}
           dataKey="valor"
@@ -87,6 +87,7 @@ export function GraficoComposicao({ massaGorda, massaMagra, massaOssea, massaMus
         <Legend
           iconType="circle"
           iconSize={8}
+          wrapperStyle={{ paddingTop: 16 }}
           formatter={(v) => <span className="text-xs text-slate-600">{v}</span>}
         />
       </PieChart>

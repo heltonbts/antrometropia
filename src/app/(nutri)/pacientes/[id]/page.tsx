@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
-import { formatarData, calcularIdade, corRisco, formatarSexo } from "@/lib/utils"
+import { formatarData, calcularIdade, corRisco, formatarSexo, corDobras } from "@/lib/utils"
 import { CardEvolucao } from "@/components/charts/CardEvolucao"
 import { GraficoComposicao } from "@/components/charts/GraficoComposicao"
 import { GraficoRadarDobras } from "@/components/charts/GraficoRadarDobras"
@@ -11,10 +11,10 @@ import { GraficoAreaEmpilhada } from "@/components/charts/GraficoAreaEmpilhada"
 import { GraficoBarrasAgrupadas } from "@/components/charts/GraficoBarrasAgrupadas"
 import { Somatocarta } from "@/components/charts/Somatocarta"
 
+const ACCENT   = "#1f8a70"
+const ACCENT2  = "#c96d42"
+const ACCENT3  = "#264653"
 const COR_ROSA = "#f472b6"
-const COR_CIANO = "#06b6d4"
-const COR_AZUL = "#3b82f6"
-const COR_VIOLETA = "#8b5cf6"
 const COR_AMBER = "#f59e0b"
 
 interface Avaliacao {
@@ -22,6 +22,7 @@ interface Avaliacao {
   dataAvaliacao: string
   peso: number
   altura: number
+  circCintura?: number | null
   dobTricipital?: number | null
   dobSubescapular?: number | null
   dobSupraespinal?: number | null
@@ -29,12 +30,10 @@ interface Avaliacao {
   dobAbdominal?: number | null
   dobCoxa?: number | null
   dobPanturrilha?: number | null
-  circCintura?: number | null
-  circQuadril?: number | null
-  circBraco?: number | null
   resultado: {
     imc?: number | null
     classificacaoImc?: string | null
+    formulaReferencia?: string | null
     percGorduraFaulkner?: number | null
     percGorduraPetroski?: number | null
     massaGorda?: number | null
@@ -51,6 +50,7 @@ interface Avaliacao {
     somatocartaY?: number | null
     biotipo?: string | null
     soma6Dobras?: number | null
+    somaTodasDobras?: number | null
     cmb?: number | null
     cmc?: number | null
   } | null
@@ -78,56 +78,39 @@ export default function PerfilPacientePage() {
   useEffect(() => {
     fetch(`/api/pacientes/${id}`)
       .then((r) => r.ok ? r.json().catch(() => null) : null)
-      .then((d) => {
-        setPaciente(d)
-        setLoading(false)
-      })
+      .then((d) => { setPaciente(d); setLoading(false) })
       .catch(() => setLoading(false))
   }, [id])
 
-  if (loading) {
-    return <div className="text-center py-20 text-slate-400">Carregando...</div>
-  }
-
-  if (!paciente) {
-    return <div className="text-center py-20 text-slate-400">Paciente não encontrado</div>
-  }
+  if (loading) return <div className="text-center py-20 text-slate-400">Carregando...</div>
+  if (!paciente) return <div className="text-center py-20 text-slate-400">Paciente não encontrado</div>
 
   const avals = paciente.avaliacoes
   const ultima = avals[avals.length - 1]
   const penultima = avals[avals.length - 2]
   const idade = calcularIdade(paciente.dataNascimento)
 
-  // Funções auxiliares para série de dados
   const serie = (fn: (a: Avaliacao) => number | null | undefined) =>
     avals.map((a) => ({ data: fmt(a.dataAvaliacao), valor: fn(a) ?? null }))
 
   const serieRes = (fn: (r: NonNullable<Avaliacao["resultado"]>) => number | null | undefined) =>
     avals.map((a) => ({ data: fmt(a.dataAvaliacao), valor: a.resultado ? (fn(a.resultado) ?? null) : null }))
 
-  // Última avaliação resultado
   const r = ultima?.resultado
 
-  // Dobras da última avaliação para barras
   const dobrasBarra = [
-    { nome: "Tricipital", valor: ultima?.dobTricipital ?? 0, cor: COR_CIANO },
-    { nome: "Subescap.", valor: ultima?.dobSubescapular ?? 0, cor: COR_AZUL },
-    { nome: "Suprailíaca", valor: ultima?.dobSupraespinal ?? 0, cor: COR_VIOLETA },
-    { nome: "Abdominal", valor: ultima?.dobAbdominal ?? 0, cor: COR_ROSA },
-    { nome: "Coxa", valor: ultima?.dobCoxa ?? 0, cor: COR_AMBER },
-    { nome: "Panturrilha", valor: ultima?.dobPanturrilha ?? 0, cor: "#10b981" },
+    { nome: "Tricipital",  valor: ultima?.dobTricipital ?? 0,  cor: ACCENT },
+    { nome: "Subescap.",   valor: ultima?.dobSubescapular ?? 0, cor: ACCENT3 },
+    { nome: "Supraespinal",valor: ultima?.dobSupraespinal ?? 0, cor: ACCENT2 },
+    { nome: "Abdominal",   valor: ultima?.dobAbdominal ?? 0,    cor: COR_ROSA },
+    { nome: "Coxa",        valor: ultima?.dobCoxa ?? 0,         cor: COR_AMBER },
+    { nome: "Panturrilha", valor: ultima?.dobPanturrilha ?? 0,  cor: "#10b981" },
   ]
 
-  // Pontos da somatocarta
   const pontosSomatocarta = avals
     .filter((a) => a.resultado?.somatocartaX != null)
-    .map((a) => ({
-      data: fmt(a.dataAvaliacao),
-      x: a.resultado!.somatocartaX!,
-      y: a.resultado!.somatocartaY!,
-    }))
+    .map((a) => ({ data: fmt(a.dataAvaliacao), x: a.resultado!.somatocartaX!, y: a.resultado!.somatocartaY! }))
 
-  // Dados área empilhada
   const dadosArea = avals.map((a) => ({
     data: fmt(a.dataAvaliacao),
     massaGorda: a.resultado?.massaGorda ?? null,
@@ -137,185 +120,139 @@ export default function PerfilPacientePage() {
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white text-2xl font-bold shadow-md shadow-cyan-100">
+          <div className="w-14 h-14 rounded-[22px] bg-[linear-gradient(135deg,#1f8a70,#264653)] flex items-center justify-center text-white text-2xl font-bold shadow-[0_16px_36px_rgba(31,138,112,0.22)]">
             {paciente.nome[0]}
           </div>
           <div>
-            <Link href="/pacientes" className="text-xs text-slate-400 hover:text-slate-600">
+            <Link href="/pacientes" className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 hover:text-slate-600">
               ← Pacientes
             </Link>
-            <h1 className="text-2xl font-bold text-slate-900">{paciente.nome}</h1>
-            <p className="text-slate-400 text-sm">
-              {idade} anos · {formatarSexo(paciente.sexo)} ·{" "}
-              {avals.length} {avals.length === 1 ? "avaliação" : "avaliações"}
+            <h1 className="text-2xl font-semibold tracking-[-0.03em] text-slate-900 mt-1">{paciente.nome}</h1>
+            <p className="text-slate-400 text-sm mt-0.5">
+              {idade} anos · {formatarSexo(paciente.sexo)} · {avals.length} {avals.length === 1 ? "avaliação" : "avaliações"}
             </p>
           </div>
         </div>
         <Link
           href={`/avaliacao/nova?pacienteId=${paciente.id}`}
-          className="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm font-semibold rounded-xl hover:opacity-90 transition shadow-sm shadow-cyan-200"
+          className="self-start md:self-auto px-5 py-2.5 bg-[linear-gradient(135deg,#1f8a70,#264653)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition shadow-[0_14px_34px_rgba(31,138,112,0.22)]"
         >
           + Nova Avaliação
         </Link>
       </div>
 
       {avals.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-12 text-center text-slate-400">
-          <p className="text-3xl mb-3">📋</p>
+        <div className="glass-panel rounded-[28px] p-12 text-center text-slate-400">
+          <p className="font-mono-ui text-sm mb-3 text-[color:var(--accent)]">EMPTY</p>
           <p className="font-medium">Nenhuma avaliação registrada</p>
-          <Link
-            href={`/avaliacao/nova?pacienteId=${paciente.id}`}
-            className="text-cyan-600 text-sm hover:underline mt-1 block"
-          >
+          <Link href={`/avaliacao/nova?pacienteId=${paciente.id}`} className="text-[color:var(--accent)] text-sm hover:underline mt-1 block">
             Fazer primeira avaliação
           </Link>
         </div>
       ) : (
         <>
-          {/* Cards de resumo da última avaliação */}
+          {/* Cards resumo */}
           <div>
-            <p className="text-xs text-slate-400 uppercase tracking-wide font-medium mb-3">
+            <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-3">
               Última avaliação — {formatarData(ultima.dataAvaliacao)}
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
               {[
-                { label: "Peso", valor: ultima.peso?.toFixed(1), unidade: "kg", cor: "from-cyan-500 to-blue-600" },
-                { label: "IMC", valor: r?.imc?.toFixed(1) ?? "—", unidade: "kg/m²", cor: "from-violet-500 to-purple-600" },
-                { label: "% Gordura", valor: r?.percGorduraPetroski?.toFixed(1) ?? r?.percGorduraFaulkner?.toFixed(1) ?? "—", unidade: "%", cor: "from-pink-400 to-rose-500" },
-                { label: "Massa Muscular", valor: r?.massaMuscular?.toFixed(1) ?? "—", unidade: "kg", cor: "from-emerald-400 to-teal-500" },
-                { label: "Massa Óssea", valor: r?.massaOssea?.toFixed(1) ?? "—", unidade: "kg", cor: "from-slate-500 to-slate-700" },
+                { label: "Peso",           valor: ultima.peso?.toFixed(1),                                                           unidade: "kg",    tone: "from-[#1f8a70] to-[#2a9d8f]" },
+                { label: "IMC",            valor: r?.imc?.toFixed(1) ?? "—",                                                         unidade: "kg/m²", tone: "from-[#264653] to-[#4d6a77]" },
+                { label: "% Gordura",      valor: (r?.formulaReferencia === "faulkner" ? r?.percGorduraFaulkner : r?.percGorduraPetroski)?.toFixed(1) ?? "—", unidade: "%", tone: "from-[#c96d42] to-[#d88c5b]" },
+                { label: "Massa Muscular", valor: r?.massaMuscular?.toFixed(1) ?? "—",                                               unidade: "kg",    tone: "from-[#1f8a70] to-[#264653]" },
+                { label: "Massa Óssea",    valor: r?.massaOssea?.toFixed(1) ?? "—",                                                  unidade: "kg",    tone: "from-[#264653] to-[#172033]" },
               ].map((c) => (
-                <div key={c.label} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${c.cor} flex-shrink-0`} />
-                  <div>
-                    <p className="text-xs text-slate-400">{c.label}</p>
-                    <p className="font-bold text-slate-900">
-                      {c.valor}{" "}
-                      <span className="text-xs font-normal text-slate-400">{c.unidade}</span>
-                    </p>
-                  </div>
+                <div key={c.label} className={`metric-card rounded-[22px] bg-gradient-to-br ${c.tone} p-4 text-white`}>
+                  <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-white/70">{c.label}</p>
+                  <p className="mt-3 text-xl font-semibold">{c.valor}</p>
+                  <p className="mt-1 text-xs text-white/60">{c.unidade}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Gráficos de evolução */}
+          {/* Evolução */}
           {avals.length >= 2 && (
             <>
               <div>
-                <h2 className="text-base font-semibold text-slate-800 mb-4">Evolução</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <CardEvolucao
-                    titulo="Peso"
-                    valorAtual={ultima.peso}
-                    valorAnterior={penultima?.peso}
-                    unidade="kg"
-                    dados={serie((a) => a.peso)}
-                    cor={COR_CIANO}
-                  />
-                  <CardEvolucao
-                    titulo="IMC"
-                    valorAtual={r?.imc ?? null}
-                    valorAnterior={penultima?.resultado?.imc ?? null}
-                    unidade="kg/m²"
-                    dados={serieRes((r) => r.imc)}
-                    cor={COR_VIOLETA}
-                    refMin={18.5}
-                    refMax={25}
-                    classificacao={r?.classificacaoImc}
-                    corClass={r?.classificacaoImc ? corRisco(r.classificacaoImc) : undefined}
-                  />
-                  <CardEvolucao
-                    titulo="% Gordura (Petroski)"
-                    valorAtual={r?.percGorduraPetroski ?? null}
-                    valorAnterior={penultima?.resultado?.percGorduraPetroski ?? null}
-                    unidade="%"
-                    dados={serieRes((r) => r.percGorduraPetroski)}
-                    cor={COR_ROSA}
-                  />
-                  <CardEvolucao
-                    titulo="Massa Muscular (SMM)"
-                    valorAtual={r?.massaMuscular ?? null}
-                    valorAnterior={penultima?.resultado?.massaMuscular ?? null}
-                    unidade="kg"
-                    dados={serieRes((r) => r.massaMuscular)}
-                    cor="#10b981"
-                  />
-                  <CardEvolucao
-                    titulo="Circunferência da Cintura"
-                    valorAtual={ultima.circCintura ?? null}
-                    valorAnterior={penultima?.circCintura ?? null}
-                    unidade="cm"
-                    dados={serie((a) => a.circCintura)}
-                    cor={COR_AMBER}
-                    classificacao={r?.riscoCintura}
-                    corClass={r?.riscoCintura ? corRisco(r.riscoCintura) : undefined}
-                  />
-                  <CardEvolucao
-                    titulo="RCQ"
-                    valorAtual={r?.rcq ?? null}
-                    valorAnterior={penultima?.resultado?.rcq ?? null}
-                    unidade=""
-                    dados={serieRes((r) => r.rcq)}
-                    cor={COR_AZUL}
-                    classificacao={r?.classificacaoRcq}
-                    corClass={r?.classificacaoRcq ? corRisco(r.classificacaoRcq) : undefined}
-                  />
+                <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-4">Evolução</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <CardEvolucao titulo="Peso" valorAtual={ultima.peso} valorAnterior={penultima?.peso} unidade="kg" dados={serie((a) => a.peso)} cor={ACCENT} />
+                  <CardEvolucao titulo="IMC" valorAtual={r?.imc ?? null} valorAnterior={penultima?.resultado?.imc ?? null} unidade="kg/m²" dados={serieRes((r) => r.imc)} cor={ACCENT3} refMin={18.5} refMax={25} classificacao={r?.classificacaoImc} corClass={r?.classificacaoImc ? corRisco(r.classificacaoImc) : undefined} />
+                  <CardEvolucao titulo={`% Gordura (${r?.formulaReferencia === "faulkner" ? "Faulkner" : "Petroski"})`} valorAtual={(r?.formulaReferencia === "faulkner" ? r?.percGorduraFaulkner : r?.percGorduraPetroski) ?? null} valorAnterior={(penultima?.resultado?.formulaReferencia === "faulkner" ? penultima?.resultado?.percGorduraFaulkner : penultima?.resultado?.percGorduraPetroski) ?? null} unidade="%" dados={serieRes((res) => res.formulaReferencia === "faulkner" ? res.percGorduraFaulkner : res.percGorduraPetroski)} cor={ACCENT2} />
+                  <CardEvolucao titulo="Massa Muscular (SMM)" valorAtual={r?.massaMuscular ?? null} valorAnterior={penultima?.resultado?.massaMuscular ?? null} unidade="kg" dados={serieRes((r) => r.massaMuscular)} cor="#10b981" />
+                  <CardEvolucao titulo="Circunferência da Cintura" valorAtual={ultima.circCintura ?? null} valorAnterior={penultima?.circCintura ?? null} unidade="cm" dados={serie((a) => a.circCintura)} cor={COR_AMBER} classificacao={r?.riscoCintura} corClass={r?.riscoCintura ? corRisco(r.riscoCintura) : undefined} />
+                  <CardEvolucao titulo="RCQ" valorAtual={r?.rcq ?? null} valorAnterior={penultima?.resultado?.rcq ?? null} unidade="" dados={serieRes((r) => r.rcq)} cor={COR_ROSA} classificacao={r?.classificacaoRcq} corClass={r?.classificacaoRcq ? corRisco(r.classificacaoRcq) : undefined} />
+                  <CardEvolucao titulo="Soma 6 Dobras" valorAtual={r?.soma6Dobras ?? null} valorAnterior={penultima?.resultado?.soma6Dobras ?? null} unidade="mm" dados={serieRes((r) => r.soma6Dobras)} cor={ACCENT2} />
+                  <CardEvolucao titulo="Soma Todas as Dobras" valorAtual={r?.somaTodasDobras ?? null} valorAnterior={penultima?.resultado?.somaTodasDobras ?? null} unidade="mm" dados={serieRes((r) => r.somaTodasDobras)} cor={ACCENT3} />
                 </div>
               </div>
 
-              {/* Massa Gorda vs Magra — área empilhada */}
-              <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-                <h2 className="text-base font-semibold text-slate-800 mb-4">Massa Gorda vs Massa Magra</h2>
+              <div className="glass-panel rounded-[28px] p-6">
+                <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-4">Massa Gorda vs Massa Magra</p>
                 <GraficoAreaEmpilhada dados={dadosArea} />
               </div>
             </>
           )}
 
-          {/* Composição corporal + Radar dobras */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {/* Composição + Radar */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {r?.massaGorda && r?.massaMagra ? (
-              <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-                <h2 className="text-base font-semibold text-slate-800 mb-1">Composição Corporal</h2>
+              <div className="glass-panel rounded-[28px] p-6">
+                <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-1">Composição Corporal</p>
                 <p className="text-xs text-slate-400 mb-4">Última avaliação</p>
-                <GraficoComposicao
-                  massaGorda={r.massaGorda}
-                  massaMagra={r.massaMagra}
-                  massaOssea={r.massaOssea}
-                  massaMuscular={r.massaMuscular}
-                  peso={ultima.peso}
-                />
+                <GraficoComposicao massaGorda={r.massaGorda} massaMagra={r.massaMagra} massaOssea={r.massaOssea} massaMuscular={r.massaMuscular} peso={ultima.peso} />
               </div>
             ) : null}
 
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-              <h2 className="text-base font-semibold text-slate-800 mb-1">Dobras Cutâneas</h2>
-              <p className="text-xs text-slate-400 mb-4">Última avaliação — distribuição</p>
-              <GraficoRadarDobras
-                tricipital={ultima.dobTricipital}
-                subescapular={ultima.dobSubescapular}
-                abdominal={ultima.dobAbdominal}
-                coxa={ultima.dobCoxa}
-                panturrilha={ultima.dobPanturrilha}
-              />
+            <div className="glass-panel rounded-[28px] p-6">
+              <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-1">Dobras Cutâneas</p>
+              <p className="text-xs text-slate-400 mb-4">Distribuição — última avaliação</p>
+              <GraficoRadarDobras tricipital={ultima.dobTricipital} subescapular={ultima.dobSubescapular} abdominal={ultima.dobAbdominal} coxa={ultima.dobCoxa} panturrilha={ultima.dobPanturrilha} />
             </div>
           </div>
 
-          {/* Barras dobras + Somatocarta */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-              <h2 className="text-base font-semibold text-slate-800 mb-1">Dobras por Região</h2>
+          {/* Totais de dobras */}
+          {(r?.soma6Dobras != null || r?.somaTodasDobras != null) && (
+            <div className="glass-panel rounded-[28px] p-6">
+              <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-5">Somatório de Dobras — última avaliação</p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="metric-card rounded-[22px] bg-gradient-to-br from-[#c96d42] to-[#264653] p-5 text-white">
+                  <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-white/70">Soma 6 Dobras</p>
+                  <p className="text-4xl font-bold mt-3">{r?.soma6Dobras?.toFixed(1) ?? "—"}</p>
+                  <p className="text-xs text-white/60 mt-1">mm</p>
+                  {r?.classificacao6Dobras && (
+                    <span className={`inline-block mt-2 px-2.5 py-1 rounded-lg text-xs font-bold font-mono-ui uppercase tracking-[0.14em] ${corDobras(r.classificacao6Dobras)}`}>
+                      {r.classificacao6Dobras}
+                    </span>
+                  )}
+                </div>
+                <div className="metric-card rounded-[22px] bg-gradient-to-br from-[#264653] to-[#c96d42] p-5 text-white">
+                  <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-white/70">Soma Todas as Dobras</p>
+                  <p className="text-4xl font-bold mt-3">{r?.somaTodasDobras?.toFixed(1) ?? "—"}</p>
+                  <p className="text-xs text-white/60 mt-1">mm · {r?.somaTodasDobras != null && r?.soma6Dobras != null ? `${(r.somaTodasDobras - r.soma6Dobras).toFixed(1)} mm fora do S6` : ""}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Barras + Somatocarta */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="glass-panel rounded-[28px] p-6">
+              <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-1">Dobras por Região</p>
               <p className="text-xs text-slate-400 mb-4">Valores em mm — última avaliação</p>
               <GraficoBarrasAgrupadas dobras={dobrasBarra} />
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-              <h2 className="text-base font-semibold text-slate-800 mb-1">Somatocarta</h2>
+            <div className="glass-panel rounded-[28px] p-6">
+              <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-1">Somatocarta</p>
               <p className="text-xs text-slate-400 mb-4">
                 {r?.biotipo && (
-                  <span className="inline-flex items-center gap-1 bg-cyan-50 text-cyan-700 px-2 py-0.5 rounded-full text-xs font-semibold mr-2">
+                  <span className="inline-flex items-center gap-1 bg-[rgba(31,138,112,0.1)] text-[color:var(--accent)] px-2 py-0.5 rounded-full text-xs font-semibold mr-2">
                     {r.biotipo}
                   </span>
                 )}
@@ -325,49 +262,47 @@ export default function PerfilPacientePage() {
             </div>
           </div>
 
-          {/* Somatotipo detalhado */}
+          {/* Somatotipo */}
           {r?.endomorfia != null && (
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-              <h2 className="text-base font-semibold text-slate-800 mb-4">Somatotipo — Heath-Carter</h2>
+            <div className="glass-panel rounded-[28px] p-6">
+              <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-5">Somatotipo — Heath-Carter</p>
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  { label: "Endomorfia", valor: r.endomorfia, cor: "from-pink-400 to-rose-500", bg: "bg-rose-50", text: "text-rose-600", desc: "Adiposidade" },
-                  { label: "Mesomorfia", valor: r.mesomorfia, cor: "from-cyan-400 to-teal-500", bg: "bg-cyan-50", text: "text-cyan-600", desc: "Muscularidade" },
-                  { label: "Ectomorfia", valor: r.ectomorfia, cor: "from-blue-400 to-indigo-500", bg: "bg-blue-50", text: "text-blue-600", desc: "Linearidade" },
+                  { label: "Endomorfia", valor: r.endomorfia, tone: "from-[#c96d42] to-[#d88c5b]", desc: "Adiposidade" },
+                  { label: "Mesomorfia", valor: r.mesomorfia, tone: "from-[#1f8a70] to-[#2a9d8f]", desc: "Muscularidade" },
+                  { label: "Ectomorfia", valor: r.ectomorfia, tone: "from-[#264653] to-[#4d6a77]", desc: "Linearidade" },
                 ].map((c) => (
-                  <div key={c.label} className={`${c.bg} rounded-2xl p-5 text-center`}>
-                    <p className={`text-xs font-semibold ${c.text} uppercase tracking-wide`}>{c.label}</p>
-                    <p className={`text-4xl font-bold ${c.text} mt-2`}>{c.valor?.toFixed(1)}</p>
-                    <p className="text-xs text-slate-400 mt-1">{c.desc}</p>
+                  <div key={c.label} className={`metric-card rounded-[22px] bg-gradient-to-br ${c.tone} p-5 text-center text-white`}>
+                    <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-white/70">{c.label}</p>
+                    <p className="text-4xl font-bold mt-2">{c.valor?.toFixed(1)}</p>
+                    <p className="text-xs text-white/60 mt-1">{c.desc}</p>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Histórico de avaliações */}
+          {/* Histórico */}
           <div>
-            <h2 className="text-base font-semibold text-slate-800 mb-4">Histórico de Avaliações</h2>
-            <div className="space-y-3">
+            <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-4">Histórico de Avaliações</p>
+            <div className="space-y-2">
               {[...avals].reverse().map((a, i) => (
                 <Link
                   key={a.id}
                   href={`/avaliacao/${a.id}/resultado`}
-                  className="flex items-center justify-between bg-white rounded-2xl border border-slate-100 shadow-sm p-4 hover:border-cyan-200 hover:shadow-md transition-all"
+                  className="glass-panel flex items-center justify-between rounded-[22px] p-4 hover:border-[rgba(31,138,112,0.22)] hover:shadow-md transition-all"
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`w-2 h-2 rounded-full ${i === 0 ? "bg-cyan-500" : "bg-slate-200"}`} />
+                    <div className={`w-2 h-2 rounded-full ${i === 0 ? "bg-[color:var(--accent)]" : "bg-slate-200"}`} />
                     <div>
                       <p className="font-medium text-slate-800">{formatarData(a.dataAvaliacao)}</p>
-                      <p className="text-slate-400 text-sm">
-                        {a.peso} kg · IMC {a.resultado?.imc?.toFixed(1) ?? "—"}
-                      </p>
+                      <p className="text-slate-400 text-sm">{a.peso} kg · IMC {a.resultado?.imc?.toFixed(1) ?? "—"}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    {a.resultado?.percGorduraPetroski && (
-                      <span className="text-xs bg-pink-50 text-pink-600 font-semibold px-2 py-1 rounded-lg">
-                        {a.resultado.percGorduraPetroski.toFixed(1)}% G
+                  <div className="flex items-center gap-2">
+                    {(a.resultado?.formulaReferencia === "faulkner" ? a.resultado?.percGorduraFaulkner : a.resultado?.percGorduraPetroski) && (
+                      <span className="font-mono-ui text-[11px] bg-[rgba(201,109,66,0.1)] text-[color:var(--accent-2)] font-semibold px-2 py-1 rounded-lg">
+                        {(a.resultado?.formulaReferencia === "faulkner" ? a.resultado?.percGorduraFaulkner : a.resultado?.percGorduraPetroski)?.toFixed(1)}% G
                       </span>
                     )}
                     <span className="text-slate-300 text-sm">→</span>

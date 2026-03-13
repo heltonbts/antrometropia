@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
 import { formatarData, calcularIdade, formatarSexo } from "@/lib/utils"
 
@@ -10,7 +10,55 @@ interface Paciente {
   email: string
   dataNascimento: string
   sexo: string
+  conviteAceito: boolean
+  tokenConvite: string | null
   avaliacoes: { dataAvaliacao: string; resultado: { imc: number; percGorduraPetroski: number } | null }[]
+}
+
+function ConviteBtn({ paciente }: { paciente: Paciente }) {
+  const [copiado, setCopiado] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const copiarLink = useCallback(async (token: string) => {
+    const link = `${window.location.origin}/convite/${token}`
+    await navigator.clipboard.writeText(link)
+    setCopiado(true)
+    setTimeout(() => setCopiado(false), 2000)
+  }, [])
+
+  const reenviar = useCallback(async () => {
+    setLoading(true)
+    try {
+      const r = await fetch(`/api/pacientes/${paciente.id}/convite`, { method: "POST" })
+      if (r.ok) {
+        const { tokenConvite } = await r.json()
+        await copiarLink(tokenConvite)
+      }
+    } finally {
+      setLoading(false)
+    }
+  }, [paciente.id, copiarLink])
+
+  if (!paciente.conviteAceito && paciente.tokenConvite) {
+    return (
+      <button
+        onClick={() => copiarLink(paciente.tokenConvite!)}
+        className="px-3 py-2 text-xs font-medium bg-[rgba(201,109,66,0.1)] text-[color:var(--accent-2)] rounded-xl hover:bg-[rgba(201,109,66,0.16)] transition"
+      >
+        {copiado ? "Copiado!" : "Copiar convite"}
+      </button>
+    )
+  }
+
+  return (
+    <button
+      onClick={reenviar}
+      disabled={loading}
+      className="px-3 py-2 text-xs font-medium bg-[rgba(201,109,66,0.1)] text-[color:var(--accent-2)] rounded-xl hover:bg-[rgba(201,109,66,0.16)] transition disabled:opacity-50"
+    >
+      {loading ? "..." : copiado ? "Copiado!" : "Reenviar acesso"}
+    </button>
+  )
 }
 
 export default function PacientesPage() {
@@ -38,14 +86,15 @@ export default function PacientesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Pacientes</h1>
-          <p className="text-slate-500 text-sm mt-1">{pacientes.length} pacientes cadastrados</p>
+          <div className="eyebrow">Pacientes</div>
+          <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-900">Base de pacientes</h1>
+          <p className="text-slate-500 text-sm mt-3">{pacientes.length} pacientes cadastrados</p>
         </div>
         <Link
           href="/pacientes/novo"
-          className="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-sm"
+          className="px-5 py-2.5 bg-[linear-gradient(135deg,#1f8a70,#264653)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition-opacity shadow-[0_14px_34px_rgba(31,138,112,0.22)]"
         >
           + Novo Paciente
         </Link>
@@ -57,17 +106,17 @@ export default function PacientesPage() {
         placeholder="Buscar paciente..."
         value={busca}
         onChange={(e) => setBusca(e.target.value)}
-        className="w-full max-w-sm px-4 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-white"
+        className="glass-panel w-full max-w-sm px-4 py-3 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(31,138,112,0.3)]"
       />
 
       {loading ? (
         <div className="text-center py-20 text-slate-400">Carregando...</div>
       ) : filtrados.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-12 text-center text-slate-400">
-          <p className="text-3xl mb-3">👤</p>
+        <div className="glass-panel rounded-[28px] p-12 text-center text-slate-400">
+          <p className="font-mono-ui text-sm mb-3 text-[color:var(--accent)]">EMPTY</p>
           <p className="font-medium">Nenhum paciente encontrado</p>
           <p className="text-sm mt-1">
-            <Link href="/pacientes/novo" className="text-cyan-600 hover:underline">
+            <Link href="/pacientes/novo" className="text-[color:var(--accent)] hover:underline">
               Cadastrar primeiro paciente
             </Link>
           </p>
@@ -80,41 +129,50 @@ export default function PacientesPage() {
             return (
               <div
                 key={p.id}
-                className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex items-center justify-between hover:border-cyan-200 hover:shadow-md transition-all"
+                className="glass-panel rounded-[28px] p-5 flex flex-col gap-5 md:flex-row md:items-center md:justify-between hover:border-[rgba(31,138,112,0.22)] hover:shadow-md transition-all"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white font-bold text-lg">
+                  <div className="w-12 h-12 rounded-2xl bg-[linear-gradient(135deg,#1f8a70,#264653)] flex items-center justify-center text-white font-bold text-lg shadow-[0_14px_32px_rgba(31,138,112,0.18)]">
                     {p.nome[0]}
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-800">{p.nome}</p>
-                    <p className="text-slate-400 text-sm">
+                    <div className="flex items-center gap-2">
+                      <p className="font-semibold text-slate-800">{p.nome}</p>
+                      {!p.conviteAceito && (
+                        <span className="font-mono-ui text-[9px] uppercase tracking-[0.18em] px-2 py-0.5 rounded-full bg-[rgba(201,109,66,0.1)] text-[color:var(--accent-2)]">
+                          Convite pendente
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-slate-400 text-sm mt-1">
                       {idade} anos · {formatarSexo(p.sexo)}
                     </p>
+                    <p className="font-mono-ui text-[11px] uppercase tracking-[0.2em] text-slate-400 mt-2">{p.email}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-6">
                   {ultimaAval ? (
                     <div className="text-right hidden sm:block">
-                      <p className="text-xs text-slate-400">Última avaliação</p>
-                      <p className="text-sm font-medium text-slate-700">
+                      <p className="font-mono-ui text-[11px] uppercase tracking-[0.2em] text-slate-400">Última avaliação</p>
+                      <p className="text-sm font-medium text-slate-700 mt-1">
                         {formatarData(ultimaAval.dataAvaliacao)}
                       </p>
                     </div>
                   ) : (
                     <span className="text-xs text-slate-400 hidden sm:block">Sem avaliações</span>
                   )}
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap">
+                    <ConviteBtn paciente={p} />
                     <Link
                       href={`/avaliacao/nova?pacienteId=${p.id}`}
-                      className="px-3 py-1.5 text-xs font-medium bg-cyan-50 text-cyan-700 rounded-lg hover:bg-cyan-100 transition"
+                      className="px-3 py-2 text-xs font-medium bg-[rgba(31,138,112,0.1)] text-[color:var(--accent)] rounded-xl hover:bg-[rgba(31,138,112,0.16)] transition"
                     >
                       + Avaliação
                     </Link>
                     <Link
                       href={`/pacientes/${p.id}`}
-                      className="px-3 py-1.5 text-xs font-medium bg-slate-50 text-slate-600 rounded-lg hover:bg-slate-100 transition"
+                      className="px-3 py-2 text-xs font-medium bg-[rgba(23,32,51,0.06)] text-slate-600 rounded-xl hover:bg-[rgba(23,32,51,0.1)] transition"
                     >
                       Ver perfil
                     </Link>

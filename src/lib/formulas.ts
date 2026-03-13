@@ -69,6 +69,7 @@ export interface ResultadoFormulas {
   cmc: number | null
   soma6Dobras: number | null
   classificacao6Dobras: string | null
+  somaTodasDobras: number | null
   cpRisco: string | null
   formulaReferencia: string | null
 }
@@ -323,13 +324,17 @@ export function calcularSoma6Dobras(
   return tricipital + subescapular + suprailíaca + abdominal + coxa + panturrilha
 }
 
+// Referência: Petroski (1995) — tabela normativa para adultos (20-49 anos)
+// Masculino: Baixo < 47,1 | Normal 47,1–84,2 | Alto > 84,2
+// Feminino:  Baixo < 69,5 | Normal 69,5–112,4 | Alto > 112,4
 export function classificar6Dobras(soma: number, sexo: "M" | "F"): string {
   if (sexo === "M") {
-    if (soma < 47.1) return "Baixo"
+    if (soma < 47.1)  return "Baixo"
     if (soma <= 84.2) return "Normal"
     return "Alto"
   }
-  if (soma < 69.5) return "Baixo"
+  // Feminino
+  if (soma < 69.5)   return "Baixo"
   if (soma <= 112.4) return "Normal"
   return "Alto"
 }
@@ -527,6 +532,16 @@ export function calcularTudo(dados: DadosAvaliacao): ResultadoFormulas {
     classificacao6Dobras = classificar6Dobras(soma6Dobras, sexo)
   }
 
+  // Soma de todas as dobras medidas
+  const todasDobras = [
+    dados.dobTricipital, dados.dobSubescapular, dados.dobBicipital,
+    dados.dobCristaIliaca, dados.dobSupraespinal, dados.dobAbdominal,
+    dados.dobCoxa, dados.dobPanturrilha,
+  ].filter(temNumero)
+  const somaTodasDobras = todasDobras.length > 0
+    ? todasDobras.reduce((acc, v) => acc + v, 0)
+    : null
+
   // CP risco idosos
   let cpRisco: string | null = null
   if (temNumero(dados.circPanturrilha) && dados.idade >= 60) {
@@ -556,6 +571,7 @@ export function calcularTudo(dados: DadosAvaliacao): ResultadoFormulas {
     cmc,
     soma6Dobras,
     classificacao6Dobras,
+    somaTodasDobras,
     cpRisco,
     formulaReferencia,
   }

@@ -56,6 +56,16 @@ export function corRisco(classificacao: string): string {
   return "text-emerald-500"
 }
 
+// Cor para classificação de soma de dobras (Baixo / Normal / Alto)
+export function corDobras(classificacao: string | null | undefined): string {
+  if (!classificacao) return "bg-[rgba(255,255,255,0.18)] text-white/80"
+  const cl = classificacao.toLowerCase()
+  if (cl === "baixo")   return "bg-[rgba(59,130,246,0.22)] text-blue-200"
+  if (cl === "normal")  return "bg-[rgba(31,138,112,0.28)] text-emerald-200"
+  if (cl === "alto")    return "bg-[rgba(201,109,66,0.30)] text-orange-200"
+  return "bg-[rgba(255,255,255,0.18)] text-white/80"
+}
+
 export function bgRisco(classificacao: string): string {
   const cl = classificacao.toLowerCase()
   if (cl.includes("muito elevado") || cl.includes("grau iii") || cl.includes("alto")) {
