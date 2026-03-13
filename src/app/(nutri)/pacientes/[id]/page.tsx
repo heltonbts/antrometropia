@@ -50,6 +50,7 @@ interface Avaliacao {
     somatocartaY?: number | null
     biotipo?: string | null
     soma6Dobras?: number | null
+    classificacao6Dobras?: string | null
     somaTodasDobras?: number | null
     cmb?: number | null
     cmc?: number | null
