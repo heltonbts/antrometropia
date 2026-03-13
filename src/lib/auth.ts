@@ -1,16 +1,23 @@
 import { NextResponse } from "next/server"
 
 export function getJwtSecret(): Uint8Array {
-  const secret = process.env.APP_SECRET ?? "dev-only-secret"
-  return new TextEncoder().encode(secret)
+  const secret = process.env.APP_SECRET
+  
+  if (!secret && process.env.NODE_ENV === "production") {
+    throw new Error("CRITICAL: APP_SECRET environment variable is not set in production.")
+  }
+  
+  return new TextEncoder().encode(secret || "dev-only-secret")
 }
 
 export function getAuthCookieOptions() {
+  const isProd = process.env.NODE_ENV === "production"
+  
   return {
-    httpOnly: true as const,
-    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    secure: isProd,
     sameSite: "lax" as const,
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24 * 7, // 7 days
     path: "/",
   }
 }
