@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Nutricionista {
+  id         String     @id @default(cuid())
+  nome       String
+  email      String     @unique
+  senhaHash  String
+  criadoEm  DateTime   @default(now())
+  pacientes  Paciente[]
+
+  @@map("nutricionistas")
+}
+
+model Paciente {
+  id               String        @id @default(cuid())
+  nutricionistaId  String
+  nome             String
+  email            String
+  dataNascimento   DateTime
+  sexo             String
+  raca             String
+  senhaHash        String?
+  tokenConvite     String?       @unique
+  conviteAceito    Boolean       @default(false)
+  observacoes      String?
+  criadoEm        DateTime      @default(now())
+
+  nutricionista    Nutricionista  @relation(fields: [nutricionistaId], references: [id])
+  avaliacoes       Avaliacao[]
+
+  @@map("pacientes")
+}
+
+model Avaliacao {
+  id               String    @id @default(cuid())
+  pacienteId       String
+  dataAvaliacao    DateTime
+
+  peso             Float
+  altura           Float
+
+  // ── Dobras cutâneas (mm) ──────────────────────────────
+  dobTricipital    Float?   // Tríceps — face posterior do braço
+  dobSubescapular  Float?   // Abaixo da escápula, 45°
+  dobBicipital     Float?   // Face anterior do braço
+  dobAxilarMedia   Float?   // Linha axilar média
+  dobSupraIliaca   Float?   // Acima da crista ilíaca
+  dobCristaIliaca  Float?   // Crista ilíaca (Pollock)
+  dobSupraespinal  Float?   // Supraespinal — Faulkner, Petroski e Heath-Carter
+  dobAbdominal     Float?   // Lateral ao umbigo, vertical
+  dobCoxa          Float?   // Face anterior da coxa, ponto médio
+  dobPanturrilha   Float?   // Maior circunferência da panturrilha
+
+  // ── Circunferências (cm) ─────────────────────────────
+  circCintura         Float?   // Parte mais estreita do abdômen
+  circQuadril         Float?   // Maior circunferência dos glúteos
+  circBracoRelaxado   Float?   // Ponto médio, braço ao longo do corpo
+  circBracoContraido  Float?   // Ponto médio, bíceps contraído ao máximo
+  circPanturrilha     Float?   // Maior circunferência da panturrilha
+  circCoxaMedia       Float?   // Ponto médio entre virilha e joelho
+  circAbdomen         Float?   // Ao nível do umbigo
+
+  // ── Diâmetros ósseos (cm) ────────────────────────────
+  diamUmero        Float?   // Epicôndilo do úmero (cotovelo)
+  diamFemur        Float?   // Epicôndilo do fêmur (joelho)
+  diamPunho        Float?   // Diâmetro biestilóideo do punho
+  diamFemurDistal  Float?   // Mesmo que diamFemur — mantido para retrocompatibilidade
+
+  // ── Dados para idosos ────────────────────────────────
+  alturaJoelho     Float?   // cm — Chumlea
+  pcse             Float?   // mm — prega cutânea subescapular (Chumlea)
+
+  criadoEm        DateTime  @default(now())
+
+  paciente         Paciente  @relation(fields: [pacienteId], references: [id])
+  resultado        Resultado?
+
+  @@map("avaliacoes")
+}
+
+model Resultado {
+  id                   String    @id @default(cuid())
+  avaliacaoId          String    @unique
+
+  imc                  Float?
+  classificacaoImc     String?
+
+  percGorduraFaulkner  Float?
+  percGorduraPetroski  Float?
+  densidadeCorporal    Float?
+
+  massaGorda           Float?
+  massaMagra           Float?
+  massaOssea           Float?
+  massaMuscular        Float?
+
+  endomorfia           Float?
+  mesomorfia           Float?
+  ectomorfia           Float?
+  somatocartaX         Float?
+  somatocartaY         Float?
+  biotipo              String?
+
+  rcq                  Float?
+  classificacaoRcq     String?
+  riscoCintura         String?
+
+  cmb                  Float?
+  cmc                  Float?
+
+  soma6Dobras          Float?
+  classificacao6Dobras String?
+
+  cpRisco              String?
+
+  criadoEm            DateTime  @default(now())
+
+  avaliacao            Avaliacao @relation(fields: [avaliacaoId], references: [id])
+
+  @@map("resultados")
+}

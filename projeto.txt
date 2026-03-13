@@ -1,0 +1,370 @@
+Avaliacao da Composicao Corporal
+Somatotipo, Metodo Heath-Carter, Faulkner e Petroski
+1. Somatotipo e Metodo Heath-Carter
+O somatotipo e um metodo de classificacao da estrutura fisica (biotipo) utilizado na avaliacao antropometrica. E frequentemente representado graficamente na somatocarta e calculado pelo metodo Heath-Carter, que utiliza dobras cutaneas, circunferencias e diametros osseos.
+
+1.1 Componentes do Somatotipo
+O somatotipo e expresso por tres numeros (ex: 3-5-2), representando Endomorfia - Mesomorfia - Ectomorfia:
+
+Componente	Caracteristica	Perfil Corporal
+Endomorfia (1°)	Adiposidade relativa	Corpo arredondado, pescoco curto, alto volume abdominal
+Mesomorfia (2°)	Muscularidade relativa	Grande relevo muscular, pouca gordura, estrutura ossea macica (atletico)
+Ectomorfia (3°)	Linearidade/Magreza	Ossos finos, baixo %G, pouco volume muscular
+
+1.2 Formulas Heath-Carter
+A. Endomorfia (Adiposidade Relativa)
+Utiliza a soma de tres dobras cutaneas: Tricipital + Subescapular + Suprailíaca (em mm), ajustada pela estatura.
+
+Variavel X	X = Soma das dobras x (170,18 / Altura em cm)
+
+Endomorfia	Endo = -0,7182 + 0,1451(X) - 0,00068(X²) + 0,0000014(X³)
+
+B. Mesomorfia (Muscularidade Relativa)
+Baseia-se no diametro do umero e femur, circunferencias do braco e panturrilha (corrigidas pela dobra tricipital e medial da perna) e pela altura do avaliado. As circunferencias sao ajustadas para remover a contribuicao da gordura subcutanea.
+
+Mesomorfia	Meso = 0,858(DU) + 0,601(DF) + 0,188(CC) + 0,161(CP) - 0,131(Alt) + 4,5
+DU = diam. umero | DF = diam. femur | CC = circ. braco corrigida | CP = circ. panturrilha corrigida | Alt = altura (cm)
+
+C. Ectomorfia (Linearidade Relativa)
+Baseia-se no Indice Ponderal (IP = Altura / Raiz cubica do Peso):
+
+Se IP >= 40,75	Ecto = 0,732 x IP - 28,58
+
+Se 38,28 <= IP < 40,75	Ecto = 0,463 x IP - 17,63
+
+Se IP < 38,28	Ecto = 0,1 (valor minimo)
+
+1.3 A Somatocarta (Grafico)
+A somatocarta e um grafico bidimensional onde o somatotipo e plotado pelas coordenadas X e Y:
+
+Eixo X	X = Ectomorfia - Endomorfia
+
+Eixo Y	Y = 2 x Mesomorfia - (Endomorfia + Ectomorfia)
+
+1.4 Classificacao dos Biotipos
+Na pratica, as pessoas apresentam combinacoes dos tres componentes (ex: Meso-endomorfo, Ecto-mesomorfo):
+
+Biotipo	Caracteristica Principal
+Endomorfo	Alto endo, baixo meso e ecto — tendencia ao acumulo de gordura
+Mesomorfo	Alto meso, baixo endo e ecto — perfil atletico predominante
+Ectomorfo	Alto ecto, baixo endo e meso — linearidade e magreza
+
+Nota: O somatotipo e fenotipico e pode ser alterado por treinamento e dieta.
+
+2. Formula de Faulkner (% Gordura)
+A formula de Faulkner (frequentemente associada a Yuhasz) estima o percentual de gordura corporal (%G) pela soma de 4 dobras cutaneas especificas. E amplamente utilizada no Brasil, especialmente para jovens fisicamente ativos ou treinados.
+
+2.1 Dobras Utilizadas
+•	Triceps
+•	Subescapular
+•	Suprailíaca
+•	Abdominal
+
+2.2 Formula
+
+%G (Faulkner)	%G = (Triceps + Subescapular + Suprailíaca + Abdominal) x 0,153 + 5,783
+Soma das 4 dobras em milimetros (mm)
+
+2.3 Aplicacoes e Observacoes
+•	Muito utilizada no Brasil para avaliacao da composicao corporal em jovens e treinados
+•	Embora referida como Faulkner, estudos indicam que se trata de uma adaptacao de equacoes de Yuhasz
+•	Precisao pode ser reduzida em criancas, adolescentes ou populacoes com perfis antropometricos muito diferentes dos originais
+•	Crucial utilizar o mesmo protocolo de medicoes (mesmo lado do corpo) para acompanhamento longitudinal
+•	Existem variacoes com 6 dobras: subescapular, triceps, biceps, suprailíaca, coxa e panturrilha
+
+3. Equacoes de Petroski (1995)
+As formulas de Petroski (1995) sao amplamente utilizadas no Brasil para calcular a densidade corporal e o percentual de gordura, com equacoes especificas para homens e mulheres de 18 a 66 anos. Sao validadas para a populacao brasileira com erro estimado abaixo de 3,5%.
+
+3.1 Dobras Utilizadas (4 Dobras)
+
+Homens e Mulheres
+
+Dobra	Localizacao
+Subescapular	Abaixo da escapula, angulo de 45°
+Tricipital	Face posterior do braco, ponto medio
+Crista / Supra-ilíaca	Acima da crista iliaca, linha axilar media
+Panturrilha Medial	Ponto de maior circunferencia da panturrilha
+
+3.2 Formulas — Densidade Corporal (DC)
+Homens
+
+DC (Homens)	DC = 1,10726863 - 0,00081201 x (S4) + 0,00000212 x (S4)² - 0,00041761 x (Idade)
+S4 = Soma das 4 dobras (mm) | Idade em anos
+
+Mulheres
+
+DC (Mulheres)	DC = 1,02902361 - 0,00067159 x (S4) + 0,00000242 x (S4)² - 0,00026073 x (Idade) - 0,00056009 x Peso + 0,00054649 x Altura
+S4 = Soma das 4 dobras (mm) | Idade em anos | Peso em kg | Altura em cm
+
+3.3 Conversao: DC para % Gordura
+Apos calcular a Densidade Corporal, converte-se para Percentual de Gordura usando a formula de Siri (1961):
+
+% Gordura (Siri, 1961)	%G = [(4,95 / DC) - 4,50] x 100
+DC = Densidade Corporal calculada pelas equacoes de Petroski
+
+3.4 Passo a Passo do Calculo
+1.	Identificar o sexo biologico para escolher a equacao correta
+2.	Medir as 4 dobras cutaneas (em mm): Subescapular, Tricipital, Crista/Supra-ilíaca e Panturrilha Medial
+3.	Somar as 4 dobras para obter S4
+4.	Aplicar a formula de Petroski correspondente ao sexo para obter a Densidade Corporal (DC)
+   Mulheres: incluir tambem peso corporal e altura
+4.	Converter a DC em Percentual de Gordura (%G) usando a formula de Siri (1961)
+
+
+4. IMC — Indice de Massa Corporal
+O IMC e calculado dividindo o peso (em kg) pela altura ao quadrado (m²). E adotado pela Organizacao Mundial da Saude (OMS) para avaliar se um adulto esta no peso ideal. Para criancas e adolescentes, a interpretacao utiliza curvas de crescimento especificas, nao a tabela de adultos.
+
+4.1 Formula
+
+IMC	IMC = Peso (kg) / [Altura (m) x Altura (m)]
+Peso em quilogramas | Altura em metros
+
+4.2 Exemplo Pratico
+Pessoa com 70 kg e 1,75 m de altura:
+5.	Altura ao quadrado: 1,75 x 1,75 = 3,06 m²
+6.	Calculo: 70 / 3,06 = 22,87 → Classificacao: Peso Normal
+
+4.3 Tabela de Classificacao do IMC (Adultos — OMS)
+
+Faixa de IMC	Classificacao
+Abaixo de 18,5	Abaixo do peso
+18,5 – 24,9	Peso normal / ideal
+25,0 – 29,9	Sobrepeso
+30,0 – 34,9	Obesidade Grau I
+35,0 – 39,9	Obesidade Grau II
+Acima de 40,0	Obesidade Grau III (Obesidade Morbida)
+
+
+5. RCQ — Razao Cintura-Quadril
+A Razao Cintura-Quadril (RCQ) e calculada dividindo a medida da cintura pela medida do quadril. E um indicador de risco cardiovascular e de doencas cronicas associadas ao acumulo de gordura abdominal (gordura visceral).
+
+5.1 Formula
+
+RCQ	RCQ = Circunferencia da Cintura (cm) / Circunferencia do Quadril (cm)
+
+5.2 Como Medir
+•	Medicao: Cintura
+Meça ao redor da parte mais estreita do abdomen — geralmente acima do umbigo, entre a ultima costela e o osso do quadril.
+
+•	Medicao: Quadril
+Meça ao redor da parte mais larga das nadegas.
+
+5.3 Valores de Referencia (Risco de Doencas Cronicas)
+
+Sexo	Risco Baixo	Risco Moderado	Risco Alto
+Mulheres	< 0,75	0,75 – 0,85	> 0,85
+Homens	< 0,85	0,85 – 0,90	> 0,90 – 1,0
+
+Nota: Valores acima de 0,85 para mulheres e 1,0 para homens indicam alto risco de doencas cronicas.
+
+6. Calculo de Massa Ossea
+A massa ossea pode ser estimada por metodos antropometricos (equacoes preditivas) ou avaliada com precisao por exames de imagem. O componente osseo e essencial na composicao corporal e na analise da saude musculoesqueletica.
+
+6.1 Equacao de Von Dobeln (Metodo Antropometrico)
+Estima a massa ossea com base em medidas antropometricas: estatura (em metros), diametro do punho e diametro do femur distal (em cm). Requer o uso de paquimetro antropometrico para medicao das extremidades osseas.
+
+Massa Ossea (Von Dobeln)	MO (kg) = 3,02 x [Altura² x Diam. Punho (cm) x Diam. Femur (cm) x 400]^0,712
+Altura em metros | Diametros em centimetros
+
+6.2 Instrumentos Necessarios
+•	Paquimetro grande (antropometrico) — para medir diametros osseos do punho e joelho com precisao
+•	Estadiometro — para medicao da estatura
+•	Balanca de precisao — para registro do peso corporal
+
+6.3 Densitometria Ossea (Metodo de Referencia)
+A densitometria ossea (DEXA — Dual-energy X-ray Absorptiometry) e a forma mais precisa de avaliacao ossea. Utiliza radiacao de baixa intensidade para avaliar:
+•	Densidade mineral ossea (DMO)
+•	Risco de osteoporose e fraturas
+•	Composicao corporal segmentar (gordura, musculo e osso por regiao)
+
+Metodo	Precisao	Instrumentacao	Indicacao Principal
+Von Dobeln	Estimativa	Paquimetro + estadiometro	Avaliacao de campo / academica
+Densitometria (DEXA)	Alta precisao	Equipamento de raio-x (clinica)	Diagnostico clinico de osteoporose
+
+
+7. Avaliacao Antropometrica em Idosos (60+ anos)
+A avaliacao antropometrica em idosos e fundamental para detectar desnutricao, obesidade e sarcopenia (perda de massa muscular). Diferente de adultos jovens, idosos possuem referencias especificas devido a perda de estatura com o envelhecimento e a redistribuicao de gordura corporal.
+
+7.1 IMC para Idosos — Referencia Lipschitz (1994)
+O IMC em idosos segue uma classificacao diferente da tabela OMS para adultos, com faixas ajustadas para a fisiologia do envelhecimento:
+
+IMC	IMC = Peso (kg) / [Altura (m) x Altura (m)]
+Mesma formula, mas com pontos de corte diferentes dos adultos jovens
+
+Faixa de IMC	Classificacao (Lipschitz, 1994)
+< 22,0 kg/m²	Baixo peso (Desnutricao)
+22,0 – 27,0 kg/m²	Eutrofia (Peso adequado)
+> 27,0 kg/m²	Sobrepeso
+
+7.2 Circunferencia da Panturrilha (CP) — Indicador de Massa Muscular
+A circunferencia da panturrilha e a medida mais sensivel para avaliar massa muscular em idosos, sendo um excelente indicador de risco nutricional e de funcionalidade fisica.
+
+•	Tecnica: Medida no lado esquerdo, no maior perimetro da batata da perna, com o idoso sentado e joelho a 90°
+•	Ponto de corte geral: < 31 cm indica risco nutricional e perda de massa muscular
+
+Referencias por Faixa Etaria (Estudo Lookup 7+)
+
+Faixa Etaria	Ponto de Corte de Risco (5° percentil)
+60 – 64 anos	< 31,5 cm
+75 – 79 anos	< 30,0 cm
+
+7.3 Estimativa de Peso e Altura (Chumlea, 1988)
+Quando o idoso nao pode ficar em pe (acamado ou com deformidade postural), utilizam-se as equacoes de Chumlea (1988), baseadas em circunferencias e dobras cutaneas:
+
+Peso Estimado (Homens)	Peso = (0,98 x CP) + (1,16 x AJ) + (1,73 x CB) + (0,37 x PCSE) - 81,69
+
+Peso Estimado (Mulheres)	Peso = (1,27 x CP) + (0,87 x AJ) + (0,98 x CB) + (0,40 x PCSE) - 62,35
+
+Sigla	Medida	Unidade
+CP	Circunferencia da Panturrilha	cm
+AJ	Altura do Joelho	cm
+CB	Circunferencia do Braco	cm
+PCSE	Prega Cutanea Subescapular	mm
+
+7.4 Circunferencia da Cintura (CC) — Risco Cardiovascular
+Indica acumulo de gordura visceral e risco de doencas cardiovasculares e metabolicas:
+
+Sexo	Risco Elevado	Risco Muito Elevado (OMS)
+Homens	> 94 cm	> 102 cm
+Mulheres	> 80 cm	> 88 cm
+
+7.5 Outras Medidas Importantes
+•	Finalidade: Circunferencia do Braco (CB)
+Utilizada para avaliar a reserva de massa muscular e de gordura corporal periferica.
+
+•	Finalidade: Dobra Cutanea Tricipital (DCT)
+Medida para avaliar as reservas de gordura corporal subcutanea.
+
+7.6 Resumo dos Pontos de Corte — Risco Nutricional em Idosos
+
+Medida	Ponto de Corte de Risco
+IMC (Lipschitz)	< 22,0 kg/m²
+Circunferencia da Panturrilha	< 31 cm
+Circunferencia do Braco — Homens	< 22 cm
+Circunferencia do Braco — Mulheres	< 21 cm
+
+* Valores de referencia para a CB podem variar segundo o estudo utilizado, mas valores abaixo de 21–22 cm costumam indicar desnutricao em idosos.
+
+8. Massa Muscular Esqueletica (SMM)
+A equacao de Lee et al. estima a massa muscular esqueletica total (SMM) em quilogramas a partir de variaveis antropometricas e demograficas, sendo amplamente utilizada em pesquisas de composicao corporal e avaliacao de sarcopenia.
+
+8.1 Formula
+
+SMM (kg)	SMM = (0,244 x Peso) + (7,8 x Altura) + (6,6 x Sexo) - (0,098 x Idade) + (Raca - 3,3)
+Peso em kg | Altura em metros | Sexo e Raca conforme codificacao abaixo
+
+8.2 Codificacao das Variaveis
+
+Variavel	Categoria	Valor
+Sexo	Homem	1
+Sexo	Mulher	0
+Raca	Branco	0
+Raca	Negro	1,2
+Raca	Asiatico	-1,2
+
+Resultado: massa muscular esqueletica total estimada em quilogramas (kg).
+
+9. Perimetro Muscular — CMB e Coxa
+O perimetro muscular desconta a gordura subcutanea da circunferencia total, permitindo monitorar o ganho de massa magra de forma isolada. Esta abordagem e superior a simples medicao com fita, pois um aumento na circunferencia pode refletir acumulo de gordura e nao necessariamente hipertrofia muscular.
+
+•	Materiais: Instrumentos necessarios
+Fita metrica inelastica e adipometro (plicometro).
+
+•	Padronizacao: Lado de medicao
+Recomenda-se medir o lado direito do corpo para garantir consistencia e permitir comparacoes longitudinais.
+
+9.1 Circunferencia Muscular do Braco (CMB)
+A CMB estima o perimetro muscular do braco descontando a camada de gordura subcutanea medida pela dobra tricipital.
+
+CMB (cm)	CMB = CB - (π x PCT / 10)
+CB = Circunferencia do Braco (cm) | PCT = Prega Cutanea Tricipital (mm) | π ≈ 3,14 | Divisao por 10 converte PCT de mm para cm
+
+Tecnica de Medicao
+•	CB (Circunferencia do Braco): Medida no ponto medio entre o ombro e o cotovelo, com o braco relaxado ao longo do corpo
+•	PCT (Prega Cutanea Tricipital): Dobra cutanea medida na face posterior do braco, no ponto medio, em milimetros
+
+Exemplo Pratico
+
+Dado	Valor
+Circunferencia do Braco (CB)	30,0 cm
+Dobra Tricipital (PCT)	10 mm
+Calculo	CMB = 30 - (3,14 x 10 / 10) = 30 - 3,14 = 26,86 cm
+Resultado (CMB)	26,86 cm
+
+9.2 Perimetro Muscular da Coxa
+O mesmo principio da CMB e aplicado a coxa: mede-se a circunferencia total e desconta-se a gordura subcutanea pela dobra cutanea anterior da coxa.
+
+CMC (cm)	CMC = CC_coxa - (π x DC / 10)
+CC_coxa = Circunferencia da Coxa Media (cm) | DC = Dobra Cutanea da Coxa anterior (mm) | π ≈ 3,14
+
+Passos para Medicao
+7.	Localizar a Coxa Media: encontrar o ponto medio entre a virilha e o joelho
+8.	Medir a Circunferencia da Coxa (CC_coxa): com a perna relaxada, posicionar a fita no ponto medio e registrar em cm
+9.	Medir a Dobra da Coxa (DC): utilizar o adipometro na parte anterior da coxa, sobre o musculo reto femoral, em mm
+10.	Aplicar a formula para obter a circunferencia muscular da coxa (CMC) em cm
+
+9.3 Resumo Comparativo — CMB vs CMC
+
+Parametro	Braco (CMB)	Coxa (CMC)
+Circunferencia total	Circunferencia do Braco (CB)	Circunferencia da Coxa Media
+Dobra cutanea utilizada	Prega Tricipital (PCT)	Dobra Anterior da Coxa (DC)
+Ponto de medicao	Ponto medio ombroxcotovelo	Ponto medio virilhaxjoelho
+Finalidade principal	Massa muscular do braco	Massa muscular da coxa
+
+
+10. Circunferencia da Cintura — Tecnica e Valores de Referencia
+A circunferencia da cintura e um dos principais indicadores de gordura visceral (abdominal) e risco cardiovascular e metabolico. A precisao da medicao depende da tecnica correta de posicionamento e da localizacao anatomica exata.
+
+10.1 Tecnica de Medicao
+•	Instrumento: Fita metrica inelastica (nao elastica)
+•	Posicao do avaliado: Em pe, ereto, peso distribuido em ambos os pes, bracos ao longo do corpo e abdomen relaxado
+•	Momento da leitura: Apos a expiracao normal (nao forcar a saida de ar)
+•	Localizacao: Ponto medio entre a ultima costela e a crista iliaca (osso do quadril), ou logo acima do umbigo quando o ponto medio nao for facilmente identificavel
+•	Leitura: A fita deve estar paralela ao solo, justa mas sem comprimir os tecidos
+
+10.2 Valores de Referencia — Risco Cardiovascular
+
+Sexo	Sem Risco	Risco Elevado	Risco Muito Elevado (OMS)
+Mulheres	< 80 cm	80 – 88 cm	> 88 cm
+Homens	< 94 cm	94 – 102 cm	> 102 cm
+
+Valores acima de 80 cm (mulheres) ou 94 cm (homens) ja indicam risco elevado de doencas cardiovasculares, diabetes tipo 2 e sindrome metabolica.
+
+11. Soma das 6 Dobras Cutaneas
+O protocolo de 6 dobras cutaneas soma as principais pregas do corpo para estimar o volume total de gordura subcutanea, excluindo as dobras Bicipital e Critoiliaca. E utilizado como parametro de classificacao do perfil de gordura corporal por faixa de referencia.
+
+11.1 Dobras Incluidas no Calculo
+
+N°	Dobra Cutanea	Localizacao
+1	Tricipital	Face posterior do braco, ponto medio
+2	Subescapular	Abaixo do angulo inferior da escapula, 45°
+3	Suprailíaca	Acima da crista iliaca, linha axilar media
+4	Abdominal	Lateral ao umbigo (2-3 cm), vertical
+5	Coxa Anterior	Ponto medio da face anterior da coxa
+6	Panturrilha Medial	Ponto de maior circunferencia da panturrilha
+
+Dobras excluidas deste protocolo: Bicipital e Critoiliaca (calculadas separadamente em outros protocolos).
+
+11.2 Formula
+
+Soma 6D	S6 = Tricipital + Subescapular + Suprailíaca + Abdominal + Coxa + Panturrilha
+Todas as dobras em milimetros (mm)
+
+11.3 Classificacao por Valores de Referencia
+
+Sexo	Baixo (< referencia)	Normal (faixa adequada)	Alto (> referencia)
+Homens	< 47,1 mm	47,1 – 84,2 mm	> 84,2 mm
+Mulheres	< 69,5 mm	69,5 – 112,4 mm	> 112,4 mm
+
+Valores baixos podem indicar desnutricao ou baixissimo percentual de gordura. Valores altos indicam excesso de gordura subcutanea e necessidade de intervencao nutricional e/ou de treinamento.
+
+Referencias Metodologicas
+Heath, B.H. & Carter, J.E.L. (1967) — Metodo de calculo do somatotipo.
+Faulkner, J.A. (1968) / Yuhasz, M.S. — Estimativa do percentual de gordura por dobras cutaneas.
+Petroski, E.L. (1995) — Desenvolvimento e validacao de equacoes generalizadas para estimativa da densidade corporal em adultos. Tese de Doutorado, UFSM.
+Siri, W.E. (1961) — Body composition from fluid spaces and density. Techniques for Measuring Body Composition.
+OMS / WHO — Classificacao do IMC para adultos. World Health Organization, Geneva.
+Von Dobeln, W. (1964) — Determination of body constituents. In: Physiology of Physical Exercise.
+Lipschitz, D.A. (1994) — Screening for nutritional status in the elderly. Primary Care Clinics in Office Practice, 21(1), 55-67.
+Chumlea, W.C. et al. (1988) — Prediction of body weight for the nonambulatory elderly from anthropometry. Journal of the American Dietetic Association.
+Lee, R.C. et al. (2000) — Total-body skeletal muscle mass: development and cross-validation of anthropometric prediction models. American Journal of Clinical Nutrition.

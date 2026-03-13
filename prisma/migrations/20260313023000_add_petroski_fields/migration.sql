@@ -1,0 +1,3 @@
+ALTER TABLE "avaliacoes"
+ADD COLUMN "dobAxilarMedia" DOUBLE PRECISION,
+ADD COLUMN "dobSupraIliaca" DOUBLE PRECISION;
