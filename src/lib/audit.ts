@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 
 export async function registrarAuditoria({
@@ -9,7 +10,7 @@ export async function registrarAuditoria({
   actorId: string
   actorTipo: "nutricionista" | "paciente"
   acao: string
-  detalhes?: Record<string, unknown>
+  detalhes?: Prisma.InputJsonValue
 }) {
   await prisma.auditLog.create({
     data: {
