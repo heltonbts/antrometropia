@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import { Suspense } from "react"
 import { ContaActions } from "@/components/account/ContaActions"
+import { PlanoCard } from "@/components/account/PlanoCard"
 import { getSessionUsuario } from "@/lib/session"
 
 export default async function ContaPage() {
@@ -29,7 +31,12 @@ export default async function ContaPage() {
           </Link>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 space-y-6">
+          {session.tipo === "nutricionista" && (
+            <Suspense>
+              <PlanoCard />
+            </Suspense>
+          )}
           <ContaActions tipo={session.tipo} />
         </div>
       </div>

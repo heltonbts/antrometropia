@@ -56,6 +56,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ erro: "Dados incompletos" }, { status: 400 })
   }
 
+  // Verifica limite do plano gratuito
+  const nutri = await prisma.nutricionista.findUnique({
+    where: { id: nutriId },
+    select: { plano: true },
+  })
+  if (nutri?.plano !== "PRO") {
+    const total = await prisma.paciente.count({ where: { nutricionistaId: nutriId } })
+    if (total >= 5) {
+      return NextResponse.json(
+        { erro: "Limite de 5 pacientes atingido no plano gratuito. Faça upgrade para o plano Pro.", limitePlano: true },
+        { status: 403 }
+      )
+    }
+  }
+
   const tokenConvite = randomBytes(32).toString("hex")
 
   const paciente = await prisma.paciente.create({

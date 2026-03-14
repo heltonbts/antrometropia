@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
@@ -11,9 +12,19 @@ const navItems = [
   { href: "/conta", label: "Conta", icon: "⚙" },
 ]
 
+type Uso = { plano: string; totalPacientes: number; limite: number | null }
+
 export function Sidebar() {
   const path = usePathname()
   const router = useRouter()
+  const [uso, setUso] = useState<Uso | null>(null)
+
+  useEffect(() => {
+    fetch("/api/billing/uso")
+      .then((r) => r.json())
+      .then((d) => { if (!d.erro) setUso(d) })
+      .catch(() => {})
+  }, [])
 
   async function handleLogout() {
     await fetch("/api/auth/logout")
@@ -59,11 +70,29 @@ export function Sidebar() {
 
       {/* Footer */}
       <div className="p-4 border-t border-[rgba(15,23,42,0.08)] space-y-3">
-        <div className="glass-panel rounded-2xl p-4">
-          <p className="font-mono-ui text-[11px] uppercase tracking-[0.26em] text-slate-500">Workspace</p>
-          <p className="mt-2 text-sm font-semibold text-slate-800">Fluxo antropométrico</p>
-          <p className="mt-1 text-xs text-slate-500">Cadastros, avaliações e evolução em um painel contínuo.</p>
-        </div>
+        {uso && uso.plano === "FREE" && uso.limite && (
+          <Link href="/conta" className="block glass-panel rounded-2xl p-4 hover:opacity-90 transition-opacity">
+            <div className="flex items-center justify-between mb-2">
+              <p className="font-mono-ui text-[11px] uppercase tracking-[0.26em] text-slate-500">Plano gratuito</p>
+              <span className="text-[11px] font-semibold text-[color:var(--accent)]">Upgrade</span>
+            </div>
+            <p className="text-xs text-slate-600 mb-2">
+              {uso.totalPacientes}/{uso.limite} pacientes
+            </p>
+            <div className="h-1 w-full rounded-full bg-slate-200 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-[linear-gradient(90deg,#1f8a70,#264653)] transition-all"
+                style={{ width: `${Math.min((uso.totalPacientes / uso.limite) * 100, 100)}%` }}
+              />
+            </div>
+          </Link>
+        )}
+        {uso && uso.plano === "PRO" && (
+          <div className="glass-panel rounded-2xl p-4">
+            <p className="font-mono-ui text-[11px] uppercase tracking-[0.26em] text-slate-500">Plano Pro</p>
+            <p className="mt-1 text-xs text-slate-500">Pacientes ilimitados</p>
+          </div>
+        )}
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-500 hover:bg-[rgba(6,182,212,0.08)] transition-all"

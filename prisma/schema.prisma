@@ -16,6 +16,10 @@ model Nutricionista {
   politicaPrivacidadeAceitaEm DateTime?
   termosVersao                String?
   politicaPrivacidadeVersao   String?
+  plano                       String     @default("FREE")
+  abacateCustomerId           String?
+  assinaturaId                String?
+  assinaturaStatus            String?
   criadoEm                    DateTime   @default(now())
   pacientes                   Paciente[]
 
