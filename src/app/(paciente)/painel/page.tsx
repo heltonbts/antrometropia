@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { formatarData, corDobras } from "@/lib/utils"
 import { GraficoLinha } from "@/components/charts/GraficoLinha"
@@ -433,6 +434,15 @@ export default function PainelPaciente() {
                           {r.biotipo}
                         </span>
                       )}
+                      <div className="mb-3 overflow-hidden rounded-[18px] border border-[rgba(15,23,42,0.08)] bg-white/70">
+                        <Image
+                          src="/avateres.png"
+                          alt="Referência visual dos biotipos da somatocarta"
+                          width={1200}
+                          height={675}
+                          className="h-auto w-full object-contain"
+                        />
+                      </div>
                       <Somatocarta pontos={pontosSomato} />
                     </div>
                   )}

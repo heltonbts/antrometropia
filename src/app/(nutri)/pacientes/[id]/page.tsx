@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { formatarData, calcularIdade, corRisco, formatarSexo, corDobras } from "@/lib/utils"
@@ -276,6 +277,15 @@ export default function PerfilPacientePage() {
                 )}
                 Heath-Carter · trajetória entre avaliações
               </p>
+              <div className="mb-4 overflow-hidden rounded-[20px] border border-[rgba(15,23,42,0.08)] bg-white/70">
+                <Image
+                  src="/avateres.png"
+                  alt="Referência visual dos biotipos da somatocarta"
+                  width={1200}
+                  height={675}
+                  className="h-auto w-full object-contain"
+                />
+              </div>
               <Somatocarta pontos={pontosSomatocarta} />
             </div>
           </div>
