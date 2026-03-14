@@ -4,7 +4,7 @@ import { clearAuthCookie, getJwtSecret } from "@/lib/auth"
 
 const rotasNutri = ["/dashboard", "/pacientes", "/avaliacao"]
 const rotasPaciente = ["/painel"]
-const rotasPublicas = ["/login", "/cadastro", "/convite", "/api"]
+const rotasPublicas = ["/login", "/cadastro", "/convite", "/termos", "/privacidade", "/api"]
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 
 interface PacienteInfo {
@@ -20,6 +21,9 @@ export default function ConvitePage() {
   const [confirmar, setConfirmar] = useState("")
   const [erro, setErro] = useState("")
   const [enviando, setEnviando] = useState(false)
+  const [aceitouTermos, setAceitouTermos] = useState(false)
+  const [aceitouPoliticaPrivacidade, setAceitouPoliticaPrivacidade] = useState(false)
+  const [consentiuDadosSaude, setConsentiuDadosSaude] = useState(false)
 
   useEffect(() => {
     fetch(`/api/auth/convite?token=${token}`)
@@ -37,13 +41,23 @@ export default function ConvitePage() {
 
     if (senha.length < 6) { setErro("A senha deve ter pelo menos 6 caracteres."); return }
     if (senha !== confirmar) { setErro("As senhas não coincidem."); return }
+    if (!aceitouTermos || !aceitouPoliticaPrivacidade || !consentiuDadosSaude) {
+      setErro("Aceite os termos, a política e o consentimento de dados para continuar.")
+      return
+    }
 
     setEnviando(true)
     try {
       const r = await fetch("/api/auth/convite", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, senha }),
+        body: JSON.stringify({
+          token,
+          senha,
+          aceitouTermos,
+          aceitouPoliticaPrivacidade,
+          consentiuDadosSaude,
+        }),
       })
       if (!r.ok) {
         const d = await r.json().catch(() => ({}))
@@ -133,6 +147,50 @@ export default function ConvitePage() {
               className="glass-panel w-full px-4 py-3 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(31,138,112,0.3)]"
             />
           </div>
+
+          <label className="flex items-start gap-3 rounded-2xl border border-[rgba(23,32,51,0.08)] bg-[rgba(255,255,255,0.55)] px-4 py-3 text-sm text-slate-600">
+            <input
+              type="checkbox"
+              checked={aceitouTermos}
+              onChange={(e) => setAceitouTermos(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-slate-300 text-[color:var(--accent)] focus:ring-[rgba(31,138,112,0.3)]"
+            />
+            <span>
+              Li e aceito os{" "}
+              <Link href="/termos" target="_blank" className="font-medium text-[color:var(--accent)] hover:underline">
+                Termos de Uso
+              </Link>
+              .
+            </span>
+          </label>
+
+          <label className="flex items-start gap-3 rounded-2xl border border-[rgba(23,32,51,0.08)] bg-[rgba(255,255,255,0.55)] px-4 py-3 text-sm text-slate-600">
+            <input
+              type="checkbox"
+              checked={aceitouPoliticaPrivacidade}
+              onChange={(e) => setAceitouPoliticaPrivacidade(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-slate-300 text-[color:var(--accent)] focus:ring-[rgba(31,138,112,0.3)]"
+            />
+            <span>
+              Li e aceito a{" "}
+              <Link href="/privacidade" target="_blank" className="font-medium text-[color:var(--accent)] hover:underline">
+                Política de Privacidade
+              </Link>
+              .
+            </span>
+          </label>
+
+          <label className="flex items-start gap-3 rounded-2xl border border-[rgba(23,32,51,0.08)] bg-[rgba(255,255,255,0.55)] px-4 py-3 text-sm text-slate-600">
+            <input
+              type="checkbox"
+              checked={consentiuDadosSaude}
+              onChange={(e) => setConsentiuDadosSaude(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-slate-300 text-[color:var(--accent)] focus:ring-[rgba(31,138,112,0.3)]"
+            />
+            <span>
+              Autorizo o tratamento dos meus dados pessoais e dados de saude para uso no acompanhamento nutricional, conforme a Politica de Privacidade.
+            </span>
+          </label>
 
           {erro && (
             <p className="text-sm text-red-500 font-medium">{erro}</p>

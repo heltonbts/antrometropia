@@ -8,29 +8,39 @@ datasource db {
 }
 
 model Nutricionista {
-  id         String     @id @default(cuid())
-  nome       String
-  email      String     @unique
-  senhaHash  String
-  criadoEm  DateTime   @default(now())
-  pacientes  Paciente[]
+  id                          String     @id @default(cuid())
+  nome                        String
+  email                       String     @unique
+  senhaHash                   String
+  termosAceitosEm             DateTime?
+  politicaPrivacidadeAceitaEm DateTime?
+  termosVersao                String?
+  politicaPrivacidadeVersao   String?
+  criadoEm                    DateTime   @default(now())
+  pacientes                   Paciente[]
 
   @@map("nutricionistas")
 }
 
 model Paciente {
-  id               String        @id @default(cuid())
-  nutricionistaId  String
-  nome             String
-  email            String
-  dataNascimento   DateTime
-  sexo             String
-  raca             String
-  senhaHash        String?
-  tokenConvite     String?       @unique
-  conviteAceito    Boolean       @default(false)
-  observacoes      String?
-  criadoEm        DateTime      @default(now())
+  id                          String        @id @default(cuid())
+  nutricionistaId             String
+  nome                        String
+  email                       String
+  dataNascimento              DateTime
+  sexo                        String
+  raca                        String
+  senhaHash                   String?
+  tokenConvite                String?       @unique
+  conviteAceito               Boolean       @default(false)
+  termosAceitosEm             DateTime?
+  politicaPrivacidadeAceitaEm DateTime?
+  consentiuDadosSaudeEm       DateTime?
+  termosVersao                String?
+  politicaPrivacidadeVersao   String?
+  consentimentoVersao         String?
+  observacoes                 String?
+  criadoEm                    DateTime      @default(now())
 
   nutricionista    Nutricionista  @relation(fields: [nutricionistaId], references: [id])
   avaliacoes       Avaliacao[]

@@ -6,7 +6,14 @@ import { useRouter } from "next/navigation"
 
 export default function CadastroPage() {
   const router = useRouter()
-  const [form, setForm] = useState({ nome: "", email: "", senha: "", confirmar: "" })
+  const [form, setForm] = useState({
+    nome: "",
+    email: "",
+    senha: "",
+    confirmar: "",
+    aceitouTermos: false,
+    aceitouPoliticaPrivacidade: false,
+  })
   const [erro, setErro] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -22,12 +29,22 @@ export default function CadastroPage() {
       setErro("A senha deve ter ao menos 6 caracteres")
       return
     }
+    if (!form.aceitouTermos || !form.aceitouPoliticaPrivacidade) {
+      setErro("Aceite os Termos de Uso e a Política de Privacidade para continuar")
+      return
+    }
 
     setLoading(true)
     const res = await fetch("/api/auth/cadastro", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome: form.nome, email: form.email, senha: form.senha }),
+      body: JSON.stringify({
+        nome: form.nome,
+        email: form.email,
+        senha: form.senha,
+        aceitouTermos: form.aceitouTermos,
+        aceitouPoliticaPrivacidade: form.aceitouPoliticaPrivacidade,
+      }),
     })
 
     const data = await res.json()
@@ -117,6 +134,38 @@ export default function CadastroPage() {
                 className="w-full px-4 py-3 border border-[rgba(23,32,51,0.1)] rounded-2xl bg-[rgba(255,255,255,0.7)] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(31,138,112,0.3)] transition"
               />
             </div>
+
+            <label className="flex items-start gap-3 rounded-2xl border border-[rgba(23,32,51,0.08)] bg-[rgba(255,255,255,0.55)] px-4 py-3 text-sm text-slate-600">
+              <input
+                type="checkbox"
+                checked={form.aceitouTermos}
+                onChange={(e) => setForm({ ...form, aceitouTermos: e.target.checked })}
+                className="mt-1 h-4 w-4 rounded border-slate-300 text-[color:var(--accent)] focus:ring-[rgba(31,138,112,0.3)]"
+              />
+              <span>
+                Li e aceito os{" "}
+                <Link href="/termos" target="_blank" className="font-medium text-[color:var(--accent)] hover:underline">
+                  Termos de Uso
+                </Link>
+                .
+              </span>
+            </label>
+
+            <label className="flex items-start gap-3 rounded-2xl border border-[rgba(23,32,51,0.08)] bg-[rgba(255,255,255,0.55)] px-4 py-3 text-sm text-slate-600">
+              <input
+                type="checkbox"
+                checked={form.aceitouPoliticaPrivacidade}
+                onChange={(e) => setForm({ ...form, aceitouPoliticaPrivacidade: e.target.checked })}
+                className="mt-1 h-4 w-4 rounded border-slate-300 text-[color:var(--accent)] focus:ring-[rgba(31,138,112,0.3)]"
+              />
+              <span>
+                Li e aceito a{" "}
+                <Link href="/privacidade" target="_blank" className="font-medium text-[color:var(--accent)] hover:underline">
+                  Política de Privacidade
+                </Link>
+                .
+              </span>
+            </label>
 
             {erro && (
               <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl">
