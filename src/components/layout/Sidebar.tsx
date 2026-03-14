@@ -8,6 +8,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: "▣" },
   { href: "/pacientes", label: "Pacientes", icon: "👥" },
   { href: "/avaliacao/nova", label: "Nova Avaliação", icon: "📋" },
+  { href: "/conta", label: "Conta", icon: "⚙" },
 ]
 
 export function Sidebar() {

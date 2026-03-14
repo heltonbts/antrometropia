@@ -139,3 +139,15 @@ model Resultado {
 
   @@map("resultados")
 }
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String
+  actorTipo  String
+  acao       String
+  detalhes   Json?
+  criadoEm   DateTime @default(now())
+
+  @@index([actorId, actorTipo, criadoEm])
+  @@map("audit_logs")
+}

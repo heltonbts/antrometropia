@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { formatarData, corDobras } from "@/lib/utils"
 import { GraficoLinha } from "@/components/charts/GraficoLinha"
 import { GraficoComposicao } from "@/components/charts/GraficoComposicao"
@@ -276,6 +277,12 @@ export default function PainelPaciente() {
             </div>
             <div className="flex items-center gap-3">
               <span className="text-sm text-slate-500 hidden sm:block">{data.nome}</span>
+              <Link
+                href="/conta"
+                className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-slate-400 hover:text-slate-700 transition"
+              >
+                Conta
+              </Link>
               <button
               onClick={async () => { await fetch("/api/auth/logout"); window.location.href = "/login" }}
               className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-slate-400 hover:text-slate-700 transition"
