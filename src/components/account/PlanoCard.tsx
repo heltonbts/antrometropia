@@ -28,11 +28,15 @@ export function PlanoCard() {
     try {
       const res = await fetch("/api/billing/checkout", { method: "POST" })
       const data = await res.json()
+      console.log("[checkout]", res.status, data)
       if (data.checkoutUrl) {
         window.location.href = data.checkoutUrl
       } else {
-        alert(data.erro ?? "Erro ao iniciar checkout")
+        alert(data.erro ?? `Erro ${res.status} ao iniciar checkout`)
       }
+    } catch (e) {
+      console.error("[checkout] erro de rede:", e)
+      alert("Erro de conexão ao iniciar checkout")
     } finally {
       setCarregando(false)
     }
