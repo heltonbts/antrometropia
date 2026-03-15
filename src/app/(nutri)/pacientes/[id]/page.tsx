@@ -147,12 +147,23 @@ export default function PerfilPacientePage() {
             </p>
           </div>
         </div>
-        <Link
-          href={`/avaliacao/nova?pacienteId=${paciente.id}`}
-          className="self-start md:self-auto px-5 py-2.5 bg-[linear-gradient(135deg,#06b6d4,#2563eb)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition shadow-[0_14px_34px_rgba(6,182,212,0.28)]"
-        >
-          + Nova Avaliação
-        </Link>
+        <div className="flex flex-wrap gap-2 self-start md:self-auto">
+          {avals.length >= 2 && (
+            <Link
+              href={`/pacientes/${paciente.id}/comparar`}
+              target="_blank"
+              className="px-5 py-2.5 glass-panel text-slate-700 text-sm font-semibold rounded-2xl hover:bg-white transition flex items-center gap-2"
+            >
+              🖨 Comparar PDF
+            </Link>
+          )}
+          <Link
+            href={`/avaliacao/nova?pacienteId=${paciente.id}`}
+            className="px-5 py-2.5 bg-[linear-gradient(135deg,#06b6d4,#2563eb)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition shadow-[0_14px_34px_rgba(6,182,212,0.28)]"
+          >
+            + Nova Avaliação
+          </Link>
+        </div>
       </div>
 
       {avals.length === 0 ? (

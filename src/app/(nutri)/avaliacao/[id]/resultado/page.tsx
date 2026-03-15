@@ -175,7 +175,7 @@ export default async function ResultadoPage({
       )}
 
       {/* Ações */}
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <Link
           href={`/avaliacao/nova?pacienteId=${p.id}`}
           className="px-5 py-2.5 bg-[linear-gradient(135deg,#06b6d4,#2563eb)] text-white text-sm font-semibold rounded-2xl hover:opacity-90 transition shadow-[0_14px_34px_rgba(6,182,212,0.28)]"
@@ -193,6 +193,13 @@ export default async function ResultadoPage({
           className="px-5 py-2.5 glass-panel text-slate-700 text-sm font-semibold rounded-2xl hover:bg-white transition"
         >
           Ver histórico
+        </Link>
+        <Link
+          href={`/avaliacao/${avaliacao.id}/imprimir`}
+          target="_blank"
+          className="px-5 py-2.5 glass-panel text-slate-700 text-sm font-semibold rounded-2xl hover:bg-white transition flex items-center gap-2"
+        >
+          🖨 Imprimir PDF
         </Link>
       </div>
     </div>
