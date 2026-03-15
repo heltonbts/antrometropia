@@ -24,6 +24,12 @@ interface Avaliacao {
   peso: number
   altura: number
   circCintura?: number | null
+  circQuadril?: number | null
+  circBracoRelaxado?: number | null
+  circBracoContraido?: number | null
+  circPanturrilha?: number | null
+  circCoxaMedia?: number | null
+  circAbdomen?: number | null
   dobTricipital?: number | null
   dobSubescapular?: number | null
   dobSupraespinal?: number | null
@@ -220,6 +226,36 @@ export default function PerfilPacientePage() {
                 <GraficoAreaEmpilhada dados={dadosArea} />
               </div>
             </>
+          )}
+
+          {/* Circunferências */}
+          {(ultima.circCintura != null || ultima.circQuadril != null || ultima.circBracoRelaxado != null || ultima.circPanturrilha != null) && (
+            <div>
+              <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-4">Circunferências</p>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {ultima.circCintura != null && (
+                  <CardEvolucao titulo="Cintura" valorAtual={ultima.circCintura} valorAnterior={penultima?.circCintura ?? null} unidade="cm" dados={serie((a) => a.circCintura)} cor={COR_AMBER} classificacao={r?.riscoCintura} corClass={r?.riscoCintura ? corRisco(r.riscoCintura) : undefined} />
+                )}
+                {ultima.circQuadril != null && (
+                  <CardEvolucao titulo="Quadril" valorAtual={ultima.circQuadril} valorAnterior={penultima?.circQuadril ?? null} unidade="cm" dados={serie((a) => a.circQuadril)} cor={ACCENT2} />
+                )}
+                {ultima.circBracoRelaxado != null && (
+                  <CardEvolucao titulo="Braço Relaxado" valorAtual={ultima.circBracoRelaxado} valorAnterior={penultima?.circBracoRelaxado ?? null} unidade="cm" dados={serie((a) => a.circBracoRelaxado)} cor={ACCENT} />
+                )}
+                {ultima.circBracoContraido != null && (
+                  <CardEvolucao titulo="Braço Contraído" valorAtual={ultima.circBracoContraido} valorAnterior={penultima?.circBracoContraido ?? null} unidade="cm" dados={serie((a) => a.circBracoContraido)} cor={ACCENT3} />
+                )}
+                {ultima.circPanturrilha != null && (
+                  <CardEvolucao titulo="Panturrilha" valorAtual={ultima.circPanturrilha} valorAnterior={penultima?.circPanturrilha ?? null} unidade="cm" dados={serie((a) => a.circPanturrilha)} cor="#10b981" />
+                )}
+                {ultima.circCoxaMedia != null && (
+                  <CardEvolucao titulo="Coxa Média" valorAtual={ultima.circCoxaMedia} valorAnterior={penultima?.circCoxaMedia ?? null} unidade="cm" dados={serie((a) => a.circCoxaMedia)} cor={COR_ROSA} />
+                )}
+                {ultima.circAbdomen != null && (
+                  <CardEvolucao titulo="Abdômen" valorAtual={ultima.circAbdomen} valorAnterior={penultima?.circAbdomen ?? null} unidade="cm" dados={serie((a) => a.circAbdomen)} cor={COR_AMBER} />
+                )}
+              </div>
+            </div>
           )}
 
           {/* Composição + Radar */}
