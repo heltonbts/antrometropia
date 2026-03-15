@@ -55,7 +55,7 @@ export default async function DashboardPage() {
       <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
         <div>
           <div className="eyebrow">Dashboard</div>
-          <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-900">
+          <h1 className="mt-4 text-3xl md:text-4xl font-semibold tracking-[-0.04em] text-slate-900">
             {data?.nome ? `Olá, ${data.nome.split(" ")[0]}` : "Visão geral"}
           </h1>
           <p className="text-slate-500 text-sm mt-3 max-w-xl leading-6">
@@ -77,7 +77,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-4">
         {stats.map((s) => (
           <div key={s.label} className={`metric-card rounded-[22px] bg-gradient-to-br ${s.tone} p-6 text-white`}>
             <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-white/70">{s.label}</p>

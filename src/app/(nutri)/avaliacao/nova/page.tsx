@@ -138,7 +138,7 @@ function NovaAvaliacaoContent() {
         ))}
       </div>
 
-      <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-8">
+      <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-4 sm:p-8">
 
         {/* PASSO 0 — Identificação */}
         {step === 0 && (

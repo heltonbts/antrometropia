@@ -69,11 +69,11 @@ export default function NovoPacientePage() {
           ← Voltar
         </Link>
         <div className="eyebrow mt-4">Novo registro</div>
-        <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-900">Cadastrar Paciente</h1>
+        <h1 className="mt-4 text-3xl md:text-4xl font-semibold tracking-[-0.04em] text-slate-900">Cadastrar Paciente</h1>
         <p className="text-slate-400 text-sm mt-2">Preencha os dados antropométricos e clínicos do paciente.</p>
       </div>
 
-      <div className="glass-panel rounded-[32px] p-8">
+      <div className="glass-panel rounded-[32px] p-4 sm:p-8">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="sm:col-span-2">

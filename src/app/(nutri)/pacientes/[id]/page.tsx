@@ -170,7 +170,7 @@ export default function PerfilPacientePage() {
             <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-3">
               Última avaliação — {formatarData(ultima.dataAvaliacao)}
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {[
                 { label: "Peso",           valor: ultima.peso?.toFixed(1),                                                           unidade: "kg",    tone: "from-[#06b6d4] to-[#22d3ee]" },
                 { label: "IMC",            valor: r?.imc?.toFixed(1) ?? "—",                                                         unidade: "kg/m²", tone: "from-[#2563eb] to-[#60a5fa]" },
@@ -192,7 +192,7 @@ export default function PerfilPacientePage() {
             <>
               <div>
                 <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-4">Evolução</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <CardEvolucao titulo="Peso" valorAtual={ultima.peso} valorAnterior={penultima?.peso} unidade="kg" dados={serie((a) => a.peso)} cor={ACCENT} />
                   <CardEvolucao titulo="IMC" valorAtual={r?.imc ?? null} valorAnterior={penultima?.resultado?.imc ?? null} unidade="kg/m²" dados={serieRes((r) => r.imc)} cor={ACCENT3} refMin={18.5} refMax={25} classificacao={r?.classificacaoImc} corClass={r?.classificacaoImc ? corRisco(r.classificacaoImc) : undefined} />
                   <CardEvolucao titulo={`% Gordura (${r?.formulaReferencia === "faulkner" ? "Faulkner" : "Petroski"})`} valorAtual={(r?.formulaReferencia === "faulkner" ? r?.percGorduraFaulkner : r?.percGorduraPetroski) ?? null} valorAnterior={(penultima?.resultado?.formulaReferencia === "faulkner" ? penultima?.resultado?.percGorduraFaulkner : penultima?.resultado?.percGorduraPetroski) ?? null} unidade="%" dados={serieRes((res) => res.formulaReferencia === "faulkner" ? res.percGorduraFaulkner : res.percGorduraPetroski)} cor={ACCENT2} />
@@ -212,7 +212,7 @@ export default function PerfilPacientePage() {
           )}
 
           {/* Composição + Radar */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {r?.massaGorda && r?.massaMagra ? (
               <div className="glass-panel rounded-[28px] p-6">
                 <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-1">Composição Corporal</p>
@@ -253,8 +253,8 @@ export default function PerfilPacientePage() {
           )}
 
           {/* Barras + Somatocarta */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="glass-panel rounded-[28px] p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="glass-panel rounded-[28px] p-4 md:p-6">
               <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-1">Dobras por Região</p>
               <p className="text-xs text-slate-400 mb-4">Valores em mm — última avaliação</p>
               <GraficoBarrasAgrupadas dobras={dobrasBarra} />

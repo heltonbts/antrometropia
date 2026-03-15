@@ -86,10 +86,10 @@ export default function PacientesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="eyebrow">Pacientes</div>
-          <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-900">Base de pacientes</h1>
+          <h1 className="mt-4 text-3xl md:text-4xl font-semibold tracking-[-0.04em] text-slate-900">Base de pacientes</h1>
           <p className="text-slate-500 text-sm mt-3">{pacientes.length} pacientes cadastrados</p>
         </div>
         <Link
@@ -106,7 +106,7 @@ export default function PacientesPage() {
         placeholder="Buscar paciente..."
         value={busca}
         onChange={(e) => setBusca(e.target.value)}
-        className="glass-panel w-full max-w-sm px-4 py-3 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(6,182,212,0.30)]"
+        className="glass-panel w-full md:max-w-sm px-4 py-3 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[rgba(6,182,212,0.30)]"
       />
 
       {loading ? (
@@ -151,17 +151,15 @@ export default function PacientesPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-4 flex-wrap">
                   {ultimaAval ? (
-                    <div className="text-right hidden sm:block">
+                    <div className="hidden sm:block text-right">
                       <p className="font-mono-ui text-[11px] uppercase tracking-[0.2em] text-slate-400">Última avaliação</p>
                       <p className="text-sm font-medium text-slate-700 mt-1">
                         {formatarData(ultimaAval.dataAvaliacao)}
                       </p>
                     </div>
-                  ) : (
-                    <span className="text-xs text-slate-400 hidden sm:block">Sem avaliações</span>
-                  )}
+                  ) : null}
                   <div className="flex gap-2 flex-wrap">
                     <ConviteBtn paciente={p} />
                     <Link
