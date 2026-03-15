@@ -86,6 +86,24 @@ export async function PUT(
     }
   }
 
+  if (formulaEscolha === "guedes") {
+    if (sexo === "M") {
+      if (!n(resto.dobTricipital) || !dobraSupraIliaca || !n(resto.dobAbdominal)) {
+        return NextResponse.json(
+          { erro: "Guedes masculino exige: Tricipital, Supra-ilíaca (Crista Ilíaca) e Abdominal" },
+          { status: 400 }
+        )
+      }
+    } else {
+      if (!n(resto.dobCoxa) || !dobraSupraIliaca || !n(resto.dobSubescapular)) {
+        return NextResponse.json(
+          { erro: "Guedes feminino exige: Coxa, Supra-ilíaca (Crista Ilíaca) e Subescapular" },
+          { status: 400 }
+        )
+      }
+    }
+  }
+
   // Atualiza a avaliação
   await prisma.avaliacao.update({
     where: { id },
@@ -158,6 +176,7 @@ export async function PUT(
       classificacaoImc: resultado.classificacaoImc,
       percGorduraFaulkner: resultado.percGorduraFaulkner,
       percGorduraPetroski: resultado.percGorduraPetroski,
+      percGorduraGuedes: resultado.percGorduraGuedes,
       densidadeCorporal: resultado.densidadeCorporal,
       massaGorda: resultado.massaGorda,
       massaMagra: resultado.massaMagra,
@@ -186,6 +205,7 @@ export async function PUT(
       classificacaoImc: resultado.classificacaoImc,
       percGorduraFaulkner: resultado.percGorduraFaulkner,
       percGorduraPetroski: resultado.percGorduraPetroski,
+      percGorduraGuedes: resultado.percGorduraGuedes,
       densidadeCorporal: resultado.densidadeCorporal,
       massaGorda: resultado.massaGorda,
       massaMagra: resultado.massaMagra,

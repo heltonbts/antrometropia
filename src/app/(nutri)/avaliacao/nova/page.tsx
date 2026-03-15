@@ -94,15 +94,20 @@ function NovaAvaliacaoContent() {
     if (!f.peso || !f.altura) return "Peso e altura são obrigatórios"
 
       if (f.formulaReferencia === "petroski") {
+        if (!f.dobTricipital || !f.dobSubescapular || !f.dobCristaIliaca || !f.dobPanturrilha) {
+          return "Petroski exige: Tricipital, Subescapular, Crista Ilíaca e Panturrilha"
+        }
+      }
+
+      if (f.formulaReferencia === "guedes") {
         if (f.sexoConfirmado === "M") {
-          if (!f.dobTricipital || !f.dobSubescapular || !f.dobCristaIliaca || !f.dobPanturrilha) {
-            return "Petroski masculino exige: Tricipital, Subescapular, Crista Ilíaca e Panturrilha"
+          if (!f.dobTricipital || !f.dobCristaIliaca || !f.dobAbdominal) {
+            return "Guedes masculino exige: Tricipital, Supra-ilíaca (Crista Ilíaca) e Abdominal"
           }
         }
-
         if (f.sexoConfirmado === "F") {
-          if (!f.dobTricipital || !f.dobSubescapular || !f.dobCristaIliaca || !f.dobPanturrilha) {
-            return "Petroski feminino exige: Tricipital, Subescapular, Crista Ilíaca e Panturrilha"
+          if (!f.dobCoxa || !f.dobCristaIliaca || !f.dobSubescapular) {
+            return "Guedes feminino exige: Coxa, Supra-ilíaca (Crista Ilíaca) e Subescapular"
           }
         }
       }
@@ -193,13 +198,13 @@ function NovaAvaliacaoContent() {
 
             <div>
               <label className="block text-xs font-medium text-slate-600 mb-1">Fórmula de Gordura % <span className="text-cyan-500 font-semibold">*</span></label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <button
                   type="button"
                   onClick={() => sf({ formulaReferencia: "petroski" })}
                   className={`py-2.5 px-4 rounded-xl text-sm font-medium border transition ${
-                    f.formulaReferencia === "petroski" 
-                      ? "bg-cyan-50 border-cyan-200 text-cyan-700" 
+                    f.formulaReferencia === "petroski"
+                      ? "bg-cyan-50 border-cyan-200 text-cyan-700"
                       : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
                   }`}
                 >
@@ -209,12 +214,23 @@ function NovaAvaliacaoContent() {
                   type="button"
                   onClick={() => sf({ formulaReferencia: "faulkner" })}
                   className={`py-2.5 px-4 rounded-xl text-sm font-medium border transition ${
-                    f.formulaReferencia === "faulkner" 
-                      ? "bg-cyan-50 border-cyan-200 text-cyan-700" 
+                    f.formulaReferencia === "faulkner"
+                      ? "bg-cyan-50 border-cyan-200 text-cyan-700"
                       : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
                   }`}
                 >
                   Faulkner
+                </button>
+                <button
+                  type="button"
+                  onClick={() => sf({ formulaReferencia: "guedes" })}
+                  className={`py-2.5 px-4 rounded-xl text-sm font-medium border transition ${
+                    f.formulaReferencia === "guedes"
+                      ? "bg-cyan-50 border-cyan-200 text-cyan-700"
+                      : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
+                  }`}
+                >
+                  Guedes
                 </button>
               </div>
               <p className="text-[10px] text-slate-400 mt-1.5">
@@ -253,6 +269,8 @@ function NovaAvaliacaoContent() {
               <p><strong>Faulkner:</strong> Tricipital + Subescapular + Supraespinal + Abdominal</p>
               <p><strong>Petroski masculino:</strong> Tricipital + Subescapular + Crista Ilíaca + Panturrilha</p>
               <p><strong>Petroski feminino:</strong> Tricipital + Subescapular + Crista Ilíaca + Panturrilha + peso + altura</p>
+              <p><strong>Guedes masculino:</strong> Tricipital + Crista Ilíaca (supra-ilíaca) + Abdominal</p>
+              <p><strong>Guedes feminino:</strong> Coxa + Crista Ilíaca (supra-ilíaca) + Subescapular</p>
               <p><strong>Heath-Carter Endo:</strong> Tricipital + Subescapular + Supraespinal</p>
             </Dica>
           </div>
@@ -307,7 +325,7 @@ function NovaAvaliacaoContent() {
               {([
                 ["Paciente", pacNome], 
                 ["Sexo confirmado", f.sexoConfirmado === "M" ? "Masculino" : f.sexoConfirmado === "F" ? "Feminino" : "—"],
-                ["Fórmula Ref.", f.formulaReferencia === "petroski" ? "Petroski" : "Faulkner"],
+                ["Fórmula Ref.", f.formulaReferencia === "petroski" ? "Petroski" : f.formulaReferencia === "guedes" ? "Guedes (1985)" : "Faulkner"],
                 ["Data", f.dataAvaliacao || "—"], 
                 ["Peso", f.peso ? `${f.peso} kg` : "—"], 
                 ["Altura", f.altura ? `${f.altura} cm` : "—"],

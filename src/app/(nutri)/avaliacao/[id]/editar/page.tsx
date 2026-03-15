@@ -127,6 +127,18 @@ export default function EditarAvaliacaoPage() {
         return "Petroski exige: Tricipital, Subescapular, Crista Ilíaca e Panturrilha"
       }
     }
+    if (f.formulaReferencia === "guedes") {
+      if (f.sexoConfirmado === "M") {
+        if (!f.dobTricipital || !f.dobCristaIliaca || !f.dobAbdominal) {
+          return "Guedes masculino exige: Tricipital, Supra-ilíaca (Crista Ilíaca) e Abdominal"
+        }
+      }
+      if (f.sexoConfirmado === "F") {
+        if (!f.dobCoxa || !f.dobCristaIliaca || !f.dobSubescapular) {
+          return "Guedes feminino exige: Coxa, Supra-ilíaca (Crista Ilíaca) e Subescapular"
+        }
+      }
+    }
     return null
   }
 
@@ -192,7 +204,7 @@ export default function EditarAvaliacaoPage() {
 
             <div>
               <label className="block text-xs font-medium text-slate-600 mb-1">Fórmula de Gordura % <span className="text-cyan-500 font-semibold">*</span></label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <button type="button" onClick={() => sf({ formulaReferencia: "petroski" })}
                   className={`py-2.5 px-4 rounded-xl text-sm font-medium border transition ${
                     f.formulaReferencia === "petroski" ? "bg-cyan-50 border-cyan-200 text-cyan-700" : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
@@ -204,6 +216,12 @@ export default function EditarAvaliacaoPage() {
                     f.formulaReferencia === "faulkner" ? "bg-cyan-50 border-cyan-200 text-cyan-700" : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
                   }`}>
                   Faulkner
+                </button>
+                <button type="button" onClick={() => sf({ formulaReferencia: "guedes" })}
+                  className={`py-2.5 px-4 rounded-xl text-sm font-medium border transition ${
+                    f.formulaReferencia === "guedes" ? "bg-cyan-50 border-cyan-200 text-cyan-700" : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
+                  }`}>
+                  Guedes
                 </button>
               </div>
             </div>
@@ -238,6 +256,8 @@ export default function EditarAvaliacaoPage() {
             <Dica>
               <p><strong>Faulkner:</strong> Tricipital + Subescapular + Supraespinal + Abdominal</p>
               <p><strong>Petroski:</strong> Tricipital + Subescapular + Crista Ilíaca + Panturrilha</p>
+              <p><strong>Guedes masculino:</strong> Tricipital + Crista Ilíaca (supra-ilíaca) + Abdominal</p>
+              <p><strong>Guedes feminino:</strong> Coxa + Crista Ilíaca (supra-ilíaca) + Subescapular</p>
             </Dica>
           </div>
         )}
