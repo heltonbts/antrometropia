@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { formatarNumero, corDobras } from "@/lib/utils"
 
 export default async function ResultadoPage({
@@ -118,6 +119,12 @@ export default async function ResultadoPage({
             })}
           </p>
         </div>
+      </div>
+
+      {/* Badge ISAK */}
+      <div className="flex items-center gap-2.5 glass-panel rounded-2xl px-4 py-2.5 w-fit">
+        <Image src="/logoisak.png" alt="ISAK" width={28} height={28} className="object-contain" />
+        <span className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-slate-500">Medições segundo padronização ISAK</span>
       </div>
 
       {/* Cards de resultado */}

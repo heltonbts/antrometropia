@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -38,8 +39,14 @@ export default function Home() {
         {/* Hero */}
         <section className="flex-1 grid gap-10 px-6 py-10 md:grid-cols-[1.2fr_0.8fr] md:px-8 md:py-14">
           <div className="flex flex-col justify-center">
-            <div className="eyebrow mb-6">
-              Plataforma para nutricionistas e educadores físicos
+            <div className="flex items-center gap-4 mb-6 flex-wrap">
+              <div className="eyebrow">
+                Plataforma para nutricionistas e educadores físicos
+              </div>
+              <div className="flex items-center gap-2 glass-panel rounded-xl px-3 py-1.5">
+                <Image src="/logoisak.png" alt="ISAK" width={20} height={20} className="object-contain" />
+                <span className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-slate-500">Padronização ISAK</span>
+              </div>
             </div>
             <h1 className="max-w-3xl text-5xl font-semibold tracking-[-0.05em] text-slate-900 md:text-7xl">
               Avaliação física com uma interface mais

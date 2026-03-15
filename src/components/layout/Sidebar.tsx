@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
@@ -46,6 +47,14 @@ export function Sidebar() {
               <p className="font-semibold text-slate-800 leading-none mt-1">Clinical Console</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Badge ISAK */}
+      <div className="px-6 py-3 border-b border-[rgba(15,23,42,0.08)]">
+        <div className="flex items-center gap-2.5">
+          <Image src="/logoisak.png" alt="ISAK" width={24} height={24} className="object-contain opacity-75" />
+          <span className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-slate-400">Padronização ISAK</span>
         </div>
       </div>
 

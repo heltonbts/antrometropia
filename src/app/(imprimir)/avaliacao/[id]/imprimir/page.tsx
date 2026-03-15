@@ -86,6 +86,11 @@ export default async function ImprimirAvaliacaoPage({
             <p className="font-semibold text-slate-800">{p.nome}</p>
             <p>{idade} anos · {formatarSexo(p.sexo)}</p>
             <p className="text-xs mt-1">Protocolo: {formula}</p>
+            <div className="flex items-center justify-end gap-2 mt-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logoisak.png" alt="ISAK" className="h-7 w-auto object-contain opacity-80" />
+              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">Padronização ISAK</span>
+            </div>
           </div>
         </div>
 
@@ -150,7 +155,11 @@ export default async function ImprimirAvaliacaoPage({
         {/* Rodapé */}
         <footer className="border-t border-slate-100 pt-4 flex items-center justify-between text-xs text-slate-400">
           <span>Nutrieval · nutrieval.com.br</span>
-          <span>Impresso em {new Date().toLocaleDateString("pt-BR")}</span>
+          <div className="flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logoisak.png" alt="ISAK" className="h-5 w-auto object-contain opacity-60" />
+            <span>Medições segundo protocolo ISAK · Impresso em {new Date().toLocaleDateString("pt-BR")}</span>
+          </div>
         </footer>
       </div>
 
