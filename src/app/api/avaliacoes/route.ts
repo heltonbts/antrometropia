@@ -92,6 +92,15 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  if (formulaEscolha === "novack") {
+    if (!n(resto.dobSubescapular) || !n(resto.dobAbdominal) || !n(resto.dobCoxa)) {
+      return NextResponse.json(
+        { erro: "Novack exige: Subescapular, Abdominal e Coxa" },
+        { status: 400 }
+      )
+    }
+  }
+
   const avaliacao = await prisma.avaliacao.create({
     data: {
       pacienteId,
@@ -167,6 +176,7 @@ export async function POST(req: NextRequest) {
       percGorduraFaulkner: resultado.percGorduraFaulkner,
       percGorduraPetroski: resultado.percGorduraPetroski,
       percGorduraGuedes: resultado.percGorduraGuedes,
+      percGorduraNovack: resultado.percGorduraNovack,
       densidadeCorporal: resultado.densidadeCorporal,
       massaGorda: resultado.massaGorda,
       massaMagra: resultado.massaMagra,

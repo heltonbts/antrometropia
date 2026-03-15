@@ -19,7 +19,7 @@ export default async function ResultadoPage({
 
   const r = avaliacao.resultado
   const p = avaliacao.paciente
-  const formula = r.formulaReferencia === "faulkner" ? "faulkner" : r.formulaReferencia === "guedes" ? "guedes" : "petroski"
+  const formula = r.formulaReferencia === "faulkner" ? "faulkner" : r.formulaReferencia === "guedes" ? "guedes" : r.formulaReferencia === "novack" ? "novack" : "petroski"
 
   const cards = [
     {
@@ -30,8 +30,8 @@ export default async function ResultadoPage({
       tone: "from-[#2563eb] to-[#60a5fa]",
     },
     {
-      titulo: formula === "faulkner" ? "% Gordura — Faulkner" : formula === "guedes" ? "% Gordura — Guedes" : "% Gordura — Petroski",
-      valor: formula === "faulkner" ? formatarNumero(r.percGorduraFaulkner) : formula === "guedes" ? formatarNumero(r.percGorduraGuedes) : formatarNumero(r.percGorduraPetroski),
+      titulo: formula === "faulkner" ? "% Gordura — Faulkner" : formula === "guedes" ? "% Gordura — Guedes" : formula === "novack" ? "% Gordura — Novack" : "% Gordura — Petroski",
+      valor: formula === "faulkner" ? formatarNumero(r.percGorduraFaulkner) : formula === "guedes" ? formatarNumero(r.percGorduraGuedes) : formula === "novack" ? formatarNumero(r.percGorduraNovack) : formatarNumero(r.percGorduraPetroski),
       unidade: "%",
       tone: "from-[#ec4899] to-[#f472b6]",
     },

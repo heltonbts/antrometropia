@@ -112,6 +112,12 @@ function NovaAvaliacaoContent() {
         }
       }
 
+      if (f.formulaReferencia === "novack") {
+        if (!f.dobSubescapular || !f.dobAbdominal || !f.dobCoxa) {
+          return "Novack exige: Subescapular, Abdominal e Coxa"
+        }
+      }
+
     return null
   }
 
@@ -198,7 +204,7 @@ function NovaAvaliacaoContent() {
 
             <div>
               <label className="block text-xs font-medium text-slate-600 mb-1">Fórmula de Gordura % <span className="text-cyan-500 font-semibold">*</span></label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <button
                   type="button"
                   onClick={() => sf({ formulaReferencia: "petroski" })}
@@ -231,6 +237,17 @@ function NovaAvaliacaoContent() {
                   }`}
                 >
                   Guedes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => sf({ formulaReferencia: "novack" })}
+                  className={`py-2.5 px-4 rounded-xl text-sm font-medium border transition ${
+                    f.formulaReferencia === "novack"
+                      ? "bg-cyan-50 border-cyan-200 text-cyan-700"
+                      : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
+                  }`}
+                >
+                  Novack
                 </button>
               </div>
               <p className="text-[10px] text-slate-400 mt-1.5">
@@ -271,6 +288,7 @@ function NovaAvaliacaoContent() {
               <p><strong>Petroski feminino:</strong> Tricipital + Subescapular + Crista Ilíaca + Panturrilha + peso + altura</p>
               <p><strong>Guedes masculino:</strong> Tricipital + Crista Ilíaca (supra-ilíaca) + Abdominal</p>
               <p><strong>Guedes feminino:</strong> Coxa + Crista Ilíaca (supra-ilíaca) + Subescapular</p>
+              <p><strong>Novack (atletas):</strong> Subescapular + Abdominal + Coxa</p>
               <p><strong>Heath-Carter Endo:</strong> Tricipital + Subescapular + Supraespinal</p>
             </Dica>
           </div>
@@ -325,7 +343,7 @@ function NovaAvaliacaoContent() {
               {([
                 ["Paciente", pacNome], 
                 ["Sexo confirmado", f.sexoConfirmado === "M" ? "Masculino" : f.sexoConfirmado === "F" ? "Feminino" : "—"],
-                ["Fórmula Ref.", f.formulaReferencia === "petroski" ? "Petroski" : f.formulaReferencia === "guedes" ? "Guedes (1985)" : "Faulkner"],
+                ["Fórmula Ref.", f.formulaReferencia === "petroski" ? "Petroski" : f.formulaReferencia === "guedes" ? "Guedes (1985)" : f.formulaReferencia === "novack" ? "Novack (2014)" : "Faulkner"],
                 ["Data", f.dataAvaliacao || "—"], 
                 ["Peso", f.peso ? `${f.peso} kg` : "—"], 
                 ["Altura", f.altura ? `${f.altura} cm` : "—"],

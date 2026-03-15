@@ -13,7 +13,7 @@ export interface DadosAvaliacao {
   idade: number
   sexo: "M" | "F"
   raca?: "branco" | "negro" | "asiatico"
-  formulaReferencia?: "petroski" | "faulkner" | "guedes"
+  formulaReferencia?: "petroski" | "faulkner" | "guedes" | "novack"
 
   // Dobras cutâneas (mm)
   dobTricipital?: number
@@ -52,6 +52,7 @@ export interface ResultadoFormulas {
   percGorduraFaulkner: number | null
   percGorduraPetroski: number | null
   percGorduraGuedes: number | null
+  percGorduraNovack: number | null
   densidadeCorporal: number | null
   massaGorda: number | null
   massaMagra: number | null
@@ -176,7 +177,20 @@ export function calcularDensidadeGuedesMulher(
 }
 
 // ------------------------------------------------------------
-// 5. SOMATOTIPO — Heath-Carter
+// 5. NOVACK (2014)
+//    Atletas adultos — 3 dobras, equação direta para %G
+//    %G = 8.997 + (0.246 × SE) + (0.296 × AB) + (0.198 × CX)
+// ------------------------------------------------------------
+export function calcularPercGorduraNovack(
+  subescapular: number,
+  abdominal: number,
+  coxa: number
+): number {
+  return 8.997 + 0.246 * subescapular + 0.296 * abdominal + 0.198 * coxa
+}
+
+// ------------------------------------------------------------
+// 6. SOMATOTIPO — Heath-Carter
 // ------------------------------------------------------------
 export function calcularEndomorfia(
   tricipital: number,
@@ -235,7 +249,7 @@ export function classificarBiotipo(
 }
 
 // ------------------------------------------------------------
-// 6. RCQ
+// 7. RCQ
 // ------------------------------------------------------------
 export function calcularRCQ(cintura: number, quadril: number): number {
   return cintura / quadril
@@ -253,7 +267,7 @@ export function classificarRCQ(rcq: number, sexo: "M" | "F"): string {
 }
 
 // ------------------------------------------------------------
-// 7. RISCO CINTURA (OMS)
+// 8. RISCO CINTURA (OMS)
 // ------------------------------------------------------------
 export function classificarRiscoCintura(cintura: number, sexo: "M" | "F"): string {
   if (sexo === "F") {
@@ -267,7 +281,7 @@ export function classificarRiscoCintura(cintura: number, sexo: "M" | "F"): strin
 }
 
 // ------------------------------------------------------------
-// 8. MASSA ÓSSEA — Von Dobeln (1964)
+// 9. MASSA ÓSSEA — Von Dobeln (1964)
 //    MO = 3,02 × [H(m)² × Diam.Punho(m) × Diam.Fêmur(m) × 400] ^ 0,712
 //    Os diâmetros são recebidos em cm e convertidos para metros internamente
 // ------------------------------------------------------------
@@ -282,7 +296,7 @@ export function calcularMassaOssea(
 }
 
 // ------------------------------------------------------------
-// 9. MASSA MUSCULAR ESQUELÉTICA — Lee et al. (2000), modelo antropométrico
+// 10. MASSA MUSCULAR ESQUELÉTICA — Lee et al. (2000), modelo antropométrico
 //    SMM = Ht x (0.00744 x CAG² + 0.00088 x CTG² + 0.00441 x CCG²)
 //          + 2.4 x sexo - 0.048 x idade + raca + 7.8
 //    sexo: 1 masculino, 0 feminino
@@ -323,21 +337,21 @@ export function calcularMassaMuscularLee(
 }
 
 // ------------------------------------------------------------
-// 10. CMB — Circunferência Muscular do Braço
+// 11. CMB — Circunferência Muscular do Braço
 // ------------------------------------------------------------
 export function calcularCMB(circBracoRelaxado: number, dobTricipital: number): number {
   return circBracoRelaxado - (Math.PI * dobTricipital) / 10
 }
 
 // ------------------------------------------------------------
-// 11. CMC — Circunferência Muscular da Coxa
+// 12. CMC — Circunferência Muscular da Coxa
 // ------------------------------------------------------------
 export function calcularCMC(circCoxaMedia: number, dobCoxa: number): number {
   return circCoxaMedia - (Math.PI * dobCoxa) / 10
 }
 
 // ------------------------------------------------------------
-// 12. SOMA 6 DOBRAS
+// 13. SOMA 6 DOBRAS
 // ------------------------------------------------------------
 export function calcularSoma6Dobras(
   tricipital: number,
@@ -366,7 +380,7 @@ export function classificar6Dobras(soma: number, sexo: "M" | "F"): string {
 }
 
 // ------------------------------------------------------------
-// 13. CP — risco idosos
+// 14. CP — risco idosos
 // ------------------------------------------------------------
 export function classificarCP(cp: number): string {
   return cp < 31 ? "Risco nutricional" : "Normal"
@@ -448,14 +462,26 @@ export function calcularTudo(dados: DadosAvaliacao): ResultadoFormulas {
     }
   }
 
+  // Novack (2014)
+  let percGorduraNovack: number | null = null
+  if (
+    temNumero(dados.dobSubescapular) &&
+    temNumero(dados.dobAbdominal) &&
+    temNumero(dados.dobCoxa)
+  ) {
+    percGorduraNovack = calcularPercGorduraNovack(dados.dobSubescapular, dados.dobAbdominal, dados.dobCoxa)
+  }
+
   // Composição corporal — Escolha da fórmula de referência
   const formulaReferencia = dados.formulaReferencia ?? (percGorduraPetroski !== null ? "petroski" : "faulkner")
   const percRef =
     formulaReferencia === "guedes"
       ? (percGorduraGuedes ?? percGorduraPetroski ?? percGorduraFaulkner)
-      : formulaReferencia === "petroski"
-        ? (percGorduraPetroski ?? percGorduraFaulkner)
-        : (percGorduraFaulkner ?? percGorduraPetroski)
+      : formulaReferencia === "novack"
+        ? (percGorduraNovack ?? percGorduraPetroski ?? percGorduraFaulkner)
+        : formulaReferencia === "petroski"
+          ? (percGorduraPetroski ?? percGorduraFaulkner)
+          : (percGorduraFaulkner ?? percGorduraPetroski)
 
   const massaGorda = percRef !== null ? dados.peso * (percRef / 100) : null
   const massaMagra = massaGorda !== null ? dados.peso - massaGorda : null
@@ -607,6 +633,7 @@ export function calcularTudo(dados: DadosAvaliacao): ResultadoFormulas {
     percGorduraFaulkner,
     percGorduraPetroski,
     percGorduraGuedes,
+    percGorduraNovack,
     densidadeCorporal,
     massaGorda,
     massaMagra,

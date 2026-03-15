@@ -139,6 +139,11 @@ export default function EditarAvaliacaoPage() {
         }
       }
     }
+    if (f.formulaReferencia === "novack") {
+      if (!f.dobSubescapular || !f.dobAbdominal || !f.dobCoxa) {
+        return "Novack exige: Subescapular, Abdominal e Coxa"
+      }
+    }
     return null
   }
 
@@ -204,7 +209,7 @@ export default function EditarAvaliacaoPage() {
 
             <div>
               <label className="block text-xs font-medium text-slate-600 mb-1">Fórmula de Gordura % <span className="text-cyan-500 font-semibold">*</span></label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <button type="button" onClick={() => sf({ formulaReferencia: "petroski" })}
                   className={`py-2.5 px-4 rounded-xl text-sm font-medium border transition ${
                     f.formulaReferencia === "petroski" ? "bg-cyan-50 border-cyan-200 text-cyan-700" : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
@@ -222,6 +227,12 @@ export default function EditarAvaliacaoPage() {
                     f.formulaReferencia === "guedes" ? "bg-cyan-50 border-cyan-200 text-cyan-700" : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
                   }`}>
                   Guedes
+                </button>
+                <button type="button" onClick={() => sf({ formulaReferencia: "novack" })}
+                  className={`py-2.5 px-4 rounded-xl text-sm font-medium border transition ${
+                    f.formulaReferencia === "novack" ? "bg-cyan-50 border-cyan-200 text-cyan-700" : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
+                  }`}>
+                  Novack
                 </button>
               </div>
             </div>
@@ -258,6 +269,7 @@ export default function EditarAvaliacaoPage() {
               <p><strong>Petroski:</strong> Tricipital + Subescapular + Crista Ilíaca + Panturrilha</p>
               <p><strong>Guedes masculino:</strong> Tricipital + Crista Ilíaca (supra-ilíaca) + Abdominal</p>
               <p><strong>Guedes feminino:</strong> Coxa + Crista Ilíaca (supra-ilíaca) + Subescapular</p>
+              <p><strong>Novack (atletas):</strong> Subescapular + Abdominal + Coxa</p>
             </Dica>
           </div>
         )}
