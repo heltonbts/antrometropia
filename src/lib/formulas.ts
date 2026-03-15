@@ -13,7 +13,7 @@ export interface DadosAvaliacao {
   idade: number
   sexo: "M" | "F"
   raca?: "branco" | "negro" | "asiatico"
-  formulaReferencia?: "petroski" | "faulkner" | "guedes" | "novack"
+  formulaReferencia?: "petroski" | "faulkner" | "guedes" | "novack" | "oliveira"
 
   // Dobras cutâneas (mm)
   dobTricipital?: number
@@ -53,6 +53,7 @@ export interface ResultadoFormulas {
   percGorduraPetroski: number | null
   percGorduraGuedes: number | null
   percGorduraNovack: number | null
+  percGorduraOliveira: number | null
   densidadeCorporal: number | null
   massaGorda: number | null
   massaMagra: number | null
@@ -190,7 +191,21 @@ export function calcularPercGorduraNovack(
 }
 
 // ------------------------------------------------------------
-// 6. SOMATOTIPO — Heath-Carter
+// 6. OLIVEIRA (2024) — gordura corporal em idosos (≥ 60 anos)
+//    %GC = 51.42 + (0.42 × IMC) + (0.18 × DC_coxa) - (0.24 × P_coxa) + (0.15 × P_quadril)
+//    DC coxa: mm | P coxa e P quadril: cm | IMC: kg/m²
+// ------------------------------------------------------------
+export function calcularPercGorduraOliveira(
+  imc: number,
+  dcCoxaMm: number,
+  pCoxaCm: number,
+  pQuadrilCm: number
+): number {
+  return 51.42 + (0.42 * imc) + (0.18 * dcCoxaMm) - (0.24 * pCoxaCm) + (0.15 * pQuadrilCm)
+}
+
+// ------------------------------------------------------------
+// 7. SOMATOTIPO — Heath-Carter
 // ------------------------------------------------------------
 export function calcularEndomorfia(
   tricipital: number,
@@ -472,6 +487,16 @@ export function calcularTudo(dados: DadosAvaliacao): ResultadoFormulas {
     percGorduraNovack = calcularPercGorduraNovack(dados.dobSubescapular, dados.dobAbdominal, dados.dobCoxa)
   }
 
+  // Oliveira (2024) — idosos ≥ 60 anos
+  let percGorduraOliveira: number | null = null
+  if (
+    temNumero(dados.dobCoxa) &&
+    temNumero(dados.circCoxaMedia) &&
+    temNumero(dados.circQuadril)
+  ) {
+    percGorduraOliveira = calcularPercGorduraOliveira(imc, dados.dobCoxa, dados.circCoxaMedia, dados.circQuadril)
+  }
+
   // Composição corporal — Escolha da fórmula de referência
   const formulaReferencia = dados.formulaReferencia ?? (percGorduraPetroski !== null ? "petroski" : "faulkner")
   const percRef =
@@ -479,9 +504,11 @@ export function calcularTudo(dados: DadosAvaliacao): ResultadoFormulas {
       ? (percGorduraGuedes ?? percGorduraPetroski ?? percGorduraFaulkner)
       : formulaReferencia === "novack"
         ? (percGorduraNovack ?? percGorduraPetroski ?? percGorduraFaulkner)
-        : formulaReferencia === "petroski"
-          ? (percGorduraPetroski ?? percGorduraFaulkner)
-          : (percGorduraFaulkner ?? percGorduraPetroski)
+        : formulaReferencia === "oliveira"
+          ? (percGorduraOliveira ?? percGorduraPetroski ?? percGorduraFaulkner)
+          : formulaReferencia === "petroski"
+            ? (percGorduraPetroski ?? percGorduraFaulkner)
+            : (percGorduraFaulkner ?? percGorduraPetroski)
 
   const massaGorda = percRef !== null ? dados.peso * (percRef / 100) : null
   const massaMagra = massaGorda !== null ? dados.peso - massaGorda : null
@@ -634,6 +661,7 @@ export function calcularTudo(dados: DadosAvaliacao): ResultadoFormulas {
     percGorduraPetroski,
     percGorduraGuedes,
     percGorduraNovack,
+    percGorduraOliveira,
     densidadeCorporal,
     massaGorda,
     massaMagra,

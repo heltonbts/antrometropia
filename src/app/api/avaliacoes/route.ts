@@ -101,6 +101,15 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  if (formulaEscolha === "oliveira") {
+    if (!n(resto.dobCoxa) || !n(resto.circCoxaMedia) || !n(resto.circQuadril)) {
+      return NextResponse.json(
+        { erro: "Oliveira (2024) exige: Dobra da Coxa, Circunferência da Coxa e Circunferência do Quadril" },
+        { status: 400 }
+      )
+    }
+  }
+
   const avaliacao = await prisma.avaliacao.create({
     data: {
       pacienteId,
@@ -177,6 +186,7 @@ export async function POST(req: NextRequest) {
       percGorduraPetroski: resultado.percGorduraPetroski,
       percGorduraGuedes: resultado.percGorduraGuedes,
       percGorduraNovack: resultado.percGorduraNovack,
+      percGorduraOliveira: resultado.percGorduraOliveira,
       densidadeCorporal: resultado.densidadeCorporal,
       massaGorda: resultado.massaGorda,
       massaMagra: resultado.massaMagra,

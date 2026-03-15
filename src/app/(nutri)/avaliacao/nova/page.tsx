@@ -118,6 +118,12 @@ function NovaAvaliacaoContent() {
         }
       }
 
+      if (f.formulaReferencia === "oliveira") {
+        if (!f.dobCoxa || !f.circCoxaMedia || !f.circQuadril) {
+          return "Oliveira (2024) exige: Dobra da Coxa, Circunferência da Coxa e Circunferência do Quadril"
+        }
+      }
+
     return null
   }
 
@@ -249,10 +255,28 @@ function NovaAvaliacaoContent() {
                 >
                   Novack
                 </button>
+                <button
+                  type="button"
+                  onClick={() => sf({ formulaReferencia: "oliveira" })}
+                  className={`py-2.5 px-4 rounded-xl text-sm font-medium border transition ${
+                    f.formulaReferencia === "oliveira"
+                      ? "bg-amber-50 border-amber-200 text-amber-700"
+                      : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
+                  }`}
+                >
+                  Oliveira
+                </button>
               </div>
-              <p className="text-[10px] text-slate-400 mt-1.5">
-                Define qual fórmula será usada como referência para Massa Gorda/Magra.
-              </p>
+              {f.formulaReferencia === "oliveira" && (
+                <p className="text-[10px] text-amber-600 mt-1.5">
+                  Oliveira (2024) — desenvolvida especificamente para estimativa de %G em idosos (≥ 60 anos).
+                </p>
+              )}
+              {f.formulaReferencia !== "oliveira" && (
+                <p className="text-[10px] text-slate-400 mt-1.5">
+                  Define qual fórmula será usada como referência para Massa Gorda/Magra.
+                </p>
+              )}
             </div>
 
             <div>
@@ -289,6 +313,7 @@ function NovaAvaliacaoContent() {
               <p><strong>Guedes masculino:</strong> Tricipital + Crista Ilíaca (supra-ilíaca) + Abdominal</p>
               <p><strong>Guedes feminino:</strong> Coxa + Crista Ilíaca (supra-ilíaca) + Subescapular</p>
               <p><strong>Novack (atletas):</strong> Subescapular + Abdominal + Coxa</p>
+              <p><strong>Oliveira (2024 · idosos):</strong> Dobra Coxa + Circ. Coxa + Circ. Quadril + IMC</p>
               <p><strong>Heath-Carter Endo:</strong> Tricipital + Subescapular + Supraespinal</p>
             </Dica>
           </div>
@@ -343,7 +368,7 @@ function NovaAvaliacaoContent() {
               {([
                 ["Paciente", pacNome], 
                 ["Sexo confirmado", f.sexoConfirmado === "M" ? "Masculino" : f.sexoConfirmado === "F" ? "Feminino" : "—"],
-                ["Fórmula Ref.", f.formulaReferencia === "petroski" ? "Petroski" : f.formulaReferencia === "guedes" ? "Guedes (1985)" : f.formulaReferencia === "novack" ? "Novack (2014)" : "Faulkner"],
+                ["Fórmula Ref.", f.formulaReferencia === "petroski" ? "Petroski" : f.formulaReferencia === "guedes" ? "Guedes (1985)" : f.formulaReferencia === "novack" ? "Novack (2014)" : f.formulaReferencia === "oliveira" ? "Oliveira (2024 · idosos)" : "Faulkner"],
                 ["Data", f.dataAvaliacao || "—"], 
                 ["Peso", f.peso ? `${f.peso} kg` : "—"], 
                 ["Altura", f.altura ? `${f.altura} cm` : "—"],

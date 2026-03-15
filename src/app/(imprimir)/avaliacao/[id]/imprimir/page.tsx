@@ -19,7 +19,12 @@ export default async function ImprimirAvaliacaoPage({
 
   const r = avaliacao.resultado
   const p = avaliacao.paciente
-  const formula = r.formulaReferencia === "faulkner" ? "Faulkner" : "Petroski"
+  const formula =
+    r.formulaReferencia === "faulkner" ? "Faulkner" :
+    r.formulaReferencia === "guedes" ? "Guedes" :
+    r.formulaReferencia === "novack" ? "Novack" :
+    r.formulaReferencia === "oliveira" ? "Oliveira (2024)" :
+    "Petroski"
   const dataFormatada = new Date(avaliacao.dataAvaliacao).toLocaleDateString("pt-BR", {
     day: "2-digit", month: "long", year: "numeric",
   })
@@ -27,7 +32,13 @@ export default async function ImprimirAvaliacaoPage({
 
   const resultados = [
     ["IMC", formatarNumero(r.imc), "kg/m²", r.classificacaoImc],
-    [`% Gordura (${formula})`, formula === "Faulkner" ? formatarNumero(r.percGorduraFaulkner) : formatarNumero(r.percGorduraPetroski), "%", null],
+    [`% Gordura (${formula})`,
+      formula === "Faulkner" ? formatarNumero(r.percGorduraFaulkner) :
+      formula === "Guedes" ? formatarNumero(r.percGorduraGuedes) :
+      formula === "Novack" ? formatarNumero(r.percGorduraNovack) :
+      formula === "Oliveira (2024)" ? formatarNumero(r.percGorduraOliveira) :
+      formatarNumero(r.percGorduraPetroski),
+      "%", null],
     ["Massa Gorda", formatarNumero(r.massaGorda), "kg", null],
     ["Massa Magra", formatarNumero(r.massaMagra), "kg", null],
     ["Massa Muscular (SMM)", formatarNumero(r.massaMuscular), "kg", null],

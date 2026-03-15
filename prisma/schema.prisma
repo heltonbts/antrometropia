@@ -110,6 +110,7 @@ model Resultado {
   percGorduraPetroski  Float?
   percGorduraGuedes    Float?
   percGorduraNovack    Float?
+  percGorduraOliveira  Float?
   densidadeCorporal    Float?
 
   massaGorda           Float?
