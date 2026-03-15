@@ -213,7 +213,8 @@ export default function PerfilPacientePage() {
                   <CardEvolucao titulo="Peso" valorAtual={ultima.peso} valorAnterior={penultima?.peso} unidade="kg" dados={serie((a) => a.peso)} cor={ACCENT} />
                   <CardEvolucao titulo="IMC" valorAtual={r?.imc ?? null} valorAnterior={penultima?.resultado?.imc ?? null} unidade="kg/m²" dados={serieRes((r) => r.imc)} cor={ACCENT3} refMin={18.5} refMax={25} classificacao={r?.classificacaoImc} corClass={r?.classificacaoImc ? corRisco(r.classificacaoImc) : undefined} />
                   <CardEvolucao titulo={`% Gordura (${r?.formulaReferencia === "faulkner" ? "Faulkner" : "Petroski"})`} valorAtual={(r?.formulaReferencia === "faulkner" ? r?.percGorduraFaulkner : r?.percGorduraPetroski) ?? null} valorAnterior={(penultima?.resultado?.formulaReferencia === "faulkner" ? penultima?.resultado?.percGorduraFaulkner : penultima?.resultado?.percGorduraPetroski) ?? null} unidade="%" dados={serieRes((res) => res.formulaReferencia === "faulkner" ? res.percGorduraFaulkner : res.percGorduraPetroski)} cor={ACCENT2} />
-                  <CardEvolucao titulo="Massa Muscular (SMM)" valorAtual={r?.massaMuscular ?? null} valorAnterior={penultima?.resultado?.massaMuscular ?? null} unidade="kg" dados={serieRes((r) => r.massaMuscular)} cor="#10b981" />
+                  <CardEvolucao titulo="Massa Magra" valorAtual={r?.massaMagra ?? null} valorAnterior={penultima?.resultado?.massaMagra ?? null} unidade="kg" dados={serieRes((r) => r.massaMagra)} cor={ACCENT} maiorMelhor />
+                  <CardEvolucao titulo="Massa Muscular (SMM)" valorAtual={r?.massaMuscular ?? null} valorAnterior={penultima?.resultado?.massaMuscular ?? null} unidade="kg" dados={serieRes((r) => r.massaMuscular)} cor="#10b981" maiorMelhor />
                   <CardEvolucao titulo="Circunferência da Cintura" valorAtual={ultima.circCintura ?? null} valorAnterior={penultima?.circCintura ?? null} unidade="cm" dados={serie((a) => a.circCintura)} cor={COR_AMBER} classificacao={r?.riscoCintura} corClass={r?.riscoCintura ? corRisco(r.riscoCintura) : undefined} />
                   <CardEvolucao titulo="RCQ" valorAtual={r?.rcq ?? null} valorAnterior={penultima?.resultado?.rcq ?? null} unidade="" dados={serieRes((r) => r.rcq)} cor={COR_ROSA} classificacao={r?.classificacaoRcq} corClass={r?.classificacaoRcq ? corRisco(r.classificacaoRcq) : undefined} />
                   <CardEvolucao titulo="Soma 6 Dobras" valorAtual={r?.soma6Dobras ?? null} valorAnterior={penultima?.resultado?.soma6Dobras ?? null} unidade="mm" dados={serieRes((r) => r.soma6Dobras)} cor={ACCENT2} />
@@ -240,16 +241,16 @@ export default function PerfilPacientePage() {
                   <CardEvolucao titulo="Quadril" valorAtual={ultima.circQuadril} valorAnterior={penultima?.circQuadril ?? null} unidade="cm" dados={serie((a) => a.circQuadril)} cor={ACCENT2} />
                 )}
                 {ultima.circBracoRelaxado != null && (
-                  <CardEvolucao titulo="Braço Relaxado" valorAtual={ultima.circBracoRelaxado} valorAnterior={penultima?.circBracoRelaxado ?? null} unidade="cm" dados={serie((a) => a.circBracoRelaxado)} cor={ACCENT} />
+                  <CardEvolucao titulo="Braço Relaxado" valorAtual={ultima.circBracoRelaxado} valorAnterior={penultima?.circBracoRelaxado ?? null} unidade="cm" dados={serie((a) => a.circBracoRelaxado)} cor={ACCENT} maiorMelhor />
                 )}
                 {ultima.circBracoContraido != null && (
-                  <CardEvolucao titulo="Braço Contraído" valorAtual={ultima.circBracoContraido} valorAnterior={penultima?.circBracoContraido ?? null} unidade="cm" dados={serie((a) => a.circBracoContraido)} cor={ACCENT3} />
+                  <CardEvolucao titulo="Braço Contraído" valorAtual={ultima.circBracoContraido} valorAnterior={penultima?.circBracoContraido ?? null} unidade="cm" dados={serie((a) => a.circBracoContraido)} cor={ACCENT3} maiorMelhor />
                 )}
                 {ultima.circPanturrilha != null && (
-                  <CardEvolucao titulo="Panturrilha" valorAtual={ultima.circPanturrilha} valorAnterior={penultima?.circPanturrilha ?? null} unidade="cm" dados={serie((a) => a.circPanturrilha)} cor="#10b981" />
+                  <CardEvolucao titulo="Panturrilha" valorAtual={ultima.circPanturrilha} valorAnterior={penultima?.circPanturrilha ?? null} unidade="cm" dados={serie((a) => a.circPanturrilha)} cor="#10b981" maiorMelhor />
                 )}
                 {ultima.circCoxaMedia != null && (
-                  <CardEvolucao titulo="Coxa Média" valorAtual={ultima.circCoxaMedia} valorAnterior={penultima?.circCoxaMedia ?? null} unidade="cm" dados={serie((a) => a.circCoxaMedia)} cor={COR_ROSA} />
+                  <CardEvolucao titulo="Coxa Média" valorAtual={ultima.circCoxaMedia} valorAnterior={penultima?.circCoxaMedia ?? null} unidade="cm" dados={serie((a) => a.circCoxaMedia)} cor={COR_ROSA} maiorMelhor />
                 )}
                 {ultima.circAbdomen != null && (
                   <CardEvolucao titulo="Abdômen" valorAtual={ultima.circAbdomen} valorAnterior={penultima?.circAbdomen ?? null} unidade="cm" dados={serie((a) => a.circAbdomen)} cor={COR_AMBER} />

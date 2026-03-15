@@ -14,6 +14,7 @@ interface Props {
   refMax?: number
   classificacao?: string | null
   corClass?: string
+  maiorMelhor?: boolean
 }
 
 export function CardEvolucao({
@@ -27,6 +28,7 @@ export function CardEvolucao({
   refMax,
   classificacao,
   corClass,
+  maiorMelhor = false,
 }: Props) {
   const diff =
     valorAtual !== null && valorAnterior !== null && valorAnterior !== undefined
@@ -57,7 +59,11 @@ export function CardEvolucao({
             <span
               className={cn(
                 "text-xs font-semibold px-2 py-1 rounded-full",
-                subiu ? "bg-rose-50 text-rose-500" : desceu ? "bg-emerald-50 text-emerald-500" : "bg-slate-50 text-slate-400"
+                subiu
+                  ? maiorMelhor ? "bg-emerald-50 text-emerald-500" : "bg-rose-50 text-rose-500"
+                  : desceu
+                  ? maiorMelhor ? "bg-rose-50 text-rose-500" : "bg-emerald-50 text-emerald-500"
+                  : "bg-slate-50 text-slate-400"
               )}
             >
               {subiu ? "▲" : desceu ? "▼" : "="} {Math.abs(diff).toFixed(1)}
