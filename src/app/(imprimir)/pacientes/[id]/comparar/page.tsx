@@ -116,6 +116,12 @@ export default async function CompararAvaliacoesPage({
       inv: false,
     },
     {
+      label: "CMC (cm)",
+      v1: av1.resultado?.cmc,
+      v2: av2.resultado?.cmc,
+      inv: false,
+    },
+    {
       label: "Soma 6 Dobras (mm)",
       v1: av1.resultado?.soma6Dobras,
       v2: av2.resultado?.soma6Dobras,

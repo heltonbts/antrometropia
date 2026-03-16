@@ -219,6 +219,8 @@ export default function PerfilPacientePage() {
                   <CardEvolucao titulo="RCQ" valorAtual={r?.rcq ?? null} valorAnterior={penultima?.resultado?.rcq ?? null} unidade="" dados={serieRes((r) => r.rcq)} cor={COR_ROSA} classificacao={r?.classificacaoRcq} corClass={r?.classificacaoRcq ? corRisco(r.classificacaoRcq) : undefined} />
                   <CardEvolucao titulo="Soma 6 Dobras" valorAtual={r?.soma6Dobras ?? null} valorAnterior={penultima?.resultado?.soma6Dobras ?? null} unidade="mm" dados={serieRes((r) => r.soma6Dobras)} cor={ACCENT2} />
                   <CardEvolucao titulo="Soma Todas as Dobras" valorAtual={r?.somaTodasDobras ?? null} valorAnterior={penultima?.resultado?.somaTodasDobras ?? null} unidade="mm" dados={serieRes((r) => r.somaTodasDobras)} cor={ACCENT3} />
+                  {r?.cmb != null && <CardEvolucao titulo="CMB" valorAtual={r.cmb} valorAnterior={penultima?.resultado?.cmb ?? null} unidade="cm" dados={serieRes((r) => r.cmb)} cor={ACCENT} maiorMelhor />}
+                  {r?.cmc != null && <CardEvolucao titulo="CMC" valorAtual={r.cmc} valorAnterior={penultima?.resultado?.cmc ?? null} unidade="cm" dados={serieRes((r) => r.cmc)} cor="#10b981" maiorMelhor />}
                 </div>
               </div>
 
