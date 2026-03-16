@@ -8,7 +8,7 @@ import { POLITICA_PRIVACIDADE_VERSAO_ATUAL, TERMOS_VERSAO_ATUAL } from "@/lib/le
 
 
 export async function POST(req: NextRequest) {
-  const { nome, email, senha, aceitouTermos, aceitouPoliticaPrivacidade } = await req.json()
+  const { nome, email, senha, aceitouTermos, aceitouPoliticaPrivacidade, origemCadastro } = await req.json()
 
   if (!nome || !email || !senha) {
     return NextResponse.json({ erro: "Dados incompletos" }, { status: 400 })
@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
       politicaPrivacidadeAceitaEm: agora,
       termosVersao: TERMOS_VERSAO_ATUAL,
       politicaPrivacidadeVersao: POLITICA_PRIVACIDADE_VERSAO_ATUAL,
+      origemCadastro: origemCadastro || null,
     },
   })
 
