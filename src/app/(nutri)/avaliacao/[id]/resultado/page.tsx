@@ -24,6 +24,12 @@ export default async function ResultadoPage({
 
   const cards = [
     {
+      titulo: "Peso",
+      valor: formatarNumero(avaliacao.peso),
+      unidade: "kg",
+      tone: "from-[#1e3a8a] to-[#2563eb]",
+    },
+    {
       titulo: "IMC",
       valor: formatarNumero(r.imc),
       unidade: "kg/m²",

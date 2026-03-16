@@ -31,6 +31,7 @@ export default async function ImprimirAvaliacaoPage({
   const idade = calcularIdade(p.dataNascimento)
 
   const resultados = [
+    ["Peso", formatarNumero(avaliacao.peso), "kg", null],
     ["IMC", formatarNumero(r.imc), "kg/m²", r.classificacaoImc],
     [`% Gordura (${formula})`,
       formula === "Faulkner" ? formatarNumero(r.percGorduraFaulkner) :
