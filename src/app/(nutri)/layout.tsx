@@ -16,7 +16,7 @@ export default function NutriLayout({ children }: { children: React.ReactNode })
             <span className="text-white text-xs font-bold">N</span>
           </div>
           <div>
-            <span className="font-mono-ui text-[10px] uppercase tracking-[0.28em] text-slate-500">Nutrieval</span>
+            <span className="font-mono-ui text-[10px] uppercase tracking-[0.28em] text-slate-500">Biometric Pro</span>
           </div>
         </header>
 

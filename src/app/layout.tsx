@@ -14,8 +14,8 @@ const plexMono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "NutriEval — Avaliação Física para Nutricionistas",
-  description: "Plataforma SaaS de avaliação física antropométrica para nutricionistas",
+  title: "Biometric Pro — Avaliação Física para Nutricionistas e Educadores Físicos",
+  description: "Plataforma SaaS de avaliação física antropométrica para nutricionistas e educadores físicos",
 }
 
 export default function RootLayout({

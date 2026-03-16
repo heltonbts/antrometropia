@@ -89,7 +89,7 @@ export default function ConvitePage() {
           </div>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Convite inválido</h1>
           <p className="text-slate-500 text-sm">
-            Este link de convite é inválido ou já foi utilizado. Peça ao seu nutricionista um novo convite.
+            Este link de convite é inválido ou já foi utilizado. Peça ao seu profissional um novo convite.
           </p>
         </div>
       </div>
@@ -114,7 +114,7 @@ export default function ConvitePage() {
             Olá, {info!.nome.split(" ")[0]}!
           </h1>
           <p className="text-slate-500 text-sm mt-2">
-            Seu nutricionista criou sua conta no NutriEval. Crie uma senha para acessar seu painel de evolução.
+            Seu nutricionista criou sua conta no Biometric Pro. Crie uma senha para acessar seu painel de evolução.
           </p>
           <p className="font-mono-ui text-[11px] text-slate-400 mt-3">{info!.email}</p>
         </div>

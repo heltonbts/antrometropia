@@ -309,7 +309,7 @@ export default function PainelPaciente() {
               <div className="glass-panel rounded-[24px] p-10 text-center text-slate-400">
                 <p className="font-mono-ui text-sm mb-3 text-[color:var(--accent)]">EMPTY</p>
                 <p className="font-medium">Nenhuma avaliação ainda</p>
-                <p className="text-sm mt-1">Seu nutricionista realizará a primeira avaliação em breve.</p>
+                <p className="text-sm mt-1">Seu profissional realizará a primeira avaliação em breve.</p>
               </div>
             ) : (
               <>

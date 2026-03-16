@@ -20,7 +20,7 @@ export default async function ContaPage() {
             <div className="eyebrow">Conta</div>
             <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-900">Privacidade e seguranca</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-500">
-              Controles de exportacao, exclusao e informacoes legais da sua conta no NutriEval.
+              Controles de exportacao, exclusao e informacoes legais da sua conta no Biometric Pro.
             </p>
           </div>
           <Link

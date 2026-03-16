@@ -11,15 +11,15 @@ export default function PrivacidadePage() {
         <div className="mt-8 space-y-6 text-sm leading-7 text-slate-700">
           <section>
             <h2 className="text-lg font-semibold text-slate-900">1. Dados coletados</h2>
-            <p>Coletamos dados cadastrais, dados de autenticacao e, quando aplicavel, dados de saude inseridos durante o acompanhamento nutricional.</p>
+            <p>Coletamos dados cadastrais, dados de autenticacao e, quando aplicavel, dados de saude inseridos durante o acompanhamento nutricional e físico.</p>
           </section>
           <section>
             <h2 className="text-lg font-semibold text-slate-900">2. Finalidade</h2>
-            <p>Os dados sao tratados para permitir o uso da plataforma, registrar avaliacoes, exibir historico clinico e manter a relacao entre nutricionista e paciente.</p>
+            <p>Os dados sao tratados para permitir o uso da plataforma, registrar avaliacoes, exibir historico clinico e manter a relacao entre o profissional e o paciente.</p>
           </section>
           <section>
             <h2 className="text-lg font-semibold text-slate-900">3. Dados sensiveis</h2>
-            <p>Dados de saude do paciente sao tratados mediante consentimento especifico no primeiro acesso e dentro das finalidades de acompanhamento nutricional.</p>
+            <p>Dados de saude do paciente sao tratados mediante consentimento especifico no primeiro acesso e dentro das finalidades de acompanhamento nutricional e físico.</p>
           </section>
           <section>
             <h2 className="text-lg font-semibold text-slate-900">4. Compartilhamento e seguranca</h2>

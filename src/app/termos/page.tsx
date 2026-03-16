@@ -11,15 +11,15 @@ export default function TermosPage() {
         <div className="mt-8 space-y-6 text-sm leading-7 text-slate-700">
           <section>
             <h2 className="text-lg font-semibold text-slate-900">1. Objeto</h2>
-            <p>O NutriEval oferece software para gestao de pacientes, avaliacoes antropometricas e compartilhamento de resultados entre nutricionistas e pacientes.</p>
+            <p>O Biometric Pro oferece software para gestao de pacientes, avaliacoes antropometricas e compartilhamento de resultados entre nutricionistas, educadores físicos e pacientes.</p>
           </section>
           <section>
             <h2 className="text-lg font-semibold text-slate-900">2. Responsabilidades do profissional</h2>
-            <p>O nutricionista e responsavel pela veracidade dos dados inseridos, pela base legal aplicavel ao atendimento e pelo uso clinico adequado das informacoes registradas na plataforma.</p>
+            <p>O profissional e responsavel pela veracidade dos dados inseridos, pela base legal aplicavel ao atendimento e pelo uso clinico adequado das informacoes registradas na plataforma.</p>
           </section>
           <section>
             <h2 className="text-lg font-semibold text-slate-900">3. Acesso do paciente</h2>
-            <p>O paciente acessa apenas os dados vinculados a sua propria conta e ao convite emitido pelo nutricionista responsavel.</p>
+            <p>O paciente acessa apenas os dados vinculados a sua propria conta e ao convite emitido pelo profissional responsavel.</p>
           </section>
           <section>
             <h2 className="text-lg font-semibold text-slate-900">4. Uso permitido</h2>
