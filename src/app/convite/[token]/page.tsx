@@ -1,52 +1,71 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 
 interface PacienteInfo {
-  nome: string
-  email: string
+  nome: string;
+  email: string;
 }
 
 export default function ConvitePage() {
-  const { token } = useParams<{ token: string }>()
-  const router = useRouter()
+  const { token } = useParams<{ token: string }>();
+  const router = useRouter();
 
-  const [info, setInfo] = useState<PacienteInfo | null>(null)
-  const [invalido, setInvalido] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [info, setInfo] = useState<PacienteInfo | null>(null);
+  const [invalido, setInvalido] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const [senha, setSenha] = useState("")
-  const [confirmar, setConfirmar] = useState("")
-  const [erro, setErro] = useState("")
-  const [enviando, setEnviando] = useState(false)
-  const [aceitouTermos, setAceitouTermos] = useState(false)
-  const [aceitouPoliticaPrivacidade, setAceitouPoliticaPrivacidade] = useState(false)
-  const [consentiuDadosSaude, setConsentiuDadosSaude] = useState(false)
+  const [senha, setSenha] = useState("");
+  const [confirmar, setConfirmar] = useState("");
+  const [erro, setErro] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const [aceitouTermos, setAceitouTermos] = useState(false);
+  const [aceitouPoliticaPrivacidade, setAceitouPoliticaPrivacidade] =
+    useState(false);
+  const [consentiuDadosSaude, setConsentiuDadosSaude] = useState(false);
 
   useEffect(() => {
     fetch(`/api/auth/convite?token=${token}`)
       .then((r) => {
-        if (!r.ok) { setInvalido(true); setLoading(false); return null }
-        return r.json()
+        if (!r.ok) {
+          setInvalido(true);
+          setLoading(false);
+          return null;
+        }
+        return r.json();
       })
-      .then((d) => { if (d) setInfo(d); setLoading(false) })
-      .catch(() => { setInvalido(true); setLoading(false) })
-  }, [token])
+      .then((d) => {
+        if (d) setInfo(d);
+        setLoading(false);
+      })
+      .catch(() => {
+        setInvalido(true);
+        setLoading(false);
+      });
+  }, [token]);
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setErro("")
+    e.preventDefault();
+    setErro("");
 
-    if (senha.length < 6) { setErro("A senha deve ter pelo menos 6 caracteres."); return }
-    if (senha !== confirmar) { setErro("As senhas não coincidem."); return }
+    if (senha.length < 6) {
+      setErro("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+    if (senha !== confirmar) {
+      setErro("As senhas não coincidem.");
+      return;
+    }
     if (!aceitouTermos || !aceitouPoliticaPrivacidade || !consentiuDadosSaude) {
-      setErro("Aceite os termos, a política e o consentimento de dados para continuar.")
-      return
+      setErro(
+        "Aceite os termos, a política e o consentimento de dados para continuar.",
+      );
+      return;
     }
 
-    setEnviando(true)
+    setEnviando(true);
     try {
       const r = await fetch("/api/auth/convite", {
         method: "POST",
@@ -58,26 +77,28 @@ export default function ConvitePage() {
           aceitouPoliticaPrivacidade,
           consentiuDadosSaude,
         }),
-      })
+      });
       if (!r.ok) {
-        const d = await r.json().catch(() => ({}))
-        setErro(d.erro ?? "Erro ao aceitar convite.")
-        setEnviando(false)
-        return
+        const d = await r.json().catch(() => ({}));
+        setErro(d.erro ?? "Erro ao aceitar convite.");
+        setEnviando(false);
+        return;
       }
-      router.push("/painel")
+      router.push("/painel");
     } catch {
-      setErro("Erro de conexão. Tente novamente.")
-      setEnviando(false)
+      setErro("Erro de conexão. Tente novamente.");
+      setEnviando(false);
     }
   }
 
   if (loading) {
     return (
       <div className="min-h-screen hero-grid flex items-center justify-center">
-        <p className="text-slate-400 font-mono-ui text-sm uppercase tracking-[0.2em]">Verificando convite...</p>
+        <p className="text-slate-400 font-mono-ui text-sm uppercase tracking-[0.2em]">
+          Verificando convite...
+        </p>
       </div>
-    )
+    );
   }
 
   if (invalido) {
@@ -87,13 +108,16 @@ export default function ConvitePage() {
           <div className="w-14 h-14 rounded-2xl bg-[rgba(201,109,66,0.12)] flex items-center justify-center mx-auto">
             <span className="text-2xl">⚠</span>
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Convite inválido</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+            Convite inválido
+          </h1>
           <p className="text-slate-500 text-sm">
-            Este link de convite é inválido ou já foi utilizado. Peça ao seu profissional um novo convite.
+            Este link de convite é inválido ou já foi utilizado. Peça ao seu
+            profissional um novo convite.
           </p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -104,7 +128,9 @@ export default function ConvitePage() {
           <div className="w-10 h-10 rounded-2xl bg-[linear-gradient(135deg,#1f8a70,#264653)] flex items-center justify-center shadow-[0_12px_28px_rgba(31,138,112,0.22)]">
             <span className="text-white text-sm font-bold">N</span>
           </div>
-          <p className="font-mono-ui text-[11px] uppercase tracking-[0.28em] text-slate-500">Nutrieval</p>
+          <p className="font-mono-ui text-[11px] uppercase tracking-[0.28em] text-slate-500">
+            Biometric Pro
+          </p>
         </div>
 
         {/* Saudação */}
@@ -114,9 +140,12 @@ export default function ConvitePage() {
             Olá, {info!.nome.split(" ")[0]}!
           </h1>
           <p className="text-slate-500 text-sm mt-2">
-            Seu nutricionista criou sua conta no Biometric Pro. Crie uma senha para acessar seu painel de evolução.
+            Seu nutricionista criou sua conta no Biometric Pro. Crie uma senha
+            para acessar seu painel de evolução.
           </p>
-          <p className="font-mono-ui text-[11px] text-slate-400 mt-3">{info!.email}</p>
+          <p className="font-mono-ui text-[11px] text-slate-400 mt-3">
+            {info!.email}
+          </p>
         </div>
 
         {/* Formulário */}
@@ -157,7 +186,11 @@ export default function ConvitePage() {
             />
             <span>
               Li e aceito os{" "}
-              <Link href="/termos" target="_blank" className="font-medium text-[color:var(--accent)] hover:underline">
+              <Link
+                href="/termos"
+                target="_blank"
+                className="font-medium text-[color:var(--accent)] hover:underline"
+              >
                 Termos de Uso
               </Link>
               .
@@ -173,7 +206,11 @@ export default function ConvitePage() {
             />
             <span>
               Li e aceito a{" "}
-              <Link href="/privacidade" target="_blank" className="font-medium text-[color:var(--accent)] hover:underline">
+              <Link
+                href="/privacidade"
+                target="_blank"
+                className="font-medium text-[color:var(--accent)] hover:underline"
+              >
                 Política de Privacidade
               </Link>
               .
@@ -188,13 +225,13 @@ export default function ConvitePage() {
               className="mt-1 h-4 w-4 rounded border-slate-300 text-[color:var(--accent)] focus:ring-[rgba(31,138,112,0.3)]"
             />
             <span>
-              Autorizo o tratamento dos meus dados pessoais e dados de saude para uso no acompanhamento nutricional, conforme a Politica de Privacidade.
+              Autorizo o tratamento dos meus dados pessoais e dados de saude
+              para uso no acompanhamento nutricional, conforme a Politica de
+              Privacidade.
             </span>
           </label>
 
-          {erro && (
-            <p className="text-sm text-red-500 font-medium">{erro}</p>
-          )}
+          {erro && <p className="text-sm text-red-500 font-medium">{erro}</p>}
 
           <button
             type="submit"
@@ -206,5 +243,5 @@ export default function ConvitePage() {
         </form>
       </div>
     </div>
-  )
+  );
 }
