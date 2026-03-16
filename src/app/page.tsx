@@ -13,7 +13,7 @@ export default function Home() {
             </div>
             <div>
               <span className="font-mono-ui text-[11px] uppercase tracking-[0.28em] text-slate-500">
-                Nutrieval
+                Biometric Pro
               </span>
               <p className="font-semibold text-slate-900 leading-none mt-1">
                 Anthropometry Studio
@@ -44,8 +44,16 @@ export default function Home() {
                 Plataforma para nutricionistas e educadores físicos
               </div>
               <div className="flex items-center gap-2 glass-panel rounded-xl px-3 py-1.5">
-                <Image src="/logoisak.png" alt="ISAK" width={20} height={20} className="object-contain" />
-                <span className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-slate-500">Padronização ISAK</span>
+                <Image
+                  src="/logoisak.png"
+                  alt="ISAK"
+                  width={20}
+                  height={20}
+                  className="object-contain"
+                />
+                <span className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-slate-500">
+                  Padronização ISAK
+                </span>
               </div>
             </div>
             <h1 className="max-w-3xl text-5xl font-semibold tracking-[-0.05em] text-slate-900 md:text-7xl">
