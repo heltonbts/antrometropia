@@ -366,7 +366,7 @@ export default function PainelPaciente() {
           {/* Header */}
           <header className="px-4 py-4 md:px-8 md:py-6 flex items-center justify-between border-b border-[rgba(23,32,51,0.08)] sticky top-0 bg-[rgba(255,255,255,0.72)] backdrop-blur-xl z-10 md:rounded-t-[36px]">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 md:w-10 md:h-10 rounded-2xl bg-[linear-gradient(135deg,#1f8a70,#264653)] flex items-center justify-center shadow-[0_12px_28px_rgba(31,138,112,0.22)]">
+              <div className="w-9 h-9 md:w-10 md:h-10 rounded-2xl bg-[linear-gradient(135deg,#06b6d4,#2563eb)] flex items-center justify-center shadow-[0_12px_28px_rgba(6,182,212,0.22)]">
                 <span className="text-white text-xs md:text-sm font-bold">
                   B
                 </span>
@@ -436,7 +436,7 @@ export default function PainelPaciente() {
                       valor: n(ultima.peso),
                       unidade: "kg",
                       diff: diffPeso,
-                      tone: "from-[#1f8a70] to-[#2a9d8f]",
+                      tone: "from-[#06b6d4] to-[#22d3ee]",
                       sub: null,
                     },
                     {
@@ -444,7 +444,7 @@ export default function PainelPaciente() {
                       valor: n(r?.imc) ?? "—",
                       unidade: "kg/m²",
                       diff: diffImc,
-                      tone: "from-[#264653] to-[#4d6a77]",
+                      tone: "from-[#2563eb] to-[#60a5fa]",
                       sub: r?.classificacaoImc,
                     },
                     {
@@ -452,7 +452,7 @@ export default function PainelPaciente() {
                       valor: n(percG) ?? "—",
                       unidade: "%",
                       diff: diffPercG,
-                      tone: "from-[#c96d42] to-[#d88c5b]",
+                      tone: "from-[#ec4899] to-[#f472b6]",
                       sub: null,
                     },
                     {
@@ -460,7 +460,7 @@ export default function PainelPaciente() {
                       valor: n(r?.massaMuscular) ?? "—",
                       unidade: "kg",
                       diff: diffMuscular,
-                      tone: "from-[#1f8a70] to-[#264653]",
+                      tone: "from-[#06b6d4] to-[#2563eb]",
                       sub: null,
                     },
                   ].map((c) => {
@@ -506,7 +506,7 @@ export default function PainelPaciente() {
                 {/* Cards de dobras */}
                 {(r?.soma6Dobras != null || r?.somaTodasDobras != null) && (
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="metric-card rounded-[20px] bg-gradient-to-br from-[#c96d42] to-[#264653] p-4 md:p-5 text-white">
+                    <div className="metric-card rounded-[20px] bg-gradient-to-br from-[#ec4899] to-[#2563eb] p-4 md:p-5 text-white">
                       <p className="font-mono-ui text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/70">
                         Soma 6 Dobras
                       </p>
@@ -535,7 +535,7 @@ export default function PainelPaciente() {
                         </span>
                       )}
                     </div>
-                    <div className="metric-card rounded-[20px] bg-gradient-to-br from-[#264653] to-[#c96d42] p-4 md:p-5 text-white">
+                    <div className="metric-card rounded-[20px] bg-gradient-to-br from-[#2563eb] to-[#ec4899] p-4 md:p-5 text-white">
                       <p className="font-mono-ui text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/70">
                         Soma Todas as Dobras
                       </p>
@@ -572,7 +572,7 @@ export default function PainelPaciente() {
                         </p>
                         <GraficoLinha
                           dados={serie((a) => a.peso)}
-                          cor="#1f8a70"
+                          cor="#06b6d4"
                           unidade="kg"
                           altura={160}
                         />
@@ -587,7 +587,7 @@ export default function PainelPaciente() {
                               ? r.percGorduraFaulkner
                               : r.percGorduraPetroski,
                           )}
-                          cor="#c96d42"
+                          cor="#ec4899"
                           unidade="%"
                           altura={160}
                         />
@@ -608,7 +608,7 @@ export default function PainelPaciente() {
                         </p>
                         <GraficoLinha
                           dados={serieRes((r) => r.soma6Dobras)}
-                          cor="#c96d42"
+                          cor="#ec4899"
                           unidade="mm"
                           altura={150}
                         />
@@ -619,7 +619,7 @@ export default function PainelPaciente() {
                         </p>
                         <GraficoLinha
                           dados={serieRes((r) => r.somaTodasDobras)}
-                          cor="#264653"
+                          cor="#2563eb"
                           unidade="mm"
                           altura={150}
                         />
@@ -685,7 +685,7 @@ export default function PainelPaciente() {
                         <button
                           key={a.id}
                           onClick={() => setAvalSelecionada(a)}
-                          className="w-full text-left glass-panel flex items-center justify-between rounded-[20px] p-3.5 md:p-4 hover:border-[rgba(31,138,112,0.25)] hover:shadow-sm active:scale-[0.99] transition-all"
+                          className="w-full text-left glass-panel flex items-center justify-between rounded-[20px] p-3.5 md:p-4 hover:border-[rgba(6,182,212,0.22)] hover:shadow-sm active:scale-[0.99] transition-all"
                         >
                           <div className="flex items-center gap-3">
                             <span
