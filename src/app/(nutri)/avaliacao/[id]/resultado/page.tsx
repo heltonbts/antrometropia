@@ -121,7 +121,7 @@ export default async function ResultadoPage({
           <p className="text-slate-400 text-sm mt-2">
             {p.nome} ·{" "}
             {new Date(avaliacao.dataAvaliacao).toLocaleDateString("pt-BR", {
-              day: "2-digit", month: "long", year: "numeric",
+              day: "2-digit", month: "long", year: "numeric", timeZone: "UTC",
             })}
           </p>
         </div>

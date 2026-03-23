@@ -5,11 +5,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatarData(data: Date | string): string {
+export function formatarData(data: Date | string, options?: Intl.DateTimeFormatOptions): string {
   return new Date(data).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
+    ...options,
+    timeZone: "UTC",
   })
 }
 

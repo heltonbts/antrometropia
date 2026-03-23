@@ -1,13 +1,15 @@
 "use client"
 
-import { useEffect, useState, Suspense } from "react"
+import { useEffect, useRef, useState, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { formatarSexo, normalizarSexo } from "@/lib/utils"
 
 const STEPS = ["Identificação", "Dobras", "Circunferências", "Diâmetros", "Revisão"]
+const DRAFT_KEY = "nutri_avaliacao_draft"
 
 type FormData = Record<string, string>
+type Draft = { form: FormData; step: number; savedAt: string }
 
 function Campo({
   label, chave, form, setForm, placeholder = "0.0", unidade = "mm", obrigatorio = false,
@@ -56,6 +58,36 @@ function NovaAvaliacaoContent() {
   })
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState("")
+  const [rascunho, setRascunho] = useState<Draft | null>(null)
+  const isFirstRender = useRef(true)
+
+  // Carrega rascunho ao montar
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(DRAFT_KEY)
+      if (saved) setRascunho(JSON.parse(saved))
+    } catch {}
+  }, [])
+
+  // Auto-salva no localStorage a cada mudança (pula renderização inicial)
+  useEffect(() => {
+    if (isFirstRender.current) { isFirstRender.current = false; return }
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ form, step, savedAt: new Date().toISOString() }))
+    } catch {}
+  }, [form, step])
+
+  function restaurarRascunho() {
+    if (!rascunho) return
+    setForm(rascunho.form)
+    setStep(rascunho.step)
+    setRascunho(null)
+  }
+
+  function descartarRascunho() {
+    try { localStorage.removeItem(DRAFT_KEY) } catch {}
+    setRascunho(null)
+  }
 
   useEffect(() => {
     fetch("/api/pacientes")
@@ -78,6 +110,7 @@ function NovaAvaliacaoContent() {
     const data = await res.json()
     setLoading(false)
     if (!res.ok) { setErro(data.erro || "Erro ao salvar"); return }
+    try { localStorage.removeItem(DRAFT_KEY) } catch {}
     router.push(`/avaliacao/${data.avaliacaoId}/resultado`)
   }
 
@@ -134,6 +167,30 @@ function NovaAvaliacaoContent() {
         <h1 className="text-2xl font-bold text-slate-900 mt-2">Nova Avaliação</h1>
         <p className="text-xs text-slate-400 mt-0.5">Campos marcados com * são necessários para os cálculos principais</p>
       </div>
+
+      {/* Banner de rascunho */}
+      {rascunho && (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 flex items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-semibold text-amber-800">Rascunho encontrado</p>
+            <p className="text-xs text-amber-600 mt-0.5">
+              Preenchimento salvo em {new Date(rascunho.savedAt).toLocaleString("pt-BR")}
+            </p>
+          </div>
+          <div className="flex gap-2 flex-shrink-0">
+            <button
+              onClick={descartarRascunho}
+              className="text-xs px-3 py-1.5 rounded-lg border border-amber-300 text-amber-700 hover:bg-amber-100 transition">
+              Descartar
+            </button>
+            <button
+              onClick={restaurarRascunho}
+              className="text-xs px-3 py-1.5 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition font-semibold">
+              Restaurar
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Steps */}
       <div className="flex items-center gap-1">

@@ -48,6 +48,7 @@ export default async function CompararAvaliacoesPage({
       day: "2-digit",
       month: "short",
       year: "numeric",
+      timeZone: "UTC",
     });
 
   const formula1 =

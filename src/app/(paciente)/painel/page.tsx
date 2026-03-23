@@ -50,6 +50,7 @@ function fmt(data: string) {
   return new Date(data).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "short",
+    timeZone: "UTC",
   });
 }
 
@@ -157,6 +158,7 @@ function DetalheAvaliacao({
                 day: "2-digit",
                 month: "long",
                 year: "numeric",
+                timeZone: "UTC",
               })}
             </h2>
           </div>
