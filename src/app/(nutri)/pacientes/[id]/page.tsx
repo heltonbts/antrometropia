@@ -268,7 +268,7 @@ export default function PerfilPacientePage() {
                   </div>
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <CardEvolucao titulo="Peso" valorAtual={ultima.peso} valorAnterior={penultima?.peso} unidade="kg" dados={serie((a) => a.peso)} cor={ACCENT} />
+                  <CardEvolucao titulo="Peso" valorAtual={ultima.peso} valorAnterior={penultima?.peso} unidade="kg" dados={serie((a) => a.peso)} cor={ACCENT} maiorMelhor />
                   <CardEvolucao titulo="IMC" valorAtual={r?.imc ?? null} valorAnterior={penultima?.resultado?.imc ?? null} unidade="kg/m²" dados={serieRes((r) => r.imc)} cor={ACCENT3} refMin={18.5} refMax={25} classificacao={r?.classificacaoImc} corClass={r?.classificacaoImc ? corRisco(r.classificacaoImc) : undefined} />
                   <CardEvolucao titulo={`% Gordura (${r?.formulaReferencia === "faulkner" ? "Faulkner" : "Petroski"})`} valorAtual={(r?.formulaReferencia === "faulkner" ? r?.percGorduraFaulkner : r?.percGorduraPetroski) ?? null} valorAnterior={(penultima?.resultado?.formulaReferencia === "faulkner" ? penultima?.resultado?.percGorduraFaulkner : penultima?.resultado?.percGorduraPetroski) ?? null} unidade="%" dados={serieRes((res) => res.formulaReferencia === "faulkner" ? res.percGorduraFaulkner : res.percGorduraPetroski)} cor={ACCENT2} />
                   <CardEvolucao titulo="Massa Magra" valorAtual={r?.massaMagra ?? null} valorAnterior={penultima?.resultado?.massaMagra ?? null} unidade="kg" dados={serieRes((r) => r.massaMagra)} cor={ACCENT} maiorMelhor />
