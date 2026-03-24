@@ -81,13 +81,13 @@ export default async function ResultadoPage({
       tone: "from-[#1e3a8a] to-[#2563eb]",
     },
     {
-      titulo: "CMB",
+      titulo: "Circ. Muscular do Braço",
       valor: formatarNumero(r.cmb),
       unidade: "cm",
       tone: "from-[#06b6d4] to-[#22d3ee]",
     },
     {
-      titulo: "CMC",
+      titulo: "Circ. Muscular da Coxa",
       valor: formatarNumero(r.cmc),
       unidade: "cm",
       tone: "from-[#06b6d4] to-[#22d3ee]",

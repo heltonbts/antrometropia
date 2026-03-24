@@ -111,13 +111,13 @@ export default async function CompararAvaliacoesPage({
       inv: true,
     },
     {
-      label: "CMB (cm)",
+      label: "Circunferência Muscular do Braço (cm)",
       v1: av1.resultado?.cmb,
       v2: av2.resultado?.cmb,
       inv: false,
     },
     {
-      label: "CMC (cm)",
+      label: "Circunferência Muscular da Coxa (cm)",
       v1: av1.resultado?.cmc,
       v2: av2.resultado?.cmc,
       inv: false,

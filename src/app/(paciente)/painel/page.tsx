@@ -97,8 +97,8 @@ function DetalheAvaliacao({
       sub: r?.classificacaoRcq,
     },
     { label: "Risco Cintura", valor: null, unidade: "", sub: r?.riscoCintura },
-    { label: "CMB", valor: n(r?.cmb), unidade: "cm" },
-    { label: "CMC", valor: n(r?.cmc), unidade: "cm" },
+    { label: "Circ. Muscular do Braço", valor: n(r?.cmb), unidade: "cm" },
+    { label: "Circ. Muscular da Coxa", valor: n(r?.cmc), unidade: "cm" },
     {
       label: "Soma 6 Dobras",
       valor: n(r?.soma6Dobras),

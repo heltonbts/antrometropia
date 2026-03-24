@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { createPortal } from "react-dom"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { formatarData, calcularIdade, corRisco, formatarSexo, corDobras } from "@/lib/utils"
@@ -78,10 +79,25 @@ function fmt(data: string) {
   return new Date(data).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", timeZone: "UTC" })
 }
 
+function fmtLong(data: string) {
+  return new Date(data).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" })
+}
+
+function delta(atual: number | null | undefined, anterior: number | null | undefined) {
+  if (atual == null || anterior == null) return null
+  const diff = atual - anterior
+  return { diff: Math.abs(diff).toFixed(2), positivo: diff >= 0 }
+}
+
 export default function PerfilPacientePage() {
   const { id } = useParams<{ id: string }>()
   const [paciente, setPaciente] = useState<Paciente | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showComparar, setShowComparar] = useState(false)
+  const [a1Selected, setA1Selected] = useState("")
+  const [a2Selected, setA2Selected] = useState("")
+  const [comparacaoAtiva, setComparacaoAtiva] = useState<{ av1: Avaliacao; av2: Avaliacao } | null>(null)
+  const [avalsVisiveis, setAvalsVisiveis] = useState<string[] | null>(null)
 
   useEffect(() => {
     fetch(`/api/pacientes/${id}`)
@@ -98,11 +114,13 @@ export default function PerfilPacientePage() {
   const penultima = avals[avals.length - 2]
   const idade = calcularIdade(paciente.dataNascimento)
 
+  const avalsFiltradas = avalsVisiveis === null ? avals : avals.filter((a) => avalsVisiveis.includes(a.id))
+
   const serie = (fn: (a: Avaliacao) => number | null | undefined) =>
-    avals.map((a) => ({ data: fmt(a.dataAvaliacao), valor: fn(a) ?? null }))
+    avalsFiltradas.map((a) => ({ data: fmt(a.dataAvaliacao), valor: fn(a) ?? null }))
 
   const serieRes = (fn: (r: NonNullable<Avaliacao["resultado"]>) => number | null | undefined) =>
-    avals.map((a) => ({ data: fmt(a.dataAvaliacao), valor: a.resultado ? (fn(a.resultado) ?? null) : null }))
+    avalsFiltradas.map((a) => ({ data: fmt(a.dataAvaliacao), valor: a.resultado ? (fn(a.resultado) ?? null) : null }))
 
   const r = ultima?.resultado
 
@@ -115,7 +133,7 @@ export default function PerfilPacientePage() {
     { nome: "Panturrilha",  valor: ultima?.dobPanturrilha ?? 0,   cor: "#10b981" },
   ]
 
-  const dobrasPorAvaliacao = avals.map((a) => ({
+  const dobrasPorAvaliacao = avalsFiltradas.map((a) => ({
     data: fmt(a.dataAvaliacao),
     tricipital:   a.dobTricipital,
     subescapular: a.dobSubescapular,
@@ -125,11 +143,11 @@ export default function PerfilPacientePage() {
     panturrilha:  a.dobPanturrilha,
   }))
 
-  const pontosSomatocarta = avals
+  const pontosSomatocarta = avalsFiltradas
     .filter((a) => a.resultado?.somatocartaX != null)
     .map((a) => ({ data: fmt(a.dataAvaliacao), x: a.resultado!.somatocartaX!, y: a.resultado!.somatocartaY! }))
 
-  const dadosArea = avals.map((a) => ({
+  const dadosArea = avalsFiltradas.map((a) => ({
     data: fmt(a.dataAvaliacao),
     massaGorda: a.resultado?.massaGorda ?? null,
     massaMagra: a.resultado?.massaMagra ?? null,
@@ -155,13 +173,16 @@ export default function PerfilPacientePage() {
         </div>
         <div className="flex flex-wrap gap-2 self-start md:self-auto">
           {avals.length >= 2 && (
-            <Link
-              href={`/pacientes/${paciente.id}/comparar`}
-              target="_blank"
+            <button
+              onClick={() => {
+                setA1Selected(avals[avals.length - 2]?.id ?? "")
+                setA2Selected(avals[avals.length - 1]?.id ?? "")
+                setShowComparar(true)
+              }}
               className="px-5 py-2.5 glass-panel text-slate-700 text-sm font-semibold rounded-2xl hover:bg-white transition flex items-center gap-2"
             >
               🖨 Comparar PDF
-            </Link>
+            </button>
           )}
           <Link
             href={`/avaliacao/nova?pacienteId=${paciente.id}`}
@@ -208,7 +229,44 @@ export default function PerfilPacientePage() {
           {avals.length >= 2 && (
             <>
               <div>
-                <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-4">Evolução</p>
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                  <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400">Evolução</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {avals.map((a) => {
+                      const ativa = avalsVisiveis === null || avalsVisiveis.includes(a.id)
+                      return (
+                        <button
+                          key={a.id}
+                          onClick={() => {
+                            if (avalsVisiveis === null) {
+                              setAvalsVisiveis(avals.filter(x => x.id !== a.id).map(x => x.id))
+                            } else {
+                              const nova = ativa
+                                ? avalsVisiveis.filter(id => id !== a.id)
+                                : [...avalsVisiveis, a.id]
+                              setAvalsVisiveis(nova.length === avals.length ? null : nova)
+                            }
+                          }}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold font-mono-ui transition border ${
+                            ativa
+                              ? "bg-[rgba(6,182,212,0.1)] text-[color:var(--accent)] border-[rgba(6,182,212,0.25)]"
+                              : "bg-slate-100 text-slate-400 border-slate-200"
+                          }`}
+                        >
+                          {fmt(a.dataAvaliacao)}
+                        </button>
+                      )
+                    })}
+                    {avalsVisiveis !== null && (
+                      <button
+                        onClick={() => setAvalsVisiveis(null)}
+                        className="px-2.5 py-1 rounded-lg text-[11px] font-semibold text-slate-400 hover:text-slate-600 transition"
+                      >
+                        Todas
+                      </button>
+                    )}
+                  </div>
+                </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <CardEvolucao titulo="Peso" valorAtual={ultima.peso} valorAnterior={penultima?.peso} unidade="kg" dados={serie((a) => a.peso)} cor={ACCENT} />
                   <CardEvolucao titulo="IMC" valorAtual={r?.imc ?? null} valorAnterior={penultima?.resultado?.imc ?? null} unidade="kg/m²" dados={serieRes((r) => r.imc)} cor={ACCENT3} refMin={18.5} refMax={25} classificacao={r?.classificacaoImc} corClass={r?.classificacaoImc ? corRisco(r.classificacaoImc) : undefined} />
@@ -219,8 +277,8 @@ export default function PerfilPacientePage() {
                   <CardEvolucao titulo="RCQ" valorAtual={r?.rcq ?? null} valorAnterior={penultima?.resultado?.rcq ?? null} unidade="" dados={serieRes((r) => r.rcq)} cor={COR_ROSA} classificacao={r?.classificacaoRcq} corClass={r?.classificacaoRcq ? corRisco(r.classificacaoRcq) : undefined} />
                   <CardEvolucao titulo="Soma 6 Dobras" valorAtual={r?.soma6Dobras ?? null} valorAnterior={penultima?.resultado?.soma6Dobras ?? null} unidade="mm" dados={serieRes((r) => r.soma6Dobras)} cor={ACCENT2} />
                   <CardEvolucao titulo="Soma Todas as Dobras" valorAtual={r?.somaTodasDobras ?? null} valorAnterior={penultima?.resultado?.somaTodasDobras ?? null} unidade="mm" dados={serieRes((r) => r.somaTodasDobras)} cor={ACCENT3} />
-                  {r?.cmb != null && <CardEvolucao titulo="CMB" valorAtual={r.cmb} valorAnterior={penultima?.resultado?.cmb ?? null} unidade="cm" dados={serieRes((r) => r.cmb)} cor={ACCENT} maiorMelhor />}
-                  {r?.cmc != null && <CardEvolucao titulo="CMC" valorAtual={r.cmc} valorAnterior={penultima?.resultado?.cmc ?? null} unidade="cm" dados={serieRes((r) => r.cmc)} cor="#10b981" maiorMelhor />}
+                  {r?.cmb != null && <CardEvolucao titulo="Circunferência Muscular do Braço" valorAtual={r.cmb} valorAnterior={penultima?.resultado?.cmb ?? null} unidade="cm" dados={serieRes((r) => r.cmb)} cor={ACCENT} maiorMelhor />}
+                  {r?.cmc != null && <CardEvolucao titulo="Circunferência Muscular da Coxa" valorAtual={r.cmc} valorAnterior={penultima?.resultado?.cmc ?? null} unidade="cm" dados={serieRes((r) => r.cmc)} cor="#10b981" maiorMelhor />}
                 </div>
               </div>
 
@@ -387,6 +445,223 @@ export default function PerfilPacientePage() {
             </div>
           </div>
         </>
+      )}
+      {/* Comparativo inline */}
+      {comparacaoAtiva && (() => {
+        const { av1, av2 } = comparacaoAtiva
+        const r1 = av1.resultado
+        const r2 = av2.resultado
+        const formula1 = r1?.formulaReferencia === "faulkner" ? "Faulkner" : "Petroski"
+        const formula2 = r2?.formulaReferencia === "faulkner" ? "Faulkner" : "Petroski"
+
+        const linhas: { label: string; v1?: number | null; v2?: number | null; badge1?: string | null; badge2?: string | null; inv: boolean }[] = [
+          { label: "Peso (kg)", v1: av1.peso, v2: av2.peso, inv: false },
+          { label: "IMC (kg/m²)", v1: r1?.imc, v2: r2?.imc, badge1: r1?.classificacaoImc, badge2: r2?.classificacaoImc, inv: false },
+          { label: `% Gordura (${formula2})`, v1: formula1 === "Faulkner" ? r1?.percGorduraFaulkner : r1?.percGorduraPetroski, v2: formula2 === "Faulkner" ? r2?.percGorduraFaulkner : r2?.percGorduraPetroski, inv: true },
+          { label: "Massa Gorda (kg)", v1: r1?.massaGorda, v2: r2?.massaGorda, inv: true },
+          { label: "Massa Magra (kg)", v1: r1?.massaMagra, v2: r2?.massaMagra, inv: false },
+          { label: "Massa Muscular SMM (kg)", v1: r1?.massaMuscular, v2: r2?.massaMuscular, inv: false },
+          { label: "Massa Óssea (kg)", v1: r1?.massaOssea, v2: r2?.massaOssea, inv: false },
+          { label: "RCQ", v1: r1?.rcq, v2: r2?.rcq, badge1: r1?.classificacaoRcq, badge2: r2?.classificacaoRcq, inv: true },
+          { label: "Circunferência Muscular do Braço (cm)", v1: r1?.cmb, v2: r2?.cmb, inv: false },
+          { label: "Circunferência Muscular da Coxa (cm)", v1: r1?.cmc, v2: r2?.cmc, inv: false },
+          { label: "Soma 6 Dobras (mm)", v1: r1?.soma6Dobras, v2: r2?.soma6Dobras, badge1: r1?.classificacao6Dobras, badge2: r2?.classificacao6Dobras, inv: true },
+          { label: "Soma Todas as Dobras (mm)", v1: r1?.somaTodasDobras, v2: r2?.somaTodasDobras, inv: true },
+        ]
+
+        const circ: { label: string; v1?: number | null; v2?: number | null; inv: boolean }[] = [
+          { label: "Cintura (cm)", v1: av1.circCintura, v2: av2.circCintura, inv: true },
+          { label: "Quadril (cm)", v1: av1.circQuadril, v2: av2.circQuadril, inv: false },
+          { label: "Braço Relaxado (cm)", v1: av1.circBracoRelaxado, v2: av2.circBracoRelaxado, inv: false },
+          { label: "Braço Contraído (cm)", v1: av1.circBracoContraido, v2: av2.circBracoContraido, inv: false },
+          { label: "Panturrilha (cm)", v1: av1.circPanturrilha, v2: av2.circPanturrilha, inv: false },
+          { label: "Coxa Média (cm)", v1: av1.circCoxaMedia, v2: av2.circCoxaMedia, inv: false },
+          { label: "Abdômen (cm)", v1: av1.circAbdomen, v2: av2.circAbdomen, inv: true },
+        ].filter(({ v1, v2 }) => v1 != null || v2 != null)
+
+        const renderTabela = (rows: typeof linhas) => (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-slate-100">
+                <th className="text-left py-2 text-[10px] font-mono uppercase tracking-wider text-slate-400 w-[45%]">Indicador</th>
+                <th className="text-center py-2 text-[10px] font-mono uppercase tracking-wider text-slate-400 w-[20%]">{fmtLong(av1.dataAvaliacao)}</th>
+                <th className="text-center py-2 text-[10px] font-mono uppercase tracking-wider text-slate-500 w-[20%]">{fmtLong(av2.dataAvaliacao)}</th>
+                <th className="text-center py-2 text-[10px] font-mono uppercase tracking-wider text-slate-400 w-[15%]">Δ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map(({ label, v1, v2, badge1, badge2, inv }) => {
+                if (v1 == null && v2 == null) return null
+                const d = delta(v2, v1)
+                const melhora = d ? (inv ? !d.positivo : d.positivo) : null
+                return (
+                  <tr key={label} className="border-b border-slate-50">
+                    <td className="py-2.5 text-slate-600 text-sm">{label}</td>
+                    <td className="py-2.5 text-center text-slate-500 font-medium">
+                      {v1 != null ? Number(v1).toFixed(2) : "—"}
+                      {badge1 && <span className="block text-[10px] text-slate-400">{badge1}</span>}
+                    </td>
+                    <td className="py-2.5 text-center text-slate-900 font-bold">
+                      {v2 != null ? Number(v2).toFixed(2) : "—"}
+                      {badge2 && <span className="block text-[10px] text-slate-400">{badge2}</span>}
+                    </td>
+                    <td className="py-2.5 text-center text-xs font-semibold">
+                      {d && (
+                        <span className={melhora ? "text-emerald-500" : "text-rose-400"}>
+                          {d.positivo ? "+" : "−"}{d.diff}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        )
+
+        return (
+          <div className="glass-panel rounded-[28px] p-6">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400">Comparativo</p>
+                <p className="text-slate-700 font-semibold mt-0.5">
+                  {fmtLong(av1.dataAvaliacao)} <span className="text-slate-300 font-normal">→</span> {fmtLong(av2.dataAvaliacao)}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <a
+                  href={`/pacientes/${paciente.id}/comparar?a1=${av1.id}&a2=${av2.id}`}
+                  target="_blank"
+                  className="px-3 py-1.5 text-xs font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition"
+                >
+                  PDF
+                </a>
+                <button
+                  onClick={() => {
+                    setA1Selected(av1.id)
+                    setA2Selected(av2.id)
+                    setShowComparar(true)
+                  }}
+                  className="px-3 py-1.5 text-xs font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition"
+                >
+                  Alterar
+                </button>
+                <button
+                  onClick={() => setComparacaoAtiva(null)}
+                  className="px-3 py-1.5 text-xs font-semibold text-slate-400 border border-slate-100 rounded-xl hover:bg-slate-50 transition"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            {renderTabela(linhas)}
+
+            {circ.length > 0 && (
+              <div className="mt-6">
+                <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-slate-400 mb-3">Circunferências</p>
+                {renderTabela(circ)}
+              </div>
+            )}
+
+            {r1?.endomorfia != null && r2?.endomorfia != null && (
+              <div className="mt-6">
+                <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-slate-400 mb-3">Somatotipo — Heath-Carter</p>
+                {renderTabela([
+                  { label: "Endomorfia (Adiposidade)", v1: r1.endomorfia, v2: r2.endomorfia, inv: true },
+                  { label: "Mesomorfia (Muscularidade)", v1: r1.mesomorfia, v2: r2.mesomorfia, inv: false },
+                  { label: "Ectomorfia (Linearidade)", v1: r1.ectomorfia, v2: r2.ectomorfia, inv: false },
+                ])}
+              </div>
+            )}
+
+            <p className="text-[10px] text-slate-400 mt-3">Δ verde = melhora · Δ vermelho = piora (considerando redução de gordura)</p>
+          </div>
+        )
+      })()}
+
+      {/* Modal seleção de avaliações para comparar */}
+      {showComparar && createPortal(
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+          onClick={() => setShowComparar(false)}
+        >
+          <div
+            className="bg-white rounded-[28px] p-8 max-w-sm w-full mx-4 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-lg font-semibold text-slate-900 mb-1">Comparar Avaliações</h2>
+            <p className="text-sm text-slate-400 mb-6">Selecione as duas avaliações para comparar</p>
+
+            <div className="space-y-4">
+              <div>
+                <label className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-slate-400 mb-1.5 block">Avaliação 1</label>
+                <select
+                  value={a1Selected}
+                  onChange={(e) => setA1Selected(e.target.value)}
+                  className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40"
+                >
+                  {avals.map((a) => (
+                    <option key={a.id} value={a.id}>{formatarData(a.dataAvaliacao)} — {a.peso} kg</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-slate-400 mb-1.5 block">Avaliação 2</label>
+                <select
+                  value={a2Selected}
+                  onChange={(e) => setA2Selected(e.target.value)}
+                  className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40"
+                >
+                  {avals.map((a) => (
+                    <option key={a.id} value={a.id}>{formatarData(a.dataAvaliacao)} — {a.peso} kg</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => setShowComparar(false)}
+                className="px-4 py-2.5 border border-slate-200 text-slate-600 text-sm font-semibold rounded-2xl hover:bg-slate-50 transition"
+              >
+                Cancelar
+              </button>
+              <button
+                disabled={a1Selected === a2Selected}
+                onClick={() => {
+                  const av1 = avals.find((a) => a.id === a1Selected)
+                  const av2 = avals.find((a) => a.id === a2Selected)
+                  if (av1 && av2) { setComparacaoAtiva({ av1, av2 }); setShowComparar(false) }
+                }}
+                className={`flex-1 px-4 py-2.5 text-sm font-semibold rounded-2xl transition ${
+                  a1Selected === a2Selected
+                    ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                }`}
+              >
+                Ver na Página
+              </button>
+              <a
+                href={`/pacientes/${paciente.id}/comparar?a1=${a1Selected}&a2=${a2Selected}`}
+                target="_blank"
+                onClick={() => setShowComparar(false)}
+                className={`flex-1 px-4 py-2.5 text-center text-white text-sm font-semibold rounded-2xl transition ${
+                  a1Selected === a2Selected
+                    ? "bg-slate-300 cursor-not-allowed pointer-events-none"
+                    : "bg-[linear-gradient(135deg,#06b6d4,#2563eb)] hover:opacity-90 shadow-[0_8px_24px_rgba(6,182,212,0.28)]"
+                }`}
+              >
+                PDF
+              </a>
+            </div>
+            {a1Selected === a2Selected && (
+              <p className="text-xs text-rose-400 text-center mt-2">Selecione avaliações diferentes</p>
+            )}
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   )

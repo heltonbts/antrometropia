@@ -63,8 +63,8 @@ export default async function ImprimirAvaliacaoPage({
     ["Massa Óssea", formatarNumero(r.massaOssea), "kg", null],
     ["RCQ", formatarNumero(r.rcq, 2), "", r.classificacaoRcq],
     ["Risco — Cintura", "", "", r.riscoCintura],
-    ["CMB", formatarNumero(r.cmb), "cm", null],
-    ["CMC", formatarNumero(r.cmc), "cm", null],
+    ["Circ. Muscular do Braço", formatarNumero(r.cmb), "cm", null],
+    ["Circ. Muscular da Coxa", formatarNumero(r.cmc), "cm", null],
     [
       "Soma 6 Dobras",
       formatarNumero(r.soma6Dobras),
