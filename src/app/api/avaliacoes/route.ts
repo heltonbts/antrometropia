@@ -151,7 +151,7 @@ export async function POST(req: NextRequest) {
     altura: Number(altura),
     idade,
     sexo,
-    raca: paciente.raca as "branco" | "negro" | "asiatico",
+    raca: paciente.raca as "branco" | "caucasiano" | "negro" | "asiatico",
     formulaReferencia: formulaEscolha,
     dobTricipital:   n(resto.dobTricipital) ?? undefined,
     dobSubescapular: n(resto.dobSubescapular) ?? undefined,

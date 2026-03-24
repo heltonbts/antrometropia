@@ -105,7 +105,7 @@ export default function NovoPacientePage() {
               <select required value={form.raca} onChange={(e) => setForm({ ...form, raca: e.target.value })} className={inputCls + " bg-[rgba(255,255,255,0.7)]"}>
                 <option value="">Selecione</option>
                 <option value="branco">Branco</option>
-                <option value="negro">Negro</option>
+                <option value="caucasiano">Caucasiano</option>
                 <option value="asiatico">Asiático</option>
               </select>
             </div>

@@ -152,7 +152,7 @@ export async function PUT(
     altura: Number(altura),
     idade,
     sexo,
-    raca: paciente.raca as "branco" | "negro" | "asiatico",
+    raca: paciente.raca as "branco" | "caucasiano" | "asiatico",
     formulaReferencia: formulaEscolha,
     dobTricipital:   n(resto.dobTricipital) ?? undefined,
     dobSubescapular: n(resto.dobSubescapular) ?? undefined,

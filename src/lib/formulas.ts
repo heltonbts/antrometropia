@@ -12,7 +12,7 @@ export interface DadosAvaliacao {
   altura: number      // cm
   idade: number
   sexo: "M" | "F"
-  raca?: "branco" | "negro" | "asiatico"
+  raca?: "branco" | "caucasiano" | "negro" | "asiatico"
   formulaReferencia?: "petroski" | "faulkner" | "guedes" | "novack" | "oliveira"
 
   // Dobras cutâneas (mm)
@@ -327,11 +327,11 @@ export function calcularMassaMuscularLee(
   dobPanturrilhaMm: number,
   sexo: "M" | "F",
   idade: number,
-  raca: "branco" | "negro" | "asiatico" = "branco"
+  raca: "branco" | "caucasiano" | "negro" | "asiatico" = "branco"
 ): number {
   const alturaM = alturaCm / 100
   const sexoVal = sexo === "M" ? 1 : 0
-  const racaVal = raca === "negro" ? 1.1 : raca === "asiatico" ? -2 : 0
+  const racaVal = raca === "caucasiano" || raca === "negro" ? 1.1 : raca === "asiatico" ? -2 : 0
 
   const bracoCorrigido = circBracoCm - Math.PI * (dobTricipitalMm / 10)
   const coxaCorrigida = circCoxaCm - Math.PI * (dobCoxaMm / 10)
