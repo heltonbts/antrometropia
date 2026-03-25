@@ -76,7 +76,7 @@ interface Paciente {
 }
 
 function fmt(data: string) {
-  return new Date(data).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", timeZone: "UTC" })
+  return new Date(data).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "2-digit", timeZone: "UTC" })
 }
 
 function fmtLong(data: string) {
@@ -115,6 +115,10 @@ export default function PerfilPacientePage() {
   const idade = calcularIdade(paciente.dataNascimento)
 
   const avalsFiltradas = avalsVisiveis === null ? avals : avals.filter((a) => avalsVisiveis.includes(a.id))
+
+  const ultimaFiltrada   = avalsFiltradas[avalsFiltradas.length - 1]
+  const penultimaFiltrada = avalsFiltradas[avalsFiltradas.length - 2]
+  const rFiltrado        = ultimaFiltrada?.resultado
 
   const serie = (fn: (a: Avaliacao) => number | null | undefined) =>
     avalsFiltradas.map((a) => ({ data: fmt(a.dataAvaliacao), valor: fn(a) ?? null }))
@@ -238,14 +242,11 @@ export default function PerfilPacientePage() {
                         <button
                           key={a.id}
                           onClick={() => {
-                            if (avalsVisiveis === null) {
-                              setAvalsVisiveis(avals.filter(x => x.id !== a.id).map(x => x.id))
-                            } else {
-                              const nova = ativa
-                                ? avalsVisiveis.filter(id => id !== a.id)
-                                : [...avalsVisiveis, a.id]
-                              setAvalsVisiveis(nova.length === avals.length ? null : nova)
-                            }
+                            const novaSelecao = ativa
+                              ? (avalsVisiveis ?? avals.map(x => x.id)).filter(id => id !== a.id)
+                              : [...(avalsVisiveis ?? avals.map(x => x.id)), a.id]
+                            const ordenada = avals.map(x => x.id).filter(id => novaSelecao.includes(id))
+                            setAvalsVisiveis(ordenada.length === avals.length ? null : ordenada)
                           }}
                           className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold font-mono-ui transition border ${
                             ativa
@@ -268,16 +269,16 @@ export default function PerfilPacientePage() {
                   </div>
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <CardEvolucao titulo="Peso" valorAtual={ultima.peso} valorAnterior={penultima?.peso} unidade="kg" dados={serie((a) => a.peso)} cor={ACCENT} maiorMelhor />
-                  <CardEvolucao titulo="IMC" valorAtual={r?.imc ?? null} valorAnterior={penultima?.resultado?.imc ?? null} unidade="kg/m²" dados={serieRes((r) => r.imc)} cor={ACCENT3} refMin={18.5} refMax={25} classificacao={r?.classificacaoImc} corClass={r?.classificacaoImc ? corRisco(r.classificacaoImc) : undefined} />
-                  <CardEvolucao titulo={`% Gordura (${r?.formulaReferencia === "faulkner" ? "Faulkner" : "Petroski"})`} valorAtual={(r?.formulaReferencia === "faulkner" ? r?.percGorduraFaulkner : r?.percGorduraPetroski) ?? null} valorAnterior={(penultima?.resultado?.formulaReferencia === "faulkner" ? penultima?.resultado?.percGorduraFaulkner : penultima?.resultado?.percGorduraPetroski) ?? null} unidade="%" dados={serieRes((res) => res.formulaReferencia === "faulkner" ? res.percGorduraFaulkner : res.percGorduraPetroski)} cor={ACCENT2} />
-                  <CardEvolucao titulo="Massa Magra" valorAtual={r?.massaMagra ?? null} valorAnterior={penultima?.resultado?.massaMagra ?? null} unidade="kg" dados={serieRes((r) => r.massaMagra)} cor={ACCENT} maiorMelhor />
-                  <CardEvolucao titulo="Massa Muscular (SMM)" valorAtual={r?.massaMuscular ?? null} valorAnterior={penultima?.resultado?.massaMuscular ?? null} unidade="kg" dados={serieRes((r) => r.massaMuscular)} cor="#10b981" maiorMelhor />
-                  <CardEvolucao titulo="RCQ" valorAtual={r?.rcq ?? null} valorAnterior={penultima?.resultado?.rcq ?? null} unidade="" dados={serieRes((r) => r.rcq)} cor={COR_ROSA} classificacao={r?.classificacaoRcq} corClass={r?.classificacaoRcq ? corRisco(r.classificacaoRcq) : undefined} />
-                  <CardEvolucao titulo="Soma 6 Dobras" valorAtual={r?.soma6Dobras ?? null} valorAnterior={penultima?.resultado?.soma6Dobras ?? null} unidade="mm" dados={serieRes((r) => r.soma6Dobras)} cor={ACCENT2} />
-                  <CardEvolucao titulo="Soma Todas as Dobras" valorAtual={r?.somaTodasDobras ?? null} valorAnterior={penultima?.resultado?.somaTodasDobras ?? null} unidade="mm" dados={serieRes((r) => r.somaTodasDobras)} cor={ACCENT3} />
-                  {r?.cmb != null && <CardEvolucao titulo="Circunferência Muscular do Braço" valorAtual={r.cmb} valorAnterior={penultima?.resultado?.cmb ?? null} unidade="cm" dados={serieRes((r) => r.cmb)} cor={ACCENT} maiorMelhor />}
-                  {r?.cmc != null && <CardEvolucao titulo="Circunferência Muscular da Coxa" valorAtual={r.cmc} valorAnterior={penultima?.resultado?.cmc ?? null} unidade="cm" dados={serieRes((r) => r.cmc)} cor="#10b981" maiorMelhor />}
+                  <CardEvolucao titulo="Peso" valorAtual={ultimaFiltrada?.peso ?? null} valorAnterior={penultimaFiltrada?.peso ?? null} unidade="kg" dados={serie((a) => a.peso)} cor={ACCENT} />
+                  <CardEvolucao titulo="IMC" valorAtual={rFiltrado?.imc ?? null} valorAnterior={penultimaFiltrada?.resultado?.imc ?? null} unidade="kg/m²" dados={serieRes((r) => r.imc)} cor={ACCENT3} refMin={18.5} refMax={25} classificacao={rFiltrado?.classificacaoImc} corClass={rFiltrado?.classificacaoImc ? corRisco(rFiltrado.classificacaoImc) : undefined} />
+                  <CardEvolucao titulo={`% Gordura (${rFiltrado?.formulaReferencia === "faulkner" ? "Faulkner" : "Petroski"})`} valorAtual={(rFiltrado?.formulaReferencia === "faulkner" ? rFiltrado?.percGorduraFaulkner : rFiltrado?.percGorduraPetroski) ?? null} valorAnterior={(penultimaFiltrada?.resultado?.formulaReferencia === "faulkner" ? penultimaFiltrada?.resultado?.percGorduraFaulkner : penultimaFiltrada?.resultado?.percGorduraPetroski) ?? null} unidade="%" dados={serieRes((res) => res.formulaReferencia === "faulkner" ? res.percGorduraFaulkner : res.percGorduraPetroski)} cor={ACCENT2} />
+                  <CardEvolucao titulo="Massa Magra" valorAtual={rFiltrado?.massaMagra ?? null} valorAnterior={penultimaFiltrada?.resultado?.massaMagra ?? null} unidade="kg" dados={serieRes((r) => r.massaMagra)} cor={ACCENT} maiorMelhor />
+                  <CardEvolucao titulo="Massa Muscular (SMM)" valorAtual={rFiltrado?.massaMuscular ?? null} valorAnterior={penultimaFiltrada?.resultado?.massaMuscular ?? null} unidade="kg" dados={serieRes((r) => r.massaMuscular)} cor="#10b981" maiorMelhor />
+                  <CardEvolucao titulo="RCQ" valorAtual={rFiltrado?.rcq ?? null} valorAnterior={penultimaFiltrada?.resultado?.rcq ?? null} unidade="" dados={serieRes((r) => r.rcq)} cor={COR_ROSA} classificacao={rFiltrado?.classificacaoRcq} corClass={rFiltrado?.classificacaoRcq ? corRisco(rFiltrado.classificacaoRcq) : undefined} />
+                  <CardEvolucao titulo="Soma 6 Dobras" valorAtual={rFiltrado?.soma6Dobras ?? null} valorAnterior={penultimaFiltrada?.resultado?.soma6Dobras ?? null} unidade="mm" dados={serieRes((r) => r.soma6Dobras)} cor={ACCENT2} />
+                  <CardEvolucao titulo="Soma Todas as Dobras" valorAtual={rFiltrado?.somaTodasDobras ?? null} valorAnterior={penultimaFiltrada?.resultado?.somaTodasDobras ?? null} unidade="mm" dados={serieRes((r) => r.somaTodasDobras)} cor={ACCENT3} />
+                  {rFiltrado?.cmb != null && <CardEvolucao titulo="Circunferência Muscular do Braço" valorAtual={rFiltrado.cmb} valorAnterior={penultimaFiltrada?.resultado?.cmb ?? null} unidade="cm" dados={serieRes((r) => r.cmb)} cor={ACCENT} maiorMelhor />}
+                  {rFiltrado?.cmc != null && <CardEvolucao titulo="Circunferência Muscular da Coxa" valorAtual={rFiltrado.cmc} valorAnterior={penultimaFiltrada?.resultado?.cmc ?? null} unidade="cm" dados={serieRes((r) => r.cmc)} cor="#10b981" maiorMelhor />}
                 </div>
               </div>
 
@@ -294,25 +295,25 @@ export default function PerfilPacientePage() {
               <p className="font-mono-ui text-[11px] uppercase tracking-[0.22em] text-slate-400 mb-4">Circunferências</p>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {ultima.circCintura != null && (
-                  <CardEvolucao titulo="Cintura" valorAtual={ultima.circCintura} valorAnterior={penultima?.circCintura ?? null} unidade="cm" dados={serie((a) => a.circCintura)} cor={COR_AMBER} classificacao={r?.riscoCintura} corClass={r?.riscoCintura ? corRisco(r.riscoCintura) : undefined} />
+                  <CardEvolucao titulo="Cintura" valorAtual={ultimaFiltrada?.circCintura ?? null} valorAnterior={penultimaFiltrada?.circCintura ?? null} unidade="cm" dados={serie((a) => a.circCintura)} cor={COR_AMBER} classificacao={rFiltrado?.riscoCintura} corClass={rFiltrado?.riscoCintura ? corRisco(rFiltrado.riscoCintura) : undefined} />
                 )}
                 {ultima.circQuadril != null && (
-                  <CardEvolucao titulo="Quadril" valorAtual={ultima.circQuadril} valorAnterior={penultima?.circQuadril ?? null} unidade="cm" dados={serie((a) => a.circQuadril)} cor={ACCENT2} />
+                  <CardEvolucao titulo="Quadril" valorAtual={ultimaFiltrada?.circQuadril ?? null} valorAnterior={penultimaFiltrada?.circQuadril ?? null} unidade="cm" dados={serie((a) => a.circQuadril)} cor={ACCENT2} />
                 )}
                 {ultima.circBracoRelaxado != null && (
-                  <CardEvolucao titulo="Braço Relaxado" valorAtual={ultima.circBracoRelaxado} valorAnterior={penultima?.circBracoRelaxado ?? null} unidade="cm" dados={serie((a) => a.circBracoRelaxado)} cor={ACCENT} maiorMelhor />
+                  <CardEvolucao titulo="Braço Relaxado" valorAtual={ultimaFiltrada?.circBracoRelaxado ?? null} valorAnterior={penultimaFiltrada?.circBracoRelaxado ?? null} unidade="cm" dados={serie((a) => a.circBracoRelaxado)} cor={ACCENT} maiorMelhor />
                 )}
                 {ultima.circBracoContraido != null && (
-                  <CardEvolucao titulo="Braço Contraído" valorAtual={ultima.circBracoContraido} valorAnterior={penultima?.circBracoContraido ?? null} unidade="cm" dados={serie((a) => a.circBracoContraido)} cor={ACCENT3} maiorMelhor />
+                  <CardEvolucao titulo="Braço Contraído" valorAtual={ultimaFiltrada?.circBracoContraido ?? null} valorAnterior={penultimaFiltrada?.circBracoContraido ?? null} unidade="cm" dados={serie((a) => a.circBracoContraido)} cor={ACCENT3} maiorMelhor />
                 )}
                 {ultima.circPanturrilha != null && (
-                  <CardEvolucao titulo="Panturrilha" valorAtual={ultima.circPanturrilha} valorAnterior={penultima?.circPanturrilha ?? null} unidade="cm" dados={serie((a) => a.circPanturrilha)} cor="#10b981" maiorMelhor />
+                  <CardEvolucao titulo="Panturrilha" valorAtual={ultimaFiltrada?.circPanturrilha ?? null} valorAnterior={penultimaFiltrada?.circPanturrilha ?? null} unidade="cm" dados={serie((a) => a.circPanturrilha)} cor="#10b981" maiorMelhor />
                 )}
                 {ultima.circCoxaMedia != null && (
-                  <CardEvolucao titulo="Coxa Média" valorAtual={ultima.circCoxaMedia} valorAnterior={penultima?.circCoxaMedia ?? null} unidade="cm" dados={serie((a) => a.circCoxaMedia)} cor={COR_ROSA} maiorMelhor />
+                  <CardEvolucao titulo="Coxa Média" valorAtual={ultimaFiltrada?.circCoxaMedia ?? null} valorAnterior={penultimaFiltrada?.circCoxaMedia ?? null} unidade="cm" dados={serie((a) => a.circCoxaMedia)} cor={COR_ROSA} maiorMelhor />
                 )}
                 {ultima.circAbdomen != null && (
-                  <CardEvolucao titulo="Abdômen" valorAtual={ultima.circAbdomen} valorAnterior={penultima?.circAbdomen ?? null} unidade="cm" dados={serie((a) => a.circAbdomen)} cor={COR_AMBER} />
+                  <CardEvolucao titulo="Abdômen" valorAtual={ultimaFiltrada?.circAbdomen ?? null} valorAnterior={penultimaFiltrada?.circAbdomen ?? null} unidade="cm" dados={serie((a) => a.circAbdomen)} cor={COR_AMBER} />
                 )}
               </div>
             </div>
