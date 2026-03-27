@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { jwtVerify } from "jose"
 import { clearAuthCookie, getJwtSecret } from "@/lib/auth"
 
-const rotasNutri = ["/dashboard", "/pacientes", "/avaliacao"]
+const rotasNutri = ["/dashboard", "/pacientes", "/avaliacao", "/agenda", "/anamnese", "/financeiro"]
 const rotasPaciente = ["/painel"]
-const rotasPublicas = ["/login", "/cadastro", "/convite", "/termos", "/privacidade", "/api"]
+const rotasPublicas = ["/login", "/cadastro", "/convite", "/termos", "/privacidade", "/api", "/f"]
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl

@@ -7,10 +7,13 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: "▣" },
-  { href: "/pacientes", label: "Pacientes", icon: "👥" },
-  { href: "/avaliacao/nova", label: "Nova Avaliação", icon: "📋" },
-  { href: "/conta", label: "Conta", icon: "⚙" },
+  { href: "/dashboard",     label: "Dashboard",     icon: "▣" },
+  { href: "/pacientes",     label: "Pacientes",     icon: "👥" },
+  { href: "/avaliacao/nova",label: "Nova Avaliação", icon: "📋" },
+  { href: "/agenda",        label: "Agenda",        icon: "📅" },
+  { href: "/anamnese",      label: "Anamnese",      icon: "📝" },
+  { href: "/financeiro",    label: "Financeiro",    icon: "💰" },
+  { href: "/conta",         label: "Conta",         icon: "⚙" },
 ];
 
 type Uso = { plano: string; totalPacientes: number; limite: number | null };

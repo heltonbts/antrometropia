@@ -23,6 +23,10 @@ model Nutricionista {
   assinaturaStatus            String?
   criadoEm                    DateTime   @default(now())
   pacientes                   Paciente[]
+  lancamentos                 Lancamento[]
+  consultas                   Consulta[]
+  modelosAnamnese             ModeloAnamnese[]
+  anamneses                   Anamnese[]
 
   @@map("nutricionistas")
 }
@@ -49,6 +53,9 @@ model Paciente {
 
   nutricionista    Nutricionista  @relation(fields: [nutricionistaId], references: [id])
   avaliacoes       Avaliacao[]
+  lancamentos      Lancamento[]
+  consultas        Consulta[]
+  anamneses        Anamnese[]
 
   @@map("pacientes")
 }
@@ -146,6 +153,81 @@ model Resultado {
   avaliacao            Avaliacao @relation(fields: [avaliacaoId], references: [id])
 
   @@map("resultados")
+}
+
+model Lancamento {
+  id              String    @id @default(cuid())
+  nutricionistaId String
+  pacienteId      String?
+  descricao       String
+  valor           Float
+  dataVencimento  DateTime
+  dataPagamento   DateTime?
+  status          String    @default("PENDENTE") // PENDENTE | PAGO | CANCELADO
+  formaPagamento  String?   // PIX | DINHEIRO | CARTAO | OUTRO
+  criadoEm        DateTime  @default(now())
+
+  consultaId    String?   @unique
+  consulta      Consulta? @relation(fields: [consultaId], references: [id])
+
+  nutricionista Nutricionista @relation(fields: [nutricionistaId], references: [id])
+  paciente      Paciente?     @relation(fields: [pacienteId], references: [id])
+
+  @@map("lancamentos")
+}
+
+model Consulta {
+  id              String    @id @default(cuid())
+  nutricionistaId String
+  pacienteId      String?
+  titulo          String
+  inicio          DateTime
+  fim             DateTime
+  status          String    @default("AGENDADA") // AGENDADA | REALIZADA | CANCELADA | FALTA
+  observacoes     String?
+  criadoEm        DateTime  @default(now())
+
+  nutricionista Nutricionista @relation(fields: [nutricionistaId], references: [id])
+  paciente      Paciente?     @relation(fields: [pacienteId], references: [id])
+  lancamento    Lancamento?
+
+  @@map("consultas")
+}
+
+model ModeloAnamnese {
+  id              String   @id @default(cuid())
+  nutricionistaId String
+  nome            String
+  descricao       String?
+  perguntas       Json     @default("[]")
+  padrao          Boolean  @default(false)
+  criadoEm        DateTime @default(now())
+  atualizadoEm    DateTime @updatedAt
+
+  nutricionista Nutricionista @relation(fields: [nutricionistaId], references: [id])
+  anamneses     Anamnese[]
+
+  @@map("modelos_anamnese")
+}
+
+model Anamnese {
+  id              String    @id @default(cuid())
+  nutricionistaId String
+  pacienteId      String?
+  modeloId        String?
+  slug            String    @unique
+  titulo          String
+  perguntas       Json      @default("[]")
+  respostas       Json?
+  status          String    @default("PENDENTE")
+  criadoEm        DateTime  @default(now())
+  preenchidaEm    DateTime?
+
+  nutricionista Nutricionista   @relation(fields: [nutricionistaId], references: [id])
+  paciente      Paciente?       @relation(fields: [pacienteId], references: [id])
+  modelo        ModeloAnamnese? @relation(fields: [modeloId], references: [id])
+
+  @@map("anamneses")
 }
 
 model AuditLog {

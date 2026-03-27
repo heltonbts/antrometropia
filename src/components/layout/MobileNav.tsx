@@ -5,10 +5,13 @@ import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 
 const items = [
-  { href: "/dashboard",     label: "Início",    icon: "▣" },
-  { href: "/pacientes",     label: "Pacientes", icon: "👥" },
-  { href: "/avaliacao/nova",label: "Avaliar",   icon: "＋" },
-  { href: "/conta",         label: "Conta",     icon: "⚙" },
+  { href: "/dashboard",     label: "Início",     icon: "▣" },
+  { href: "/pacientes",     label: "Pacientes",  icon: "👥" },
+  { href: "/avaliacao/nova",label: "Avaliar",    icon: "＋" },
+  { href: "/agenda",        label: "Agenda",     icon: "📅" },
+  { href: "/anamnese",      label: "Anamnese",   icon: "📝" },
+  { href: "/financeiro",    label: "Financeiro", icon: "💰" },
+  { href: "/conta",         label: "Conta",      icon: "⚙" },
 ]
 
 export function MobileNav() {
