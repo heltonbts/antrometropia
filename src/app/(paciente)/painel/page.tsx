@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { formatarData, corDobras } from "@/lib/utils";
 import { GraficoLinha } from "@/components/charts/GraficoLinha";
 import { GraficoComposicao } from "@/components/charts/GraficoComposicao";
 import { GraficoAreaEmpilhada } from "@/components/charts/GraficoAreaEmpilhada";
+import { GraficoComparacaoDobras } from "@/components/charts/GraficoComparacaoDobras";
 import { Somatocarta } from "@/components/charts/Somatocarta";
 import { cn } from "@/lib/utils";
 
@@ -13,6 +14,12 @@ interface Avaliacao {
   id: string;
   dataAvaliacao: string;
   peso: number;
+  dobTricipital?: number | null;
+  dobSubescapular?: number | null;
+  dobSupraespinal?: number | null;
+  dobAbdominal?: number | null;
+  dobCoxa?: number | null;
+  dobPanturrilha?: number | null;
   resultado: {
     imc?: number | null;
     classificacaoImc?: string | null;
@@ -270,9 +277,9 @@ function DetalheAvaliacao({
 export default function PainelPaciente() {
   const [data, setData] = useState<PacienteData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [avalSelecionada, setAvalSelecionada] = useState<Avaliacao | null>(
-    null,
-  );
+  const [avalSelecionada, setAvalSelecionada] = useState<Avaliacao | null>(null);
+  const [anamneses, setAnamneses] = useState<any[]>([]);
+  const [anamneseSelecionada, setAnamneseSelecionada] = useState<any | null>(null);
 
   useEffect(() => {
     fetch("/api/paciente/painel")
@@ -288,6 +295,11 @@ export default function PainelPaciente() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
+
+    fetch("/api/paciente/anamneses")
+      .then((r) => r.ok ? r.json() : [])
+      .then((d) => setAnamneses(Array.isArray(d) ? d : []))
+      .catch(() => {});
   }, []);
 
   if (loading) {
@@ -329,6 +341,16 @@ export default function PainelPaciente() {
     data: fmt(a.dataAvaliacao),
     massaGorda: a.resultado?.massaGorda ?? null,
     massaMagra: a.resultado?.massaMagra ?? null,
+  }));
+
+  const dobrasPorAvaliacao = avals.map((a) => ({
+    data: fmt(a.dataAvaliacao),
+    tricipital:   a.dobTricipital,
+    subescapular: a.dobSubescapular,
+    supraespinal: a.dobSupraespinal,
+    abdominal:    a.dobAbdominal,
+    coxa:         a.dobCoxa,
+    panturrilha:  a.dobPanturrilha,
   }));
 
   const pontosSomato = avals
@@ -625,6 +647,13 @@ export default function PainelPaciente() {
                         />
                       </div>
                     </div>
+
+                    <div className="glass-panel rounded-[24px] p-4 md:p-5">
+                      <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-slate-400 mb-3">
+                        Evolução das Dobras
+                      </p>
+                      <GraficoComparacaoDobras avaliacoes={dobrasPorAvaliacao} />
+                    </div>
                   </>
                 )}
 
@@ -666,6 +695,69 @@ export default function PainelPaciente() {
                     </div>
                   )}
                 </div>
+
+                {/* Anamneses */}
+                {anamneses.length > 0 && (
+                  <div>
+                    <p className="font-mono-ui text-[10px] uppercase tracking-[0.22em] text-slate-400 mb-3">
+                      Formulários de anamnese
+                    </p>
+                    <div className="space-y-2">
+                      {anamneses.map((a) => (
+                        <div key={a.id} className="glass-panel rounded-[20px] p-4 flex items-center justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-slate-800 truncate">{a.titulo}</p>
+                            <p className="text-xs text-slate-400 mt-0.5">
+                              {new Date(a.criadoEm).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })}
+                            </p>
+                          </div>
+                          {a.status === "PENDENTE" ? (
+                            <a
+                              href={`/f/${a.slug}`}
+                              className="flex-shrink-0 px-4 py-2 bg-[linear-gradient(135deg,#06b6d4,#2563eb)] text-white text-xs font-semibold rounded-xl shadow-sm hover:opacity-90 transition-opacity"
+                            >
+                              Responder
+                            </a>
+                          ) : (
+                            <button
+                              onClick={() => setAnamneseSelecionada(a)}
+                              className="flex-shrink-0 px-4 py-2 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-xl border border-emerald-200 hover:bg-emerald-100 transition-colors"
+                            >
+                              Ver respostas
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Modal respostas anamnese */}
+                {anamneseSelecionada && (
+                  <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
+                    <div className="w-full max-w-lg bg-white rounded-[28px] shadow-2xl flex flex-col max-h-[90vh]">
+                      <div className="flex items-center justify-between p-5 border-b border-slate-100">
+                        <h2 className="text-base font-semibold text-slate-900">{anamneseSelecionada.titulo}</h2>
+                        <button onClick={() => setAnamneseSelecionada(null)} className="text-slate-400 hover:text-slate-700 text-xl">×</button>
+                      </div>
+                      <div className="overflow-y-auto p-5 space-y-4">
+                        {(anamneseSelecionada.perguntas ?? []).map((p: any, i: number) => {
+                          const resp = (anamneseSelecionada.respostas ?? {})[p.id]
+                          return (
+                            <div key={p.id} className="space-y-1">
+                              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{i + 1}. {p.pergunta}</p>
+                              <p className="text-sm text-slate-800 bg-slate-50 rounded-xl px-3 py-2">
+                                {resp == null || resp === "" ? <span className="text-slate-300 italic">Não respondida</span>
+                                  : Array.isArray(resp) ? resp.join(", ")
+                                  : String(resp)}
+                              </p>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Histórico — clicável */}
                 <div className="pb-6">
