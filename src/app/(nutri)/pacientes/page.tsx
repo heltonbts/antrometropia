@@ -65,6 +65,21 @@ export default function PacientesPage() {
   const [pacientes, setPacientes] = useState<Paciente[]>([])
   const [loading, setLoading] = useState(true)
   const [busca, setBusca] = useState("")
+  const [excluindo, setExcluindo] = useState<string | null>(null)
+  const [confirmar, setConfirmar] = useState<Paciente | null>(null)
+
+  const excluirPaciente = useCallback(async (paciente: Paciente) => {
+    setExcluindo(paciente.id)
+    try {
+      const r = await fetch(`/api/pacientes/${paciente.id}`, { method: "DELETE" })
+      if (r.ok) {
+        setPacientes((prev) => prev.filter((p) => p.id !== paciente.id))
+      }
+    } finally {
+      setExcluindo(null)
+      setConfirmar(null)
+    }
+  }, [])
 
   useEffect(() => {
     fetch("/api/pacientes")
@@ -174,11 +189,47 @@ export default function PacientesPage() {
                     >
                       Ver perfil
                     </Link>
+                    <button
+                      onClick={() => setConfirmar(p)}
+                      className="px-3 py-2 text-xs font-medium bg-[rgba(239,68,68,0.08)] text-red-500 rounded-xl hover:bg-[rgba(239,68,68,0.16)] transition"
+                    >
+                      Excluir
+                    </button>
                   </div>
                 </div>
               </div>
             )
           })}
+        </div>
+      )}
+
+      {confirmar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="glass-panel rounded-[28px] p-8 max-w-sm w-full mx-4 space-y-5">
+            <div>
+              <p className="font-mono-ui text-[11px] uppercase tracking-[0.2em] text-red-400 mb-2">Atenção</p>
+              <h2 className="text-lg font-semibold text-slate-800">Excluir paciente?</h2>
+              <p className="text-sm text-slate-500 mt-2">
+                Isso removerá <span className="font-medium text-slate-700">{confirmar.nome}</span> e todos os dados vinculados (avaliações, anamneses, consultas e lançamentos). Esta ação não pode ser desfeita.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmar(null)}
+                disabled={excluindo === confirmar.id}
+                className="flex-1 px-4 py-2.5 text-sm font-medium bg-[rgba(15,23,42,0.06)] text-slate-600 rounded-2xl hover:bg-[rgba(15,23,42,0.10)] transition disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => excluirPaciente(confirmar)}
+                disabled={excluindo === confirmar.id}
+                className="flex-1 px-4 py-2.5 text-sm font-semibold bg-red-500 text-white rounded-2xl hover:bg-red-600 transition disabled:opacity-50"
+              >
+                {excluindo === confirmar.id ? "Excluindo..." : "Sim, excluir"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

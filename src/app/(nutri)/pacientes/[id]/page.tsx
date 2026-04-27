@@ -98,6 +98,9 @@ export default function PerfilPacientePage() {
   const [a2Selected, setA2Selected] = useState("")
   const [comparacaoAtiva, setComparacaoAtiva] = useState<{ av1: Avaliacao; av2: Avaliacao } | null>(null)
   const [avalsVisiveis, setAvalsVisiveis] = useState<string[] | null>(null)
+  const [editandoSexo, setEditandoSexo] = useState(false)
+  const [sexoTemp, setSexoTemp] = useState("")
+  const [salvandoSexo, setSalvandoSexo] = useState(false)
 
   useEffect(() => {
     fetch(`/api/pacientes/${id}`)
@@ -170,8 +173,56 @@ export default function PerfilPacientePage() {
               ← Pacientes
             </Link>
             <h1 className="text-2xl font-semibold tracking-[-0.03em] text-slate-900 mt-1">{paciente.nome}</h1>
-            <p className="text-slate-400 text-sm mt-0.5">
-              {idade} anos · {formatarSexo(paciente.sexo)} · {avals.length} {avals.length === 1 ? "avaliação" : "avaliações"}
+            <p className="text-slate-400 text-sm mt-0.5 flex items-center gap-1.5 flex-wrap">
+              {idade} anos ·{" "}
+              {editandoSexo ? (
+                <>
+                  <select
+                    value={sexoTemp}
+                    onChange={(e) => setSexoTemp(e.target.value)}
+                    className="text-xs px-2 py-0.5 rounded-lg border border-[rgba(6,182,212,0.40)] bg-white text-slate-700 focus:outline-none focus:ring-1 focus:ring-[rgba(6,182,212,0.50)]"
+                    autoFocus
+                  >
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
+                  </select>
+                  <button
+                    disabled={salvandoSexo}
+                    onClick={async () => {
+                      setSalvandoSexo(true)
+                      const r = await fetch(`/api/pacientes/${id}`, {
+                        method: "PATCH",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ sexo: sexoTemp }),
+                      })
+                      if (r.ok) setPaciente((p) => p ? { ...p, sexo: sexoTemp } : p)
+                      setSalvandoSexo(false)
+                      setEditandoSexo(false)
+                    }}
+                    className="text-xs font-medium text-[color:var(--accent)] hover:underline disabled:opacity-50"
+                  >
+                    {salvandoSexo ? "..." : "Salvar"}
+                  </button>
+                  <button
+                    onClick={() => setEditandoSexo(false)}
+                    className="text-xs text-slate-400 hover:text-slate-600"
+                  >
+                    Cancelar
+                  </button>
+                </>
+              ) : (
+                <>
+                  {formatarSexo(paciente.sexo)}
+                  <button
+                    onClick={() => { setSexoTemp(paciente.sexo); setEditandoSexo(true) }}
+                    className="text-[10px] font-mono-ui uppercase tracking-[0.15em] text-slate-300 hover:text-[color:var(--accent)] transition"
+                    title="Editar sexo"
+                  >
+                    editar
+                  </button>
+                </>
+              )}{" "}
+              · {avals.length} {avals.length === 1 ? "avaliação" : "avaliações"}
             </p>
           </div>
         </div>
