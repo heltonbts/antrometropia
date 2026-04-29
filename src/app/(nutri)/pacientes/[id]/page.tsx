@@ -12,6 +12,7 @@ import { GraficoAreaEmpilhada } from "@/components/charts/GraficoAreaEmpilhada"
 import { GraficoBarrasAgrupadas } from "@/components/charts/GraficoBarrasAgrupadas"
 import { GraficoComparacaoDobras } from "@/components/charts/GraficoComparacaoDobras"
 import { Somatocarta } from "@/components/charts/Somatocarta"
+import { EvolucaoStorytelling } from "@/components/EvolucaoStorytelling"
 
 const ACCENT    = "#06b6d4"
 const ACCENT2   = "#ec4899"
@@ -101,6 +102,7 @@ export default function PerfilPacientePage() {
   const [editandoSexo, setEditandoSexo] = useState(false)
   const [sexoTemp, setSexoTemp] = useState("")
   const [salvandoSexo, setSalvandoSexo] = useState(false)
+  const [showStory, setShowStory] = useState(false)
 
   useEffect(() => {
     fetch(`/api/pacientes/${id}`)
@@ -162,6 +164,14 @@ export default function PerfilPacientePage() {
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
+      {showStory && (
+        <EvolucaoStorytelling
+          nome={paciente.nome}
+          avaliacoes={avals}
+          onClose={() => setShowStory(false)}
+        />
+      )}
+
       {/* Header */}
       <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
@@ -227,6 +237,14 @@ export default function PerfilPacientePage() {
           </div>
         </div>
         <div className="flex flex-wrap gap-2 self-start md:self-auto">
+          {avals.length >= 1 && (
+            <button
+              onClick={() => setShowStory(true)}
+              className="px-5 py-2.5 glass-panel text-slate-700 text-sm font-semibold rounded-2xl hover:bg-white transition flex items-center gap-2"
+            >
+              ✦ Ver Evolução
+            </button>
+          )}
           {avals.length >= 2 && (
             <button
               onClick={() => {

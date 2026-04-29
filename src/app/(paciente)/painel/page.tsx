@@ -9,6 +9,7 @@ import { GraficoAreaEmpilhada } from "@/components/charts/GraficoAreaEmpilhada";
 import { GraficoComparacaoDobras } from "@/components/charts/GraficoComparacaoDobras";
 import { Somatocarta } from "@/components/charts/Somatocarta";
 import { cn } from "@/lib/utils";
+import { EvolucaoStorytelling } from "@/components/EvolucaoStorytelling";
 
 interface Avaliacao {
   id: string;
@@ -280,6 +281,7 @@ export default function PainelPaciente() {
   const [avalSelecionada, setAvalSelecionada] = useState<Avaliacao | null>(null);
   const [anamneses, setAnamneses] = useState<any[]>([]);
   const [anamneseSelecionada, setAnamneseSelecionada] = useState<any | null>(null);
+  const [showStory, setShowStory] = useState(false);
 
   useEffect(() => {
     fetch("/api/paciente/painel")
@@ -382,6 +384,13 @@ export default function PainelPaciente() {
           onClose={() => setAvalSelecionada(null)}
         />
       )}
+      {showStory && (
+        <EvolucaoStorytelling
+          nome={data.nome}
+          avaliacoes={avals}
+          onClose={() => setShowStory(false)}
+        />
+      )}
 
       <div className="hero-grid min-h-screen md:px-6 md:py-6">
         <div className="glass-panel-strong flex flex-col min-h-screen md:min-h-[calc(100vh-3rem)] md:rounded-[36px]">
@@ -437,6 +446,38 @@ export default function PainelPaciente() {
                 </p>
               )}
             </div>
+
+            {/* Card "Ver sua evolução" */}
+            {avals.length >= 1 && (
+              <button
+                onClick={() => setShowStory(true)}
+                className="w-full text-left rounded-[24px] overflow-hidden relative group"
+                style={{
+                  background: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)",
+                }}
+              >
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ background: "linear-gradient(135deg, #1a1035 0%, #3d3475 50%, #2e2e52 100%)" }}
+                />
+                <div className="relative px-6 py-5 flex items-center justify-between">
+                  <div>
+                    <p className="font-mono-ui text-[10px] uppercase tracking-[0.28em] text-white/40 mb-1">
+                      Retrospectiva
+                    </p>
+                    <p className="text-xl font-semibold text-white tracking-tight">
+                      Ver sua evolução
+                    </p>
+                    <p className="text-white/40 text-sm mt-0.5">
+                      A história do seu progresso
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl"
+                    style={{ background: "rgba(255,255,255,0.08)" }}>
+                    ✦
+                  </div>
+                </div>
+              </button>
+            )}
 
             {avals.length === 0 ? (
               <div className="glass-panel rounded-[24px] p-10 text-center text-slate-400">
