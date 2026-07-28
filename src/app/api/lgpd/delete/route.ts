@@ -4,8 +4,8 @@ import { prisma } from "@/lib/prisma"
 import { getSessionUsuario } from "@/lib/session"
 import { registrarAuditoria } from "@/lib/audit"
 
-export async function DELETE() {
-  const session = await getSessionUsuario()
+export async function DELETE(req: Request) {
+  const session = await getSessionUsuario(req)
 
   if (!session) {
     return NextResponse.json({ erro: "Não autorizado" }, { status: 401 })

@@ -18,5 +18,10 @@ export async function GET(req: NextRequest) {
 
   if (!paciente) return NextResponse.json({ erro: "Não encontrado" }, { status: 404 })
 
-  return NextResponse.json({ nome: paciente.nome, avaliacoes: paciente.avaliacoes })
+  return NextResponse.json({
+    nome: paciente.nome,
+    email: paciente.email,
+    criadoEm: paciente.criadoEm,
+    avaliacoes: paciente.avaliacoes,
+  })
 }
