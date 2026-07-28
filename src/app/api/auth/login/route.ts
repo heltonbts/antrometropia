@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       .setExpirationTime("7d")
       .sign(getJwtSecret())
 
-    const res = NextResponse.json({ ok: true, tipo: "nutricionista" })
+    const res = NextResponse.json({ ok: true, tipo: "nutricionista", token })
     setAuthCookie(res, token)
     return res
   }
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       .setExpirationTime("7d")
       .sign(getJwtSecret())
 
-    const res = NextResponse.json({ ok: true, tipo: "paciente" })
+    const res = NextResponse.json({ ok: true, tipo: "paciente", token })
     setAuthCookie(res, token)
     return res
   }
